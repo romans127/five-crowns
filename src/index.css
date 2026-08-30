@@ -277,28 +277,214 @@ h1 {
 }
 
 .hand-track {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 2px 8px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hand-round-card {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+}
+
+.playing-card {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(11, 1fr);
-  gap: 4px;
-}
-
-.crown-step {
-  min-height: 40px;
+  place-items: center;
+  border: 1px solid #d8cbb0;
   border-radius: 10px;
-  background: #241833;
-  color: var(--muted);
+  background: linear-gradient(165deg, #fffdf8 0%, #f3e8d4 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 6px 14px rgba(0, 0, 0, 0.28);
   padding: 0;
+  color: #1b1b1f;
+  overflow: hidden;
+  aspect-ratio: 5 / 7;
 }
 
-.crown-step.active {
-  background: var(--gold);
-  color: #2a1604;
+.playing-card-red {
+  color: #c1121f;
+}
+
+.playing-card-blue {
+  color: #1d4ed8;
+}
+
+.playing-card-gold {
+  color: #b7791f;
+}
+
+.playing-card-xs {
+  width: 34px;
+}
+
+.playing-card-sm {
+  width: 100%;
+  min-height: 88px;
+}
+
+.playing-card-md {
+  width: 72px;
+}
+
+.pc-corner,
+.pc-center,
+.pc-joker-top,
+.pc-joker-face {
+  line-height: 1;
+}
+
+.pc-corner {
+  position: absolute;
+  display: grid;
+  gap: 1px;
+  font-weight: 700;
+}
+
+.pc-corner strong,
+.pc-center {
+  font-family: var(--display);
+}
+
+.pc-corner-tl {
+  top: 4px;
+  left: 4px;
+  font-size: 0.55rem;
+}
+
+.pc-corner-br {
+  right: 4px;
+  bottom: 4px;
+  transform: rotate(180deg);
+  font-size: 0.55rem;
+}
+
+.pc-center {
+  display: grid;
+  place-items: center;
+  gap: 0;
+  font-size: 1rem;
+}
+
+.playing-card-xs .pc-center {
+  font-size: 0.72rem;
+}
+
+.playing-card-sm .pc-center {
+  font-size: 1.35rem;
+}
+
+.pc-center small,
+.pc-corner small {
+  font-size: 0.65em;
+}
+
+.playing-card-joker {
+  background: linear-gradient(165deg, #4c1d95 0%, #2a1248 100%);
+  color: #ffe08a;
+  border-color: #c084fc;
+}
+
+.pc-joker-top {
+  position: absolute;
+  top: 6px;
+  font-size: 0.45rem;
+  letter-spacing: 0.08em;
   font-weight: 800;
 }
 
-.crown-step.done:not(.active) {
-  background: #35523d;
+.pc-joker-face {
+  font-size: 1.2rem;
+}
+
+.playing-card-xs .pc-joker-face {
+  font-size: 0.85rem;
+}
+
+.pc-deal-count {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  min-width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(11, 16, 32, 0.82);
+  color: var(--ivory);
+  font-size: 0.52rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  padding: 0 3px;
+}
+
+.pc-points {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  transform: translateX(-50%);
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: rgba(255, 253, 248, 0.92);
+  padding: 1px 4px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.playing-card-wild:not(.playing-card-joker)::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 8px;
+  border: 1px dashed rgba(183, 121, 31, 0.55);
+  pointer-events: none;
+}
+
+.playing-card-active {
+  transform: translateY(-4px) scale(1.06);
+  box-shadow:
+    0 0 0 2px var(--gold),
+    0 10px 20px rgba(244, 201, 93, 0.35);
+  z-index: 1;
+}
+
+.playing-card-done:not(.playing-card-active) {
+  filter: saturate(0.75);
+  opacity: 0.88;
+}
+
+.playing-card-done:not(.playing-card-active)::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(53, 82, 61, 0.42);
   color: #d9ffe4;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.card-picker {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.token-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 42px;
+  align-items: center;
+}
+
+.token-card {
+  width: 38px;
 }
 
 .leader-strip {
@@ -400,31 +586,17 @@ h1 {
   margin-top: 6px;
 }
 
-.token-row,
-.rank-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.rank-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.rank-grid button,
-.keypad button,
-.token {
-  min-height: 56px;
-  border-radius: 14px;
-  background: #2a1f3d;
-  color: var(--ivory);
-}
-
 .keypad {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
+}
+
+.keypad button {
+  min-height: 64px;
+  border-radius: 14px;
+  background: #2a1f3d;
+  color: var(--ivory);
 }
 
 .keypad-digit,
@@ -442,30 +614,6 @@ h1 {
 
 .keypad-spacer {
   min-height: 0;
-}
-
-.rank-grid button {
-  display: grid;
-  place-items: center;
-  padding: 6px 0;
-}
-
-.rank-grid small {
-  color: var(--muted);
-}
-
-.wild-key,
-.token.hot,
-.joker-key {
-  background: #4a2a12;
-  color: var(--gold);
-  box-shadow: inset 0 0 0 1px rgba(244, 201, 93, 0.35);
-}
-
-.token {
-  min-height: 36px;
-  padding: 0 10px;
-  font-size: 0.85rem;
 }
 
 .rules-screen {

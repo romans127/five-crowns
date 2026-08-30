@@ -1,16 +1,10 @@
-const SUITS = [
-  { symbol: '★', className: 'suit-star' },
-  { symbol: '♥', className: 'suit-heart' },
-  { symbol: '♣', className: 'suit-club' },
-  { symbol: '♠', className: 'suit-spade' },
-  { symbol: '♦', className: 'suit-diamond' },
-] as const
+import { SUITS } from '../game/suits.ts'
 
 export function SuitRow({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   return (
     <div className={`suit-row suit-row-${size}`} aria-hidden="true">
       {SUITS.map((suit) => (
-        <span key={suit.symbol} className={suit.className}>
+        <span key={suit.id} className={`suit-${suit.id}`}>
           {suit.symbol}
         </span>
       ))}

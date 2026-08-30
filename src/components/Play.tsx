@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import { handComplete, playerColor, playerTotal, standings } from '../game/engine.ts'
-import { cardsDealt, handTitle, wildLabel } from '../game/rules.ts'
+import { cardsDealt, handTitle, wildLabel, wildRank } from '../game/rules.ts'
+import { suitForHand } from '../game/suits.ts'
 import { HAND_SIZES, type Game } from '../game/types.ts'
+import { PlayingCard } from './PlayingCard.tsx'
 import { ScorePad } from './ScorePad.tsx'
 import { SuitRow } from './Suits.tsx'
 
@@ -40,17 +42,22 @@ export function Play({ game, onScore, onNextHand, onSelectHand, onRules, onQuit 
       <div className="hand-track" role="tablist" aria-label="Hands">
         {HAND_SIZES.map((size, index) => {
           const done = handComplete(game, index)
+          const suit = suitForHand(index)
           return (
-            <button
+            <PlayingCard
               key={size}
-              type="button"
-              role="tab"
-              aria-selected={index === current}
-              className={`crown-step ${done ? 'done' : ''} ${index === current ? 'active' : ''}`}
+              face={wildRank(index)}
+              suitId={suit.id}
+              size="xs"
+              wild
+              active={index === current}
+              done={done}
+              dealCount={cardsDealt(index)}
+              tabRole="tab"
+              tabSelected={index === current}
               onClick={() => onSelectHand(index)}
-            >
-              <span>{cardsDealt(index)}</span>
-            </button>
+              className="hand-round-card"
+            />
           )
         })}
       </div>

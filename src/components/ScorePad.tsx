@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import { loadPadMode, savePadMode, type PadMode } from '../game/preferences.ts'
-import { leftoverPoints, rankLabel, tallyLeftovers, wildRank } from '../game/rules.ts'
+import { leftoverPoints, tallyLeftovers, wildRank } from '../game/rules.ts'
+import { suitForHand } from '../game/suits.ts'
 import { HAND_SIZES, type LeftoverToken, type Rank } from '../game/types.ts'
+import { PlayingCard } from './PlayingCard.tsx'
 
 type ScorePadProps = {
   playerName: string
@@ -84,32 +86,31 @@ export function ScorePad({ playerName, playerColor, handIndex, currentScore, onS
             <div className="token-row">
               {tokens.length === 0 ? <span className="hint">Tap every unused card</span> : null}
               {tokens.map((token, index) => (
-                <button
+                <PlayingCard
                   key={`${token.type}-${index}`}
-                  type="button"
-                  className={`token ${token.type === 'joker' || (token.type === 'rank' && token.rank === wild) ? 'hot' : ''}`}
+                  face={token.type === 'joker' ? 'joker' : token.rank}
+                  suitId={token.type === 'rank' ? suitForHand(token.rank - 3).id : 'star'}
+                  size="xs"
+                  wild={token.type === 'joker' || (token.type === 'rank' && token.rank === wild)}
+                  pointsLabel={String(leftoverPoints(token, wild))}
                   onClick={() => setTokens(tokens.filter((_, i) => i !== index))}
-                >
-                  {token.type === 'joker' ? 'Joker' : rankLabel(token.rank)} · {leftoverPoints(token, wild)}
-                </button>
+                  className="token-card"
+                />
               ))}
             </div>
-            <div className="rank-grid">
+            <div className="card-picker">
               {FACE_RANKS.map((rank) => (
-                <button
+                <PlayingCard
                   key={rank}
-                  type="button"
-                  className={rank === wild ? 'wild-key' : ''}
+                  face={rank}
+                  suitId={suitForHand(rank - 3).id}
+                  size="sm"
+                  wild={rank === wild}
+                  pointsLabel={rank === wild ? '20 wild' : String(leftoverPoints({ type: 'rank', rank }, wild))}
                   onClick={() => addRank(rank)}
-                >
-                  <strong>{rankLabel(rank)}</strong>
-                  <small>{rank === wild ? `${leftoverPoints({ type: 'rank', rank }, wild)} wild` : leftoverPoints({ type: 'rank', rank }, wild)}</small>
-                </button>
+                />
               ))}
-              <button type="button" className="joker-key" onClick={() => setTokens((current) => [...current, { type: 'joker' }])}>
-                <strong>Joker</strong>
-                <small>50</small>
-              </button>
+              <PlayingCard face="joker" size="sm" wild pointsLabel="50" onClick={() => setTokens((current) => [...current, { type: 'joker' }])} />
             </div>
           </>
         ) : (
