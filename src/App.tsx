@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { History } from './components/History.tsx'
 import { Home } from './components/Home.tsx'
 import { Play } from './components/Play.tsx'
 import { Rules } from './components/Rules.tsx'
@@ -8,7 +9,8 @@ import { useGame } from './hooks/useGame.ts'
 import type { Screen } from './game/types.ts'
 
 export default function App() {
-  const { game, startGame, recordScore, nextHand, selectHand, clearGame } = useGame()
+  const { game, historyCount, refreshHistoryCount, startGame, recordScore, nextHand, selectHand, clearGame } =
+    useGame()
   const [screen, setScreen] = useState<Screen>(() => {
     if (!game) {
       return 'home'
@@ -17,6 +19,17 @@ export default function App() {
   })
 
   const goHome = () => setScreen('home')
+
+  if (screen === 'history') {
+    return (
+      <History
+        onBack={() => {
+          refreshHistoryCount()
+          setScreen('home')
+        }}
+      />
+    )
+  }
 
   if (screen === 'rules') {
     return <Rules onBack={() => setScreen(game ? (game.status === 'finished' ? 'winner' : 'play') : 'home')} />
@@ -47,6 +60,7 @@ export default function App() {
           setScreen('play')
         }}
         onRules={() => setScreen('rules')}
+        onHistory={() => setScreen('history')}
       />
     )
   }
@@ -65,6 +79,7 @@ export default function App() {
             setScreen('play')
           }}
           onRules={() => setScreen('rules')}
+          onHistory={() => setScreen('history')}
         />
       )
     }
@@ -91,8 +106,10 @@ export default function App() {
   return (
     <Home
       canResume={Boolean(game)}
+      historyCount={historyCount}
       onNewGame={() => setScreen('setup')}
       onResume={() => setScreen(game?.status === 'finished' ? 'winner' : 'play')}
+      onHistory={() => setScreen('history')}
       onRules={() => setScreen('rules')}
     />
   )

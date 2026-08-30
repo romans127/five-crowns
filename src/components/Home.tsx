@@ -3,12 +3,14 @@ import { useInstallPrompt } from '../hooks/useInstallPrompt.ts'
 
 type HomeProps = {
   canResume: boolean
+  historyCount: number
   onNewGame: () => void
   onResume: () => void
+  onHistory: () => void
   onRules: () => void
 }
 
-export function Home({ canResume, onNewGame, onResume, onRules }: HomeProps) {
+export function Home({ canResume, historyCount, onNewGame, onResume, onHistory, onRules }: HomeProps) {
   const { canInstall, install, installed } = useInstallPrompt()
 
   return (
@@ -25,6 +27,11 @@ export function Home({ canResume, onNewGame, onResume, onRules }: HomeProps) {
         {canResume ? (
           <button type="button" className="btn ghost" onClick={onResume}>
             Resume the table
+          </button>
+        ) : null}
+        {historyCount > 0 ? (
+          <button type="button" className="btn ghost" onClick={onHistory}>
+            Past games ({historyCount})
           </button>
         ) : null}
         <button type="button" className="btn text" onClick={onRules}>

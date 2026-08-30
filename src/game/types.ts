@@ -27,7 +27,12 @@ export type LeftoverToken =
   | { type: 'rank'; rank: Rank }
   | { type: 'joker' }
 
-export type Screen = 'home' | 'setup' | 'play' | 'rules' | 'winner'
+export type Screen = 'home' | 'setup' | 'play' | 'rules' | 'winner' | 'history'
+
+export type GameRecord = Game & {
+  finishedAt: string | null
+  archivedAt: string
+}
 
 export const PLAYER_COLORS = [
   { id: 'hearts', hex: '#ff4d6d', suit: '♥' },

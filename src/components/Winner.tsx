@@ -7,9 +7,10 @@ type WinnerProps = {
   onPlayAgain: (names: string[]) => void
   onHome: () => void
   onRules: () => void
+  onHistory: () => void
 }
 
-export function Winner({ game, onPlayAgain, onHome, onRules }: WinnerProps) {
+export function Winner({ game, onPlayAgain, onHome, onRules, onHistory }: WinnerProps) {
   const champs = winners(game)
   const rows = standings(game)
   const title = champs.length > 1 ? 'Shared crown!' : 'The crown is yours'
@@ -50,6 +51,9 @@ export function Winner({ game, onPlayAgain, onHome, onRules }: WinnerProps) {
       </button>
       <button type="button" className="btn ghost" onClick={onHome}>
         Back home
+      </button>
+      <button type="button" className="btn ghost" onClick={onHistory}>
+        Past games
       </button>
       <button type="button" className="btn text" onClick={onRules}>
         Review the rules

@@ -613,3 +613,120 @@ h1 {
     animation: none;
   }
 }
+
+.history-screen {
+  gap: 14px;
+}
+
+.history-empty {
+  margin-top: 24px;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.history-row {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  gap: 4px;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px 16px;
+  color: inherit;
+  min-height: 72px;
+}
+
+.history-when {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.history-meta {
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+
+.history-detail-card {
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.history-detail-card h2 {
+  font-size: 1.35rem;
+}
+
+.champs.compact {
+  font-size: 1.2rem;
+}
+
+.final-standings.compact {
+  margin-top: 4px;
+}
+
+.score-sheet-grid-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(12, 8, 20, 0.35);
+}
+
+.score-sheet-grid {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.score-sheet-grid th,
+.score-sheet-grid td {
+  padding: 8px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.score-sheet-grid th[scope='row'] {
+  text-align: left;
+  padding-left: 12px;
+  white-space: nowrap;
+}
+
+.score-sheet-grid thead th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.sheet-hand {
+  display: block;
+  font-size: 0.72rem;
+}
+
+.sheet-deal {
+  display: block;
+  color: var(--gold);
+  font-size: 0.68rem;
+}
+
+.sheet-empty {
+  color: var(--muted);
+}
+
+.sheet-total {
+  font-weight: 800;
+  color: var(--gold);
+}
+
+.sheet-footnote {
+  padding: 10px 12px 12px;
+  margin: 0;
+}
