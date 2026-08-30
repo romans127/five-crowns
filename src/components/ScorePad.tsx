@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { loadPadMode, savePadMode, type PadMode } from '../game/preferences.ts'
 import { leftoverPoints, rankLabel, tallyLeftovers, wildRank } from '../game/rules.ts'
 import { HAND_SIZES, type LeftoverToken, type Rank } from '../game/types.ts'
 
@@ -12,17 +13,35 @@ type ScorePadProps = {
 }
 
 const FACE_RANKS = HAND_SIZES
-
-type PadMode = 'cards' | 'keypad'
+const KEYPAD_ROWS = [
+  ['1', '2', '3'],
+  ['4', '5', '6'],
+  ['7', '8', '9'],
+] as const
 
 export function ScorePad({ playerName, playerColor, handIndex, currentScore, onSave, onClose }: ScorePadProps) {
   const wild = wildRank(handIndex)
-  const [mode, setMode] = useState<PadMode>('cards')
+  const [mode, setMode] = useState<PadMode>(() => loadPadMode())
   const [tokens, setTokens] = useState<LeftoverToken[]>([])
   const [digits, setDigits] = useState(currentScore === null ? '' : String(currentScore))
 
   const cardTotal = useMemo(() => tallyLeftovers(tokens, wild), [tokens, wild])
   const keypadTotal = digits === '' ? 0 : Number(digits)
+
+  const selectMode = (next: PadMode) => {
+    setMode(next)
+    savePadMode(next)
+  }
+
+  const appendDigit = (key: string) => {
+    setDigits((current) => (current + key).replace(/^0+(?=\d)/, '').slice(0, 3))
+    buzz()
+  }
+
+  const backspaceDigit = () => {
+    setDigits((current) => current.slice(0, -1))
+    buzz()
+  }
 
   const addRank = (rank: Rank) => {
     setTokens((current) => [...current, { type: 'rank', rank }])
@@ -48,10 +67,10 @@ export function ScorePad({ playerName, playerColor, handIndex, currentScore, onS
           <h2 id="score-pad-title">Leftovers this hand</h2>
         </header>
         <div className="mode-toggle" role="tablist">
-          <button type="button" role="tab" aria-selected={mode === 'cards'} onClick={() => setMode('cards')}>
+          <button type="button" role="tab" aria-selected={mode === 'cards'} onClick={() => selectMode('cards')}>
             Tap cards
           </button>
-          <button type="button" role="tab" aria-selected={mode === 'keypad'} onClick={() => setMode('keypad')}>
+          <button type="button" role="tab" aria-selected={mode === 'keypad'} onClick={() => selectMode('keypad')}>
             Keypad
           </button>
         </div>
@@ -99,17 +118,19 @@ export function ScorePad({ playerName, playerColor, handIndex, currentScore, onS
               {digits === '' ? '0' : digits}
               <span>typed score</span>
             </p>
-            <div className="keypad">
-              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'].map((key) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setDigits((current) => (current + key).replace(/^0+(?=\d)/, '').slice(0, 3))}
-                >
-                  {key}
-                </button>
-              ))}
-              <button type="button" onClick={() => setDigits((current) => current.slice(0, -1))}>
+            <div className="keypad" aria-label="Score keypad">
+              {KEYPAD_ROWS.flatMap((row) =>
+                row.map((key) => (
+                  <button key={key} type="button" className="keypad-digit" onClick={() => appendDigit(key)}>
+                    {key}
+                  </button>
+                )),
+              )}
+              <span className="keypad-spacer" aria-hidden="true" />
+              <button type="button" className="keypad-digit keypad-zero" onClick={() => appendDigit('0')}>
+                0
+              </button>
+              <button type="button" className="keypad-action" aria-label="Delete last digit" onClick={backspaceDigit}>
                 ⌫
               </button>
             </div>
