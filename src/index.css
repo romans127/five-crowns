@@ -140,8 +140,8 @@ h1 {
 
 @keyframes pulse {
   50% {
-    transform: translateY(-1px) scale(1.02);
-    box-shadow: 0 12px 28px rgba(244, 201, 93, 0.4);
+    box-shadow: 0 12px 32px rgba(244, 201, 93, 0.55);
+    filter: brightness(1.08);
   }
 }
 
