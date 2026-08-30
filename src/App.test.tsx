@@ -14,12 +14,12 @@ describe('Five Crowns scorekeeper', () => {
     await user.type(screen.getByLabelText('Player 2 name'), 'Ada')
     await user.click(screen.getByRole('button', { name: /shuffle up and deal/i }))
 
-    expect(screen.getByText(/3s are wild/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /3s are wild/i })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /ryan/i }))
     const pad = screen.getByRole('dialog', { name: /leftovers this hand/i })
     await user.click(within(pad).getByRole('button', { name: /^9/ }))
     await user.click(within(pad).getByRole('button', { name: /lock in 9/i }))
-    expect(screen.getByText('9')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /ryan.*total 9/i })).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Rules' }))
     expect(screen.getByRole('heading', { name: /how five crowns works/i })).toBeInTheDocument()

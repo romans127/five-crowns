@@ -5,18 +5,21 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
+function isStandalone(): boolean {
+  if (typeof window === 'undefined') {
+    return false
+  }
+  return (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    ('standalone' in navigator && Boolean((navigator as Navigator & { standalone?: boolean }).standalone))
+  )
+}
+
 export function useInstallPrompt() {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null)
-  const [installed, setInstalled] = useState(false)
+  const [installed, setInstalled] = useState(isStandalone)
 
   useEffect(() => {
-    const standalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      ('standalone' in navigator && Boolean((navigator as Navigator & { standalone?: boolean }).standalone))
-    if (standalone) {
-      setInstalled(true)
-    }
-
     const onPrompt = (event: Event) => {
       event.preventDefault()
       setDeferred(event as BeforeInstallPromptEvent)
