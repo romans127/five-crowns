@@ -89,7 +89,7 @@ export function Rules({ onBack }: RulesProps) {
             <strong>{JOKER_POINTS}</strong>
           </li>
         </ul>
-        <p>The player who goes out scores zero for that hand. After the Kings-wild hand, lowest total wins.</p>
+        <p>The player who goes out scores zero for that hand. Nobody can hold more cards than were dealt that round — hand 3 means up to 3 leftovers. After the Kings-wild hand, lowest total wins.</p>
       </article>
     </section>
   )

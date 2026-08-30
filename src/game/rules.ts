@@ -11,6 +11,15 @@ export function cardsDealt(handIndex: number): HandSize {
   return size
 }
 
+/** Max unused cards a player can still be holding when someone goes out. */
+export function maxLeftoverCards(handIndex: number): HandSize {
+  return cardsDealt(handIndex)
+}
+
+export function leftoverCardLimitReached(tokenCount: number, handIndex: number): boolean {
+  return tokenCount >= maxLeftoverCards(handIndex)
+}
+
 export function wildRank(handIndex: number): Rank {
   return cardsDealt(handIndex)
 }

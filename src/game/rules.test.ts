@@ -4,7 +4,9 @@ import {
   JOKER_POINTS,
   WILD_POINTS,
   cardsDealt,
+  leftoverCardLimitReached,
   leftoverPoints,
+  maxLeftoverCards,
   rankLabel,
   tallyLeftovers,
   wildLabel,
@@ -33,6 +35,15 @@ describe('Five Crowns hands and wilds', () => {
 
   it('rejects a hand that does not exist', () => {
     expect(() => cardsDealt(11)).toThrow(/11 hands/)
+  })
+
+  it('caps leftover cards at the number dealt that hand', () => {
+    expect(maxLeftoverCards(0)).toBe(3)
+    expect(maxLeftoverCards(2)).toBe(5)
+    expect(maxLeftoverCards(10)).toBe(13)
+    expect(leftoverCardLimitReached(2, 0)).toBe(false)
+    expect(leftoverCardLimitReached(3, 0)).toBe(true)
+    expect(leftoverCardLimitReached(13, 10)).toBe(true)
   })
 })
 

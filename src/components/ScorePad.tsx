@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { loadPadMode, savePadMode, type PadMode } from '../game/preferences.ts'
-import { leftoverPoints, tallyLeftovers, wildRank } from '../game/rules.ts'
+import { leftoverPoints, maxLeftoverCards, leftoverCardLimitReached, tallyLeftovers, wildRank } from '../game/rules.ts'
 import { suitForHand } from '../game/suits.ts'
 import { HAND_SIZES, type LeftoverToken, type Rank } from '../game/types.ts'
 import { PlayingCard } from './PlayingCard.tsx'
@@ -23,12 +23,14 @@ const KEYPAD_ROWS = [
 
 export function ScorePad({ playerName, playerColor, handIndex, currentScore, onSave, onClose }: ScorePadProps) {
   const wild = wildRank(handIndex)
+  const maxCards = maxLeftoverCards(handIndex)
   const [mode, setMode] = useState<PadMode>(() => loadPadMode())
   const [tokens, setTokens] = useState<LeftoverToken[]>([])
   const [digits, setDigits] = useState(currentScore === null ? '' : String(currentScore))
 
   const cardTotal = useMemo(() => tallyLeftovers(tokens, wild), [tokens, wild])
   const keypadTotal = digits === '' ? 0 : Number(digits)
+  const atCardLimit = leftoverCardLimitReached(tokens.length, handIndex)
 
   const selectMode = (next: PadMode) => {
     setMode(next)
@@ -46,7 +48,18 @@ export function ScorePad({ playerName, playerColor, handIndex, currentScore, onS
   }
 
   const addRank = (rank: Rank) => {
+    if (atCardLimit) {
+      return
+    }
     setTokens((current) => [...current, { type: 'rank', rank }])
+    buzz()
+  }
+
+  const addJoker = () => {
+    if (atCardLimit) {
+      return
+    }
+    setTokens((current) => [...current, { type: 'joker' }])
     buzz()
   }
 
@@ -67,6 +80,7 @@ export function ScorePad({ playerName, playerColor, handIndex, currentScore, onS
         <header>
           <p style={{ color: playerColor }}>{playerName}</p>
           <h2 id="score-pad-title">Leftovers this hand</h2>
+          <p className="pad-limit">Up to {maxCards} cards · you deal {maxCards} and discard every turn</p>
         </header>
         <div className="mode-toggle" role="tablist">
           <button type="button" role="tab" aria-selected={mode === 'cards'} onClick={() => selectMode('cards')}>
@@ -84,6 +98,9 @@ export function ScorePad({ playerName, playerColor, handIndex, currentScore, onS
               <span>points</span>
             </p>
             <div className="token-row">
+              <span className="pad-card-count" aria-live="polite">
+                {tokens.length} / {maxCards} cards
+              </span>
               {tokens.length === 0 ? <span className="hint">Tap every unused card</span> : null}
               {tokens.map((token, index) => (
                 <PlayingCard
@@ -98,7 +115,7 @@ export function ScorePad({ playerName, playerColor, handIndex, currentScore, onS
                 />
               ))}
             </div>
-            <div className="card-picker">
+            <div className={`card-picker ${atCardLimit ? 'card-picker-full' : ''}`}>
               {FACE_RANKS.map((rank) => (
                 <PlayingCard
                   key={rank}
@@ -107,10 +124,10 @@ export function ScorePad({ playerName, playerColor, handIndex, currentScore, onS
                   size="sm"
                   wild={rank === wild}
                   pointsLabel={rank === wild ? '20 wild' : String(leftoverPoints({ type: 'rank', rank }, wild))}
-                  onClick={() => addRank(rank)}
+                  onClick={atCardLimit ? undefined : () => addRank(rank)}
                 />
               ))}
-              <PlayingCard face="joker" size="sm" wild pointsLabel="50" onClick={() => setTokens((current) => [...current, { type: 'joker' }])} />
+              <PlayingCard face="joker" size="sm" wild pointsLabel="50" onClick={atCardLimit ? undefined : addJoker} />
             </div>
           </>
         ) : (

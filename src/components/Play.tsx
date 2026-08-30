@@ -108,7 +108,7 @@ export function Play({ game, onScore, onNextHand, onSelectHand, onRules, onQuit 
           {lastHand ? 'Crown a winner' : 'Next hand — deal one more'}
         </button>
       ) : (
-        <p className="hint center">Tap a player as they count leftovers.</p>
+        <p className="hint center">Tap a player as they count leftovers (up to {cardsDealt(current)} cards).</p>
       )}
 
       <button type="button" className="btn text quiet" onClick={onQuit}>

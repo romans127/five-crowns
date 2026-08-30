@@ -503,6 +503,29 @@ h1 {
   margin-top: 6px;
 }
 
+.pad-limit {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.pad-card-count {
+  display: block;
+  width: 100%;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.card-picker-full .playing-card {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 .keypad {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
