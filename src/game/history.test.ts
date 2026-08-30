@@ -6,6 +6,7 @@ import {
   getHistoryGame,
   HISTORY_KEY,
   listHistory,
+  searchHistory,
   upsertHistory,
 } from './history.ts'
 
@@ -42,7 +43,7 @@ describe('game history', () => {
     expect(listHistory(storage)).toHaveLength(1)
   })
 
-  it('keeps abandoned tables that had scores', () => {
+  it('stores in-progress games with null finishedAt', () => {
     const storage = memoryStorage()
     let game = createGame(['Ryan', 'Ada'])
     game = setHandScore(game, 0, game.players[0]!.id, 9)
@@ -58,5 +59,18 @@ describe('game history', () => {
     upsertHistory(game, undefined, storage)
     deleteHistoryGame(game.id, storage)
     expect(storage.getItem(HISTORY_KEY)).toContain('"records":[]')
+  })
+
+  it('filters history by player name', () => {
+    const storage = memoryStorage()
+    const first = createGame(['Alice', 'Bob'])
+    const second = createGame(['Carol', 'Dave'])
+    upsertHistory({ ...first, status: 'finished' }, undefined, storage)
+    upsertHistory({ ...second, status: 'finished' }, undefined, storage)
+    const records = listHistory(storage)
+    expect(searchHistory(records, 'alice')).toHaveLength(1)
+    expect(searchHistory(records, 'dave')).toHaveLength(1)
+    expect(searchHistory(records, 'zzz')).toHaveLength(0)
+    expect(searchHistory(records, '')).toHaveLength(2)
   })
 })

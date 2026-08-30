@@ -31,4 +31,14 @@ describe('Five Crowns scorekeeper', () => {
     expect(screen.getByText(/six jokers/i)).toBeInTheDocument()
     expect(screen.getByText(/kings when 13 cards are dealt/i)).toBeInTheDocument()
   })
+
+  it('always offers past games from the home screen', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    expect(screen.getByRole('button', { name: /^past games/i })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /^past games/i }))
+    expect(screen.getByRole('heading', { name: 'Past games' })).toBeInTheDocument()
+    expect(screen.getByRole('searchbox', { name: /search past games/i })).toBeInTheDocument()
+  })
 })

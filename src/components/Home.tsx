@@ -29,11 +29,9 @@ export function Home({ canResume, historyCount, onNewGame, onResume, onHistory, 
             Resume the table
           </button>
         ) : null}
-        {historyCount > 0 ? (
-          <button type="button" className="btn ghost" onClick={onHistory}>
-            Past games ({historyCount})
-          </button>
-        ) : null}
+        <button type="button" className="btn ghost" onClick={onHistory}>
+          Past games{historyCount > 0 ? ` (${historyCount})` : ''}
+        </button>
         <button type="button" className="btn text" onClick={onRules}>
           Look up the rules
         </button>

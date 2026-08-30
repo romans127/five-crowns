@@ -1,6 +1,13 @@
 import { useMemo, useState } from 'react'
 import { playerColor, standings, winners } from '../game/engine.ts'
-import { deleteHistoryGame, formatWhen, handsRecorded, historyHeadline, listHistory } from '../game/history.ts'
+import {
+  deleteHistoryGame,
+  formatWhen,
+  handsRecorded,
+  historyHeadline,
+  listHistory,
+  searchHistory,
+} from '../game/history.ts'
 import type { GameRecord } from '../game/types.ts'
 import { ScoreSheet } from './ScoreSheet.tsx'
 
@@ -10,7 +17,10 @@ type HistoryProps = {
 
 export function History({ onBack }: HistoryProps) {
   const [records, setRecords] = useState(() => listHistory())
+  const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState<string | null>(null)
+
+  const filtered = useMemo(() => searchHistory(records, query), [records, query])
 
   const selected = useMemo(
     () => records.find((record) => record.id === selectedId) ?? null,
@@ -77,14 +87,28 @@ export function History({ onBack }: HistoryProps) {
           Back home
         </button>
         <h1>Past games</h1>
-        <p>Every finished or saved table stays on this phone for score lookup.</p>
+        <p>Search by player name or browse every saved table on this phone.</p>
       </header>
+
+      <label className="history-search">
+        <span className="sr-only">Search past games</span>
+        <input
+          type="search"
+          value={query}
+          placeholder="Search players…"
+          autoComplete="off"
+          enterKeyHint="search"
+          onChange={(event) => setQuery(event.target.value)}
+        />
+      </label>
 
       {records.length === 0 ? (
         <p className="hint center history-empty">No saved games yet. Finish a match and it will show up here.</p>
+      ) : filtered.length === 0 ? (
+        <p className="hint center history-empty">No games match “{query.trim()}”.</p>
       ) : (
         <ol className="history-list">
-          {records.map((record) => (
+          {filtered.map((record) => (
             <HistoryRow key={record.id} record={record} onOpen={() => setSelectedId(record.id)} />
           ))}
         </ol>

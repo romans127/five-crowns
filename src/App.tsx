@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { History } from './components/History.tsx'
 import { Home } from './components/Home.tsx'
 import { Play } from './components/Play.tsx'
@@ -19,6 +19,12 @@ export default function App() {
   })
 
   const goHome = () => setScreen('home')
+
+  useEffect(() => {
+    if (screen === 'home') {
+      refreshHistoryCount()
+    }
+  }, [screen, refreshHistoryCount])
 
   if (screen === 'history') {
     return (

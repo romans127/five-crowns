@@ -90,3 +90,20 @@ export function formatWhen(iso: string): string {
 export function historyHeadline(record: GameRecord): string {
   return record.players.map((player) => player.name).join(', ')
 }
+
+export function searchHistory(records: GameRecord[], query: string): GameRecord[] {
+  const needle = query.trim().toLowerCase()
+  if (!needle) {
+    return records
+  }
+  return records.filter((record) => {
+    const playerNames = record.players.map((player) => player.name.toLowerCase())
+    const haystack = [
+      historyHeadline(record).toLowerCase(),
+      formatWhen(record.archivedAt).toLowerCase(),
+      record.status,
+      ...playerNames,
+    ]
+    return haystack.some((part) => part.includes(needle))
+  })
+}
