@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { handComplete, playerColor, playerTotal, standings } from '../game/engine.ts'
 import { cardsDealt, handTitle, wildLabel, wildRank } from '../game/rules.ts'
 import { suitForHand } from '../game/suits.ts'
@@ -24,6 +24,16 @@ export function Play({ game, onScore, onNextHand, onSelectHand, onRules, onQuit 
   const ranked = useMemo(() => standings(game), [game])
   const leader = ranked[0]
   const editingPlayer = game.players.find((player) => player.id === editingPlayerId) ?? null
+  const handTrackRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const track = handTrackRef.current
+    if (!track) {
+      return
+    }
+    const active = track.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')
+    active?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+  }, [current])
 
   return (
     <section className="screen play-screen">
@@ -39,7 +49,7 @@ export function Play({ game, onScore, onNextHand, onSelectHand, onRules, onQuit 
         </button>
       </header>
 
-      <div className="hand-track" role="tablist" aria-label="Hands">
+      <div className="hand-track" ref={handTrackRef} role="tablist" aria-label="Hands">
         {HAND_SIZES.map((size, index) => {
           const done = handComplete(game, index)
           const suit = suitForHand(index)

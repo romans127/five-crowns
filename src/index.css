@@ -282,12 +282,14 @@ h1 {
   overflow-x: auto;
   padding: 4px 2px 8px;
   scroll-snap-type: x proximity;
+  scroll-padding-inline: 8px;
   -webkit-overflow-scrolling: touch;
 }
 
 .hand-round-card {
   flex: 0 0 auto;
-  scroll-snap-align: center;
+  scroll-snap-align: start;
+  scroll-margin-inline: 4px;
 }
 
 .playing-card {
