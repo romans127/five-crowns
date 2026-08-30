@@ -1,6 +1,7 @@
 import { rankLabel } from '../game/rules.ts'
 import { SUITS, type SuitId } from '../game/suits.ts'
 import type { Rank } from '../game/types.ts'
+import { CardFaceGraphic } from './card-art/CardFaceGraphic.tsx'
 
 export type CardFace = Rank | 'joker'
 
@@ -44,11 +45,11 @@ export function PlayingCard({
   const suit = suitById(suitId)
   const label = faceLabel(face)
   const isJoker = face === 'joker'
+  const compact = size === 'xs'
   const classes = [
     'playing-card',
     `playing-card-${size}`,
-    `playing-card-${suit.tone}`,
-    isJoker ? 'playing-card-joker' : '',
+    isJoker ? 'playing-card-joker' : `playing-card-${suit.tone}`,
     wild ? 'playing-card-wild' : '',
     active ? 'playing-card-active' : '',
     done ? 'playing-card-done' : '',
@@ -59,31 +60,9 @@ export function PlayingCard({
 
   const body = (
     <>
-      {!isJoker ? (
-        <>
-          <span className="pc-corner pc-corner-tl" aria-hidden="true">
-            <strong>{label}</strong>
-            <small>{suit.symbol}</small>
-          </span>
-          <span className="pc-center" aria-hidden="true">
-            {label}
-            <small>{suit.symbol}</small>
-          </span>
-          <span className="pc-corner pc-corner-br" aria-hidden="true">
-            <strong>{label}</strong>
-            <small>{suit.symbol}</small>
-          </span>
-        </>
-      ) : (
-        <>
-          <span className="pc-joker-top" aria-hidden="true">
-            JOKER
-          </span>
-          <span className="pc-joker-face" aria-hidden="true">
-            ★
-          </span>
-        </>
-      )}
+      <svg className="pc-art" viewBox="0 0 100 140" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        <CardFaceGraphic face={face} suitId={suitId} compact={compact} wild={wild && !isJoker} />
+      </svg>
       {typeof dealCount === 'number' ? (
         <span className="pc-deal-count" aria-hidden="true">
           {dealCount}

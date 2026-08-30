@@ -292,117 +292,35 @@ h1 {
 
 .playing-card {
   position: relative;
-  display: grid;
-  place-items: center;
-  border: 1px solid #d8cbb0;
-  border-radius: 10px;
-  background: linear-gradient(165deg, #fffdf8 0%, #f3e8d4 100%);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 6px 14px rgba(0, 0, 0, 0.28);
+  display: block;
   padding: 0;
-  color: #1b1b1f;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
   overflow: hidden;
   aspect-ratio: 5 / 7;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 8px 18px rgba(0, 0, 0, 0.32);
 }
 
-.playing-card-red {
-  color: #c1121f;
-}
-
-.playing-card-blue {
-  color: #1d4ed8;
-}
-
-.playing-card-gold {
-  color: #b7791f;
+.pc-art {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .playing-card-xs {
-  width: 34px;
+  width: 40px;
 }
 
 .playing-card-sm {
   width: 100%;
-  min-height: 88px;
+  min-height: 96px;
 }
 
 .playing-card-md {
-  width: 72px;
-}
-
-.pc-corner,
-.pc-center,
-.pc-joker-top,
-.pc-joker-face {
-  line-height: 1;
-}
-
-.pc-corner {
-  position: absolute;
-  display: grid;
-  gap: 1px;
-  font-weight: 700;
-}
-
-.pc-corner strong,
-.pc-center {
-  font-family: var(--display);
-}
-
-.pc-corner-tl {
-  top: 4px;
-  left: 4px;
-  font-size: 0.55rem;
-}
-
-.pc-corner-br {
-  right: 4px;
-  bottom: 4px;
-  transform: rotate(180deg);
-  font-size: 0.55rem;
-}
-
-.pc-center {
-  display: grid;
-  place-items: center;
-  gap: 0;
-  font-size: 1rem;
-}
-
-.playing-card-xs .pc-center {
-  font-size: 0.72rem;
-}
-
-.playing-card-sm .pc-center {
-  font-size: 1.35rem;
-}
-
-.pc-center small,
-.pc-corner small {
-  font-size: 0.65em;
-}
-
-.playing-card-joker {
-  background: linear-gradient(165deg, #4c1d95 0%, #2a1248 100%);
-  color: #ffe08a;
-  border-color: #c084fc;
-}
-
-.pc-joker-top {
-  position: absolute;
-  top: 6px;
-  font-size: 0.45rem;
-  letter-spacing: 0.08em;
-  font-weight: 800;
-}
-
-.pc-joker-face {
-  font-size: 1.2rem;
-}
-
-.playing-card-xs .pc-joker-face {
-  font-size: 0.85rem;
+  width: 76px;
 }
 
 .pc-deal-count {
@@ -435,13 +353,10 @@ h1 {
   white-space: nowrap;
 }
 
-.playing-card-wild:not(.playing-card-joker)::before {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border-radius: 8px;
-  border: 1px dashed rgba(183, 121, 31, 0.55);
-  pointer-events: none;
+.playing-card-wild:not(.playing-card-joker) {
+  box-shadow:
+    0 0 0 1px rgba(212, 160, 23, 0.55),
+    0 8px 18px rgba(0, 0, 0, 0.32);
 }
 
 .playing-card-active {
@@ -484,7 +399,7 @@ h1 {
 }
 
 .token-card {
-  width: 38px;
+  width: 42px;
 }
 
 .leader-strip {
