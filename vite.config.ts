@@ -9,12 +9,12 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Game Night',
+        name: 'Family Game Night',
         short_name: 'Game Night',
         description:
-          'Table-side scorekeepers for Five Crowns, Phase 10, and more. History, leaderboards, and per-game theming.',
-        theme_color: '#081018',
-        background_color: '#081018',
+          'Frosted-glass scorekeepers for Five Crowns, Phase 10, and more. History, leaderboards, and a theme for every game.',
+        theme_color: '#050910',
+        background_color: '#050910',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',

@@ -1,6 +1,10 @@
-# Game Night
+# Family Game Night
 
 A mobile-first React PWA for keeping score at the table. Pick a game, play in its theme, and keep history plus leaderboards for each one.
+
+Live: https://family-game-night-hazel.vercel.app
+
+(`family-game-night.vercel.app` is already taken by another app, so this project ships on the `family-game-night` Vercel project at the hazel production URL.)
 
 ## Games
 

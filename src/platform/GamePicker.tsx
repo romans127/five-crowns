@@ -20,24 +20,31 @@ export function GamePicker({ onChoose }: GamePickerProps) {
 
   return (
     <section className="screen picker-screen">
-      <p className="eyebrow">Table-side scorekeepers</p>
-      <h1>Game Night</h1>
-      <p className="tagline">Pick a game. Each table keeps its own scores, history, and theme.</p>
+      <header className="hero-block">
+        <p className="eyebrow">Family table</p>
+        <h1>Game Night</h1>
+        <p className="tagline">Scorekeepers that feel like the apps on your phone — glass, history, and a theme for every game.</p>
+      </header>
 
       <ol className="game-grid">
         {GAMES.map((game) => (
           <li key={game.id}>
             <button type="button" className={`game-tile theme-${game.id}`} onClick={() => onChoose(game.id)}>
-              <span className="eyebrow">{game.tagline}</span>
-              <strong>{game.name}</strong>
-              <span>{game.blurb}</span>
+              <span className="game-tile-copy">
+                <span className="eyebrow">{game.tagline}</span>
+                <strong>{game.name}</strong>
+                <span>{game.blurb}</span>
+              </span>
+              <span className="chevron" aria-hidden="true">
+                ›
+              </span>
             </button>
           </li>
         ))}
       </ol>
 
       {showImport ? (
-        <div className="import-panel">
+        <div className="import-panel glass">
           <p>
             Found {localPeek.historyCount} saved Five Crowns {localPeek.historyCount === 1 ? 'game' : 'games'}
             {localPeek.active ? ' plus a table in progress' : ''} on this phone.
@@ -71,12 +78,14 @@ export function GamePicker({ onChoose }: GamePickerProps) {
         </div>
       ) : null}
 
-      {canInstall ? (
-        <button type="button" className="install-chip" onClick={() => void install()}>
-          Install on this phone
-        </button>
-      ) : null}
-      {installed ? <p className="install-note">Installed — Game Night works like an app, even offline.</p> : null}
+      <div className="thumb-dock">
+        {canInstall ? (
+          <button type="button" className="install-chip" onClick={() => void install()}>
+            Add to Home Screen
+          </button>
+        ) : null}
+        {installed ? <p className="install-note">On your Home Screen — works offline at the table.</p> : null}
+      </div>
     </section>
   )
 }

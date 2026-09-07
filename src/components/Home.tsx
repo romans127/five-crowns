@@ -26,36 +26,46 @@ export function Home({
 
   return (
     <section className="screen home-screen">
-      <SuitRow size="lg" />
-      <CrownMark />
-      <p className="eyebrow">Table-side scorekeeper</p>
-      <h1>Five Crowns</h1>
-      <p className="tagline">The game isn’t over ’til the Kings go wild.</p>
-      <div className="home-actions">
+      <header className="nav-bar">
         <button type="button" className="btn text" onClick={onLeaveGames}>
           All games
         </button>
+      </header>
+      <div className="hero-block">
+        <SuitRow size="lg" />
+        <CrownMark />
+        <p className="eyebrow">Table-side scorekeeper</p>
+        <h1>Five Crowns</h1>
+        <p className="tagline">The game isn’t over ’til the Kings go wild.</p>
+      </div>
+      <div className="home-actions">
         <button type="button" className="btn primary pulse" onClick={onNewGame}>
           Deal a new game
         </button>
-        {canResume ? (
-          <button type="button" className="btn ghost" onClick={onResume}>
-            Resume the table
+        <div className="grouped-list">
+          {canResume ? (
+            <button type="button" className="grouped-row" onClick={onResume}>
+              <span>Resume the table</span>
+              <span className="chevron">›</span>
+            </button>
+          ) : null}
+          <button type="button" className="grouped-row" onClick={onHistory}>
+            <span>Past games{historyCount > 0 ? ` (${historyCount})` : ''}</span>
+            <span className="chevron">›</span>
           </button>
-        ) : null}
-        <button type="button" className="btn ghost" onClick={onHistory}>
-          Past games{historyCount > 0 ? ` (${historyCount})` : ''}
-        </button>
-        <button type="button" className="btn ghost" onClick={onLeaderboard}>
-          Hall of crowns
-        </button>
-        <button type="button" className="btn text" onClick={onRules}>
-          Look up the rules
-        </button>
+          <button type="button" className="grouped-row" onClick={onLeaderboard}>
+            <span>Hall of crowns</span>
+            <span className="chevron">›</span>
+          </button>
+          <button type="button" className="grouped-row" onClick={onRules}>
+            <span>Look up the rules</span>
+            <span className="chevron">›</span>
+          </button>
+        </div>
       </div>
       {canInstall ? (
         <button type="button" className="install-chip" onClick={() => void install()}>
-          Install on this phone
+          Add to Home Screen
         </button>
       ) : null}
       {installed ? <p className="install-note">Installed — play it like an app, even offline.</p> : null}

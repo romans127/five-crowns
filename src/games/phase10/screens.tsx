@@ -40,30 +40,40 @@ export function Phase10Home({
 }) {
   return (
     <section className="screen home-screen">
-      <p className="eyebrow">Phase by phase</p>
-      <h1>Phase 10</h1>
-      <p className="tagline">Complete every phase. Leftovers still count against you.</p>
-      <div className="home-actions">
+      <header className="nav-bar">
         <button type="button" className="btn text" onClick={onLeaveGames}>
           All games
         </button>
+      </header>
+      <div className="hero-block">
+        <p className="eyebrow">Phase by phase</p>
+        <h1>Phase 10</h1>
+        <p className="tagline">Complete every phase. Leftovers still count against you.</p>
+      </div>
+      <div className="home-actions">
         <button type="button" className="btn primary pulse" onClick={onNewGame}>
           Deal a new game
         </button>
-        {resume ? (
-          <button type="button" className="btn ghost" onClick={onResume}>
-            Resume the table
+        <div className="grouped-list">
+          {resume ? (
+            <button type="button" className="grouped-row" onClick={onResume}>
+              <span>Resume the table</span>
+              <span className="chevron">›</span>
+            </button>
+          ) : null}
+          <button type="button" className="grouped-row" onClick={onHistory}>
+            <span>Past games{historyCount > 0 ? ` (${historyCount})` : ''}</span>
+            <span className="chevron">›</span>
           </button>
-        ) : null}
-        <button type="button" className="btn ghost" onClick={onHistory}>
-          Past games{historyCount > 0 ? ` (${historyCount})` : ''}
-        </button>
-        <button type="button" className="btn ghost" onClick={onLeaderboard}>
-          Phase board
-        </button>
-        <button type="button" className="btn text" onClick={onRules}>
-          Look up the rules
-        </button>
+          <button type="button" className="grouped-row" onClick={onLeaderboard}>
+            <span>Phase board</span>
+            <span className="chevron">›</span>
+          </button>
+          <button type="button" className="grouped-row" onClick={onRules}>
+            <span>Look up the rules</span>
+            <span className="chevron">›</span>
+          </button>
+        </div>
       </div>
     </section>
   )
