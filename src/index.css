@@ -116,6 +116,11 @@ body {
   min-height: 100svh;
 }
 
+.swipe-back-shell {
+  min-height: 100svh;
+  width: 100%;
+}
+
 .orb {
   position: fixed;
   z-index: 0;

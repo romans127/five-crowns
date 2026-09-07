@@ -1,6 +1,7 @@
 import { SearchBar, Sheet, Toggle } from '@ios27_design_system/react'
 import { useMemo, useState } from 'react'
 import { ActionList, GlassButton, PrimaryButton, TextButton, TintedButton } from '../../platform/IosChrome.tsx'
+import { SwipeBack } from '../../platform/SwipeBack.tsx'
 import {
   playerColor,
   playerTotal,
@@ -356,7 +357,8 @@ export function Phase10History({
   if (selected) {
     const champs = winners(selected)
     return (
-      <section className="screen history-screen">
+      <SwipeBack onBack={() => setSelectedId(null)}>
+        <section className="screen history-screen">
         <header className="screen-head">
           <TextButton onClick={() => setSelectedId(null)}>Back to history</TextButton>
           <h1>Game detail</h1>
@@ -388,12 +390,14 @@ export function Phase10History({
         >
           Delete this game
         </TextButton>
-      </section>
+        </section>
+      </SwipeBack>
     )
   }
 
   return (
-    <section className="screen history-screen">
+    <SwipeBack onBack={onBack}>
+      <section className="screen history-screen">
       <header className="screen-head">
         <TextButton onClick={onBack}>Back home</TextButton>
         <h1>Past games</h1>
@@ -423,7 +427,8 @@ export function Phase10History({
           ))}
         </ol>
       )}
-    </section>
+      </section>
+    </SwipeBack>
   )
 }
 

@@ -12,6 +12,7 @@ import {
 } from '../game/history.ts'
 import type { GameRecord } from '../game/types.ts'
 import { PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
+import { SwipeBack } from '../platform/SwipeBack.tsx'
 import { ScoreSheet } from './ScoreSheet.tsx'
 
 type HistoryProps = {
@@ -36,7 +37,8 @@ export function History({ onBack, onLeaderboard, onResume }: HistoryProps) {
     const champs = winners(selected)
     const rows = standings(selected)
     return (
-      <section className="screen history-screen">
+      <SwipeBack onBack={() => setSelectedId(null)}>
+        <section className="screen history-screen">
         <header className="screen-head">
           <TextButton onClick={() => setSelectedId(null)}>Back to history</TextButton>
           <h1>Game detail</h1>
@@ -82,12 +84,14 @@ export function History({ onBack, onLeaderboard, onResume }: HistoryProps) {
         >
           Delete this game
         </TextButton>
-      </section>
+        </section>
+      </SwipeBack>
     )
   }
 
   return (
-    <section className="screen history-screen">
+    <SwipeBack onBack={onBack}>
+      <section className="screen history-screen">
       <header className="screen-head">
         <TextButton onClick={onBack}>Back home</TextButton>
         <h1>Past games</h1>
@@ -115,7 +119,8 @@ export function History({ onBack, onLeaderboard, onResume }: HistoryProps) {
           ))}
         </ol>
       )}
-    </section>
+      </section>
+    </SwipeBack>
   )
 }
 

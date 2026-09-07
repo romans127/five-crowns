@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { History } from './components/History.tsx'
+import { SwipeBack } from './platform/SwipeBack.tsx'
 import { Home } from './components/Home.tsx'
 import { Leaderboard } from './components/Leaderboard.tsx'
 import { Play } from './components/Play.tsx'
@@ -25,6 +26,11 @@ export function FiveCrownsApp({ onLeaveGames }: FiveCrownsAppProps) {
   })
 
   const goHome = () => setScreen('home')
+  const goRulesBack = () => setScreen(game ? (game.status === 'finished' ? 'winner' : 'play') : 'home')
+  const goWinnerHome = () => {
+    clearGame()
+    setScreen('home')
+  }
 
   useEffect(() => {
     if (screen === 'home') {
@@ -51,52 +57,41 @@ export function FiveCrownsApp({ onLeaveGames }: FiveCrownsAppProps) {
   }
 
   if (screen === 'leaderboard') {
-    return <Leaderboard onBack={() => setScreen('home')} />
+    return (
+      <SwipeBack onBack={goHome}>
+        <Leaderboard onBack={goHome} />
+      </SwipeBack>
+    )
   }
 
   if (screen === 'rules') {
-    return <Rules onBack={() => setScreen(game ? (game.status === 'finished' ? 'winner' : 'play') : 'home')} />
+    return (
+      <SwipeBack onBack={goRulesBack}>
+        <Rules onBack={goRulesBack} />
+      </SwipeBack>
+    )
   }
 
   if (screen === 'setup') {
     return (
-      <Setup
-        onBack={goHome}
-        onStart={(names) => {
-          startGame(names)
-          setScreen('play')
-        }}
-      />
+      <SwipeBack onBack={goHome}>
+        <Setup
+          onBack={goHome}
+          onStart={(names) => {
+            startGame(names)
+            setScreen('play')
+          }}
+        />
+      </SwipeBack>
     )
   }
 
   if (screen === 'winner' && game) {
     return (
-      <Winner
-        game={game}
-        onHome={() => {
-          clearGame()
-          setScreen('home')
-        }}
-        onPlayAgain={(names) => {
-          startGame(names)
-          setScreen('play')
-        }}
-        onRules={() => setScreen('rules')}
-        onHistory={() => setScreen('history')}
-      />
-    )
-  }
-
-  if (screen === 'play' && game) {
-    if (game.status === 'finished') {
-      return (
+      <SwipeBack onBack={goWinnerHome}>
         <Winner
           game={game}
-          onHome={() => {
-            clearGame()
-            setScreen('home')
-          }}
+          onHome={goWinnerHome}
           onPlayAgain={(names) => {
             startGame(names)
             setScreen('play')
@@ -104,38 +99,61 @@ export function FiveCrownsApp({ onLeaveGames }: FiveCrownsAppProps) {
           onRules={() => setScreen('rules')}
           onHistory={() => setScreen('history')}
         />
+      </SwipeBack>
+    )
+  }
+
+  if (screen === 'play' && game) {
+    if (game.status === 'finished') {
+      return (
+        <SwipeBack onBack={goWinnerHome}>
+          <Winner
+            game={game}
+            onHome={goWinnerHome}
+            onPlayAgain={(names) => {
+              startGame(names)
+              setScreen('play')
+            }}
+            onRules={() => setScreen('rules')}
+            onHistory={() => setScreen('history')}
+          />
+        </SwipeBack>
       )
     }
     return (
-      <Play
-        game={game}
-        onScore={recordScore}
-        onNextHand={() => {
-          nextHand()
-          if (game.currentHand === 10) {
-            setScreen('winner')
-          }
-        }}
-        onSelectHand={selectHand}
-        onRules={() => setScreen('rules')}
-        onQuit={() => {
-          clearGame()
-          setScreen('home')
-        }}
-      />
+      <SwipeBack onBack={goHome}>
+        <Play
+          game={game}
+          onScore={recordScore}
+          onNextHand={() => {
+            nextHand()
+            if (game.currentHand === 10) {
+              setScreen('winner')
+            }
+          }}
+          onSelectHand={selectHand}
+          onRules={() => setScreen('rules')}
+          onQuit={() => {
+            clearGame()
+            setScreen('home')
+          }}
+        />
+      </SwipeBack>
     )
   }
 
   return (
-    <Home
-      canResume={Boolean(game)}
-      historyCount={historyCount}
-      onLeaveGames={onLeaveGames}
-      onNewGame={() => setScreen('setup')}
-      onResume={() => setScreen(game?.status === 'finished' ? 'winner' : 'play')}
-      onHistory={() => setScreen('history')}
-      onLeaderboard={() => setScreen('leaderboard')}
-      onRules={() => setScreen('rules')}
-    />
+    <SwipeBack onBack={onLeaveGames}>
+      <Home
+        canResume={Boolean(game)}
+        historyCount={historyCount}
+        onLeaveGames={onLeaveGames}
+        onNewGame={() => setScreen('setup')}
+        onResume={() => setScreen(game?.status === 'finished' ? 'winner' : 'play')}
+        onHistory={() => setScreen('history')}
+        onLeaderboard={() => setScreen('leaderboard')}
+        onRules={() => setScreen('rules')}
+      />
+    </SwipeBack>
   )
 }

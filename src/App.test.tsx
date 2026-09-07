@@ -1,10 +1,23 @@
-import { cleanup, render, screen, within } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, beforeEach } from 'vitest'
 import { createGame, setHandScore } from './game/engine.ts'
 import { HISTORY_KEY, upsertHistory } from './game/history.ts'
 import { STORAGE_KEY } from './game/storage.ts'
 import App from './App.tsx'
+
+function swipeLeft(element: Element) {
+  fireEvent.touchStart(element, { touches: [{ clientX: 220, clientY: 120 }] })
+  fireEvent.touchEnd(element, { changedTouches: [{ clientX: 120, clientY: 125 }] })
+}
+
+function swipeBackShell() {
+  const shell = document.querySelector('.swipe-back-shell')
+  if (!shell) {
+    throw new Error('Expected a swipe-back shell')
+  }
+  return shell
+}
 
 describe('Game Night', () => {
   beforeEach(() => {
@@ -115,5 +128,43 @@ describe('Five Crowns scorekeeper', () => {
     await user.click(screen.getByRole('button', { name: /hall of crowns/i }))
     expect(screen.getByRole('heading', { name: 'Hall of crowns' })).toBeInTheDocument()
     expect(screen.getByText(/no completed games yet/i)).toBeInTheDocument()
+  })
+
+  it('swipes back from setup to home', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await openFiveCrowns(user)
+
+    await user.click(screen.getByRole('button', { name: /deal a new game/i }))
+    expect(screen.getByRole('heading', { name: /who.*at the table/i })).toBeInTheDocument()
+
+    swipeLeft(swipeBackShell())
+    expect(screen.getByRole('heading', { name: 'Five Crowns' })).toBeInTheDocument()
+  })
+
+  it('swipes back from game home to the picker', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await openFiveCrowns(user)
+
+    swipeLeft(swipeBackShell())
+    expect(screen.getByRole('heading', { name: 'Game Night' })).toBeInTheDocument()
+  })
+
+  it('swipes back from history detail to the list', async () => {
+    let game = createGame(['Ryan', 'Ada'])
+    game = setHandScore(game, 0, game.players[0]!.id, 7)
+    upsertHistory(game, { finishedAt: null })
+
+    const user = userEvent.setup()
+    render(<App />)
+    await openFiveCrowns(user)
+
+    await user.click(screen.getByRole('button', { name: /^past games/i }))
+    await user.click(screen.getByRole('button', { name: /Ryan, Ada/i }))
+    expect(screen.getByRole('heading', { name: 'Game detail' })).toBeInTheDocument()
+
+    swipeLeft(swipeBackShell())
+    expect(screen.getByRole('heading', { name: 'Past games' })).toBeInTheDocument()
   })
 })

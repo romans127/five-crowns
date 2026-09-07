@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { SwipeBack } from '../../platform/SwipeBack.tsx'
 import {
   Phase10History,
   Phase10Home,
@@ -25,6 +26,13 @@ export function Phase10App({ onLeaveGames }: Phase10AppProps) {
     return game.status === 'finished' ? 'winner' : 'play'
   })
 
+  const goHome = () => setScreen('home')
+  const goRulesBack = () => setScreen(game ? (game.status === 'finished' ? 'winner' : 'play') : 'home')
+  const goWinnerHome = () => {
+    clearGame()
+    setScreen('home')
+  }
+
   useEffect(() => {
     if (screen === 'home') {
       refreshHistoryCount()
@@ -45,70 +53,83 @@ export function Phase10App({ onLeaveGames }: Phase10AppProps) {
   }
 
   if (screen === 'leaderboard') {
-    return <Phase10Leaderboard onBack={() => setScreen('home')} />
+    return (
+      <SwipeBack onBack={goHome}>
+        <Phase10Leaderboard onBack={goHome} />
+      </SwipeBack>
+    )
   }
 
   if (screen === 'rules') {
-    return <Phase10Rules onBack={() => setScreen(game ? (game.status === 'finished' ? 'winner' : 'play') : 'home')} />
+    return (
+      <SwipeBack onBack={goRulesBack}>
+        <Phase10Rules onBack={goRulesBack} />
+      </SwipeBack>
+    )
   }
 
   if (screen === 'setup') {
     return (
-      <Phase10Setup
-        onBack={() => setScreen('home')}
-        onStart={(names) => {
-          startGame(names)
-          setScreen('play')
-        }}
-      />
+      <SwipeBack onBack={goHome}>
+        <Phase10Setup
+          onBack={goHome}
+          onStart={(names) => {
+            startGame(names)
+            setScreen('play')
+          }}
+        />
+      </SwipeBack>
     )
   }
 
   if ((screen === 'winner' || (screen === 'play' && game?.status === 'finished')) && game) {
     return (
-      <Phase10Winner
-        game={game}
-        onHome={() => {
-          clearGame()
-          setScreen('home')
-        }}
-        onPlayAgain={(names) => {
-          startGame(names)
-          setScreen('play')
-        }}
-        onRules={() => setScreen('rules')}
-        onHistory={() => setScreen('history')}
-      />
+      <SwipeBack onBack={goWinnerHome}>
+        <Phase10Winner
+          game={game}
+          onHome={goWinnerHome}
+          onPlayAgain={(names) => {
+            startGame(names)
+            setScreen('play')
+          }}
+          onRules={() => setScreen('rules')}
+          onHistory={() => setScreen('history')}
+        />
+      </SwipeBack>
     )
   }
 
   if (screen === 'play' && game) {
     return (
-      <Phase10Play
-        game={game}
-        onScore={recordScore}
-        onNextRound={() => {
-          nextRound()
-        }}
-        onRules={() => setScreen('rules')}
-        onQuit={() => {
-          clearGame()
-          setScreen('home')
-        }}
-      />
+      <SwipeBack onBack={goHome}>
+        <Phase10Play
+          game={game}
+          onScore={recordScore}
+          onNextRound={() => {
+            nextRound()
+          }}
+          onRules={() => setScreen('rules')}
+          onQuit={() => {
+            clearGame()
+            setScreen('home')
+          }}
+        />
+      </SwipeBack>
     )
   }
 
   return (
-    <Phase10Home
-      canResume={Boolean(game)}
-      historyCount={historyCount}
-      onLeaveGames={onLeaveGames}
-      onNewGame={() => setScreen('setup')}
-      onResume={() => setScreen(game?.status === 'finished' ? 'winner' : 'play')}
-      onHistory={() => setScreen('history')}
-      onLeaderboard={() => setScreen('leaderboard')}
-      onRules={() => setScreen('rules')}
-    />
+    <SwipeBack onBack={onLeaveGames}>
+      <Phase10Home
+        canResume={Boolean(game)}
+        historyCount={historyCount}
+        onLeaveGames={onLeaveGames}
+        onNewGame={() => setScreen('setup')}
+        onResume={() => setScreen(game?.status === 'finished' ? 'winner' : 'play')}
+        onHistory={() => setScreen('history')}
+        onLeaderboard={() => setScreen('leaderboard')}
+        onRules={() => setScreen('rules')}
+      />
+    </SwipeBack>
   )
 }

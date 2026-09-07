@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { FiveCrownsApp } from './FiveCrownsApp.tsx'
 import { Phase10App } from './games/phase10/App.tsx'
 import { GamePicker } from './platform/GamePicker.tsx'
+import { SwipeBack } from './platform/SwipeBack.tsx'
 import type { GameId } from './platform/types.ts'
 
 function AppShell({ children }: { children: ReactNode }) {
@@ -43,7 +44,9 @@ export default function App() {
 
   return (
     <AppShell>
-      <GamePicker onChoose={setSelected} />
+      <SwipeBack onBack={() => undefined} enabled={false}>
+        <GamePicker onChoose={setSelected} />
+      </SwipeBack>
     </AppShell>
   )
 }
