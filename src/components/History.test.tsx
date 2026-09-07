@@ -28,7 +28,7 @@ describe('History screen', () => {
   it('lists saved games and opens a score sheet', async () => {
     seedHistory()
     const user = userEvent.setup()
-    render(<History onBack={() => undefined} onResume={() => undefined} />)
+    render(<History onBack={() => undefined} onLeaderboard={() => undefined} onResume={() => undefined} />)
 
     expect(screen.getByRole('heading', { name: 'Past games' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /Ryan, Ada/i }))
@@ -47,7 +47,7 @@ describe('History screen', () => {
     upsertHistory({ ...game, status: 'finished' })
 
     const user = userEvent.setup()
-    render(<History onBack={() => undefined} onResume={() => undefined} />)
+    render(<History onBack={() => undefined} onLeaderboard={() => undefined} onResume={() => undefined} />)
 
     await user.type(screen.getByRole('searchbox', { name: /search past games/i }), 'Morgan')
     expect(screen.getByRole('button', { name: /Morgan, Lee/i })).toBeInTheDocument()
@@ -59,7 +59,7 @@ describe('History screen', () => {
     seedInProgressHistory()
     const onResume = vi.fn()
     const user = userEvent.setup()
-    render(<History onBack={() => undefined} onResume={onResume} />)
+    render(<History onBack={() => undefined} onLeaderboard={() => undefined} onResume={onResume} />)
 
     await user.click(screen.getByRole('button', { name: /Ryan, Ada/i }))
     const resume = screen.getByRole('button', { name: /resume this table/i })

@@ -7,10 +7,11 @@ type HomeProps = {
   onNewGame: () => void
   onResume: () => void
   onHistory: () => void
+  onLeaderboard: () => void
   onRules: () => void
 }
 
-export function Home({ canResume, historyCount, onNewGame, onResume, onHistory, onRules }: HomeProps) {
+export function Home({ canResume, historyCount, onNewGame, onResume, onHistory, onLeaderboard, onRules }: HomeProps) {
   const { canInstall, install, installed } = useInstallPrompt()
 
   return (
@@ -31,6 +32,9 @@ export function Home({ canResume, historyCount, onNewGame, onResume, onHistory, 
         ) : null}
         <button type="button" className="btn ghost" onClick={onHistory}>
           Past games{historyCount > 0 ? ` (${historyCount})` : ''}
+        </button>
+        <button type="button" className="btn ghost" onClick={onLeaderboard}>
+          Hall of crowns
         </button>
         <button type="button" className="btn text" onClick={onRules}>
           Look up the rules

@@ -83,6 +83,15 @@ export function winners(game: Game): Player[] {
   return ranked.filter((row) => row.total === best.total).map((row) => row.player)
 }
 
+export function lastPlacePlayers(game: Game): Player[] {
+  const ranked = standings(game)
+  const worst = ranked[ranked.length - 1]
+  if (!worst) {
+    return []
+  }
+  return ranked.filter((row) => row.total === worst.total).map((row) => row.player)
+}
+
 export function advanceHand(game: Game): Game {
   if (!handComplete(game, game.currentHand)) {
     return game

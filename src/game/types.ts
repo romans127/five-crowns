@@ -27,7 +27,7 @@ export type LeftoverToken =
   | { type: 'rank'; rank: Rank }
   | { type: 'joker' }
 
-export type Screen = 'home' | 'setup' | 'play' | 'rules' | 'winner' | 'history'
+export type Screen = 'home' | 'setup' | 'play' | 'rules' | 'winner' | 'history' | 'leaderboard'
 
 export type GameRecord = Game & {
   finishedAt: string | null

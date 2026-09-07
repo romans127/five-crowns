@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { History } from './components/History.tsx'
 import { Home } from './components/Home.tsx'
+import { Leaderboard } from './components/Leaderboard.tsx'
 import { Play } from './components/Play.tsx'
 import { Rules } from './components/Rules.tsx'
 import { Setup } from './components/Setup.tsx'
@@ -34,6 +35,7 @@ export default function App() {
           refreshHistoryCount()
           setScreen('home')
         }}
+        onLeaderboard={() => setScreen('leaderboard')}
         onResume={(record) => {
           const restored = recordToGame(record)
           resumeFromHistory(record)
@@ -42,6 +44,10 @@ export default function App() {
         }}
       />
     )
+  }
+
+  if (screen === 'leaderboard') {
+    return <Leaderboard onBack={() => setScreen('home')} />
   }
 
   if (screen === 'rules') {
@@ -123,6 +129,7 @@ export default function App() {
       onNewGame={() => setScreen('setup')}
       onResume={() => setScreen(game?.status === 'finished' ? 'winner' : 'play')}
       onHistory={() => setScreen('history')}
+      onLeaderboard={() => setScreen('leaderboard')}
       onRules={() => setScreen('rules')}
     />
   )

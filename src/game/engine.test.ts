@@ -6,6 +6,7 @@ import {
   gameComplete,
   goToHand,
   handComplete,
+  lastPlacePlayers,
   playerTotal,
   setHandScore,
   standings,
@@ -86,6 +87,16 @@ describe('winner', () => {
 
     game = setHandScore(game, 10, game.players[1]!.id, 0)
     expect(winners(game).map((player) => player.name)).toEqual(['Ada'])
+  })
+
+  it('finds everyone tied for the lantern', () => {
+    let game = createGame(['Ryan', 'Ada'])
+    for (let hand = 0; hand < 11; hand += 1) {
+      game = setHandScore(game, hand, game.players[0]!.id, 12)
+      game = setHandScore(game, hand, game.players[1]!.id, 12)
+    }
+    expect(lastPlacePlayers(game)).toHaveLength(2)
+    expect(lastPlacePlayers(game).map((player) => player.name).sort()).toEqual(['Ada', 'Ryan'])
   })
 })
 

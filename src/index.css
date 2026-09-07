@@ -789,3 +789,72 @@ h1 {
   padding: 10px 12px 12px;
   margin: 0;
 }
+
+.leaderboard-screen {
+  gap: 18px;
+}
+
+.leaderboard-panel {
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.leaderboard-panel header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.leaderboard-panel header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.leaderboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.leaderboard-list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+}
+
+.leaderboard-name {
+  display: grid;
+  gap: 2px;
+}
+
+.leaderboard-name small {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.leaderboard-stat {
+  min-width: 2.2rem;
+  text-align: center;
+  font-family: var(--display);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.gold-stat {
+  color: var(--gold);
+}
+
+.lantern-stat {
+  color: #ff8a4c;
+}

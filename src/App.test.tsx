@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, beforeEach } from 'vitest'
 import { createGame, setHandScore } from './game/engine.ts'
@@ -8,6 +8,7 @@ import App from './App.tsx'
 
 describe('Five Crowns scorekeeper', () => {
   beforeEach(() => {
+    cleanup()
     localStorage.removeItem(HISTORY_KEY)
     localStorage.removeItem(STORAGE_KEY)
   })
@@ -63,5 +64,14 @@ describe('Five Crowns scorekeeper', () => {
 
     expect(screen.getByRole('heading', { name: /3s are wild/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /ryan.*total 7/i })).toBeInTheDocument()
+  })
+
+  it('opens the all-game leaderboard from home', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: /hall of crowns/i }))
+    expect(screen.getByRole('heading', { name: 'Hall of crowns' })).toBeInTheDocument()
+    expect(screen.getByText(/no completed games yet/i)).toBeInTheDocument()
   })
 })

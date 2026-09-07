@@ -14,10 +14,11 @@ import { ScoreSheet } from './ScoreSheet.tsx'
 
 type HistoryProps = {
   onBack: () => void
+  onLeaderboard: () => void
   onResume: (record: GameRecord) => void
 }
 
-export function History({ onBack, onResume }: HistoryProps) {
+export function History({ onBack, onLeaderboard, onResume }: HistoryProps) {
   const [records, setRecords] = useState(() => listHistory())
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -100,6 +101,9 @@ export function History({ onBack, onResume }: HistoryProps) {
         </button>
         <h1>Past games</h1>
         <p>Search by player name or browse every saved table on this phone.</p>
+        <button type="button" className="btn text" onClick={onLeaderboard}>
+          Hall of crowns
+        </button>
       </header>
 
       <label className="history-search">
