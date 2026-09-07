@@ -23,10 +23,12 @@ export function Winner({ game, onPlayAgain, onHome, onRules, onHistory }: Winner
           <span key={index} className={`speck speck-${index % 5}`} />
         ))}
       </div>
-      <SuitRow size="lg" />
-      <CrownMark />
-      <p className="eyebrow">Kings went wild</p>
-      <h1>{title}</h1>
+      <div className="hero-block">
+        <SuitRow size="lg" />
+        <CrownMark />
+        <p className="eyebrow">Kings went wild</p>
+        <h1>{title}</h1>
+      </div>
       <p className="champs">
         {champs.map((player) => (
           <span key={player.id} style={{ color: playerColor(player).hex }}>

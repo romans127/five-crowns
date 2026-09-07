@@ -141,7 +141,7 @@ export function Phase10Play({
         <TextButton onClick={onRules}>Rules</TextButton>
       </header>
       {leader ? (
-        <p className="hint center">
+        <p className="hint center frost-tile">
           Lowest so far: <strong style={{ color: playerColor(leader.player).hex }}>{leader.player.name}</strong> · {leader.total}
         </p>
       ) : null}
@@ -175,7 +175,7 @@ export function Phase10Play({
           Next hand
         </PrimaryButton>
       ) : (
-        <p className="hint center">Tap a player for leftovers and whether they completed this phase.</p>
+        <p className="hint center frost-tile">Tap a player for leftovers and whether they completed this phase.</p>
       )}
       <TextButton className="quiet" onClick={onQuit}>
         Leave table
@@ -308,8 +308,10 @@ export function Phase10Winner({
   const rows = standings(game)
   return (
     <section className="screen winner-screen">
-      <p className="eyebrow">Phase 10 complete</p>
-      <h1>{champs.length > 1 ? 'Shared finish!' : 'Phase master'}</h1>
+      <div className="hero-block">
+        <p className="eyebrow">Phase 10 complete</p>
+        <h1>{champs.length > 1 ? 'Shared finish!' : 'Phase master'}</h1>
+      </div>
       <p className="champs">
         {champs.map((player) => (
           <span key={player.id} style={{ color: playerColor(player).hex }}>

@@ -13,9 +13,16 @@
   --glow: rgba(90, 168, 255, 0.28);
   --fill: #0a84ff;
   --fill-text: #fff;
-  --glass: rgba(22, 32, 48, 0.52);
-  --glass-strong: rgba(12, 18, 30, 0.72);
-  --shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-strong: rgba(16, 22, 36, 0.86);
+  --frost-fill: rgba(255, 255, 255, 0.1);
+  --frost-tile: rgba(255, 255, 255, 0.06);
+  --frost-border: rgba(255, 255, 255, 0.15);
+  --frost-highlight: rgba(255, 255, 255, 0.1);
+  --frost-blur: 24px;
+  --frost-blur-tile: 16px;
+  --frost-shadow: inset 0 1px 0 var(--frost-highlight), 0 18px 40px -22px rgba(0, 0, 0, 0.55);
+  --shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.55);
   --safe-top: env(safe-area-inset-top);
   --safe-bottom: env(safe-area-inset-bottom);
   --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI Variable', 'Segoe UI', sans-serif;
@@ -41,8 +48,10 @@
   --glow: rgba(244, 201, 93, 0.26);
   --fill: #f4c95d;
   --fill-text: #2a1604;
-  --glass: rgba(36, 22, 58, 0.55);
-  --glass-strong: rgba(18, 10, 32, 0.74);
+  --glass: rgba(255, 244, 220, 0.08);
+  --glass-strong: rgba(24, 14, 38, 0.86);
+  --frost-fill: rgba(255, 244, 220, 0.1);
+  --frost-tile: rgba(255, 244, 220, 0.06);
   --color-blue: #f4c95d;
   --ios27-color-accent-blue: #f4c95d;
 }
@@ -60,8 +69,10 @@
   --glow: rgba(255, 120, 196, 0.28);
   --fill: #ff2d92;
   --fill-text: #fff;
-  --glass: rgba(56, 16, 52, 0.55);
-  --glass-strong: rgba(28, 8, 28, 0.74);
+  --glass: rgba(255, 220, 240, 0.08);
+  --glass-strong: rgba(36, 10, 34, 0.86);
+  --frost-fill: rgba(255, 220, 240, 0.1);
+  --frost-tile: rgba(255, 220, 240, 0.06);
   --color-blue: #ff2d92;
   --ios27-color-accent-blue: #ff2d92;
 }
@@ -108,12 +119,12 @@ body {
 .orb {
   position: fixed;
   z-index: 0;
-  width: 240px;
-  height: 240px;
+  width: 280px;
+  height: 280px;
   border-radius: 50%;
-  filter: blur(42px);
+  filter: blur(48px);
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 0.72;
 }
 
 .orb-a {
@@ -125,17 +136,26 @@ body {
 .orb-b {
   top: 32%;
   right: -80px;
-  width: 200px;
-  height: 200px;
-  background: color-mix(in srgb, var(--crimson) 40%, transparent);
+  width: 240px;
+  height: 240px;
+  background: color-mix(in srgb, var(--crimson) 48%, transparent);
 }
 
 .orb-c {
   bottom: 8%;
   left: 10%;
-  width: 180px;
-  height: 180px;
-  background: color-mix(in srgb, var(--gold-deep) 35%, #7c5cff);
+  width: 220px;
+  height: 220px;
+  background: color-mix(in srgb, var(--gold-deep) 40%, #7c5cff);
+}
+
+.orb-d {
+  top: 58%;
+  left: 40%;
+  width: 200px;
+  height: 200px;
+  background: color-mix(in srgb, var(--gold) 28%, #4f9dff);
+  opacity: 0.45;
 }
 
 button,
@@ -189,28 +209,57 @@ h1 {
   text-align: center;
 }
 
+.frost-panel,
+.frost-tile,
 .glass,
+.hero-block,
+.play-head,
+.hand-track,
 .player-field,
 .player-card,
 .rule-card,
 .final-standings li,
+.wild-list li,
+.score-legend li,
 .history-row,
 .history-detail-card,
+.history-empty,
 .leaderboard-panel,
+.leaderboard-list li,
 .import-panel,
 .game-tile,
 .grouped-list,
 .leader-strip,
 .score-sheet-grid-wrap,
-.ios27-list-section-content {
-  background: color-mix(in srgb, var(--glass) 78%, rgba(var(--ios27-glass-me-rgb, 26, 26, 26), 0.45));
-  backdrop-filter: blur(calc(6px * calc(0.5 + 0.8 * var(--ios27-glass-transparency, 0.5)))) saturate(1.8);
-  -webkit-backdrop-filter: blur(calc(6px * calc(0.5 + 0.8 * var(--ios27-glass-transparency, 0.5)))) saturate(1.8);
-  border: 0;
-  box-shadow:
-    var(--ios27-glass-me-shadow, var(--shadow)),
-    0 0 0 var(--ios27-glass-rim-spread, 0.5px) var(--ios27-glass-rim, var(--hairline)),
-    inset 0 40px 10px -40px var(--ios27-glass-inner, rgba(26, 26, 26, 1));
+.pad-total,
+.champs,
+.token-row,
+.ios27-list-section-content,
+.ios27-searchbar-field,
+.ios27-segmented,
+.install-chip {
+  background: var(--frost-fill);
+  backdrop-filter: blur(var(--frost-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(180%);
+  border: 1px solid var(--frost-border);
+  box-shadow: var(--frost-shadow);
+}
+
+.frost-tile,
+.pad-total,
+.wild-list li,
+.score-legend li,
+.leaderboard-list li,
+.ios27-searchbar-field,
+.ios27-segmented,
+.champs,
+.token-row,
+.keypad button {
+  background: var(--frost-tile);
+  backdrop-filter: blur(var(--frost-blur-tile)) saturate(170%);
+  -webkit-backdrop-filter: blur(var(--frost-blur-tile)) saturate(170%);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -226,7 +275,23 @@ h1 {
   .game-tile,
   .grouped-list,
   .leader-strip,
-  .score-sheet-grid-wrap {
+  .score-sheet-grid-wrap,
+  .hero-block,
+  .play-head,
+  .hand-track,
+  .frost-panel,
+  .frost-tile,
+  .history-empty,
+  .pad-total,
+  .wild-list li,
+  .score-legend li,
+  .leaderboard-list li,
+  .ios27-searchbar-field,
+  .ios27-segmented,
+  .champs,
+  .token-row,
+  .keypad button,
+  .ios27-sheet {
     background: var(--glass-strong);
   }
 }
@@ -300,6 +365,8 @@ h1 {
 .hero-block {
   display: grid;
   gap: 10px;
+  padding: 20px 18px 22px;
+  border-radius: 26px;
 }
 
 .grouped-list {
@@ -396,6 +463,24 @@ h1 {
 
 .ios27-sheet {
   width: min(430px, 100%);
+  background: var(--frost-fill) !important;
+  background-image: none !important;
+  backdrop-filter: blur(var(--frost-blur)) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(180%) !important;
+  border: 1px solid var(--frost-border);
+  box-shadow:
+    0 -12px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 var(--frost-highlight);
+}
+
+.ios27-searchbar-field {
+  min-height: 48px;
+  border-radius: 16px;
+}
+
+.ios27-segmented {
+  padding: 4px;
+  border-radius: 14px;
 }
 
 .ios27-list-row {
@@ -452,11 +537,7 @@ h1 {
   margin: 8px auto 0;
   border-radius: 999px;
   padding: 0 16px;
-  background: var(--glass);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
   color: var(--gold);
-  border: 1px solid var(--line);
 }
 
 .install-note {
@@ -475,10 +556,11 @@ h1 {
   z-index: 5;
   margin: calc(-12px - var(--safe-top)) -16px 0;
   padding: calc(10px + var(--safe-top)) 16px 12px;
-  background: color-mix(in srgb, var(--ink) 28%, transparent);
-  backdrop-filter: blur(24px) saturate(170%);
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  background: var(--frost-fill);
+  backdrop-filter: blur(var(--frost-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(180%);
+  border-bottom: 1px solid var(--frost-border);
+  box-shadow: inset 0 1px 0 var(--frost-highlight);
 }
 
 .screen-head h1 {
@@ -540,6 +622,8 @@ h1 {
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-card);
 }
 
 .wild-burst {
@@ -551,7 +635,8 @@ h1 {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding: 8px 2px 10px;
+  padding: 12px 12px 14px;
+  border-radius: var(--radius-card);
   scroll-snap-type: x proximity;
   scroll-padding-inline: 8px;
   -webkit-overflow-scrolling: touch;
@@ -669,6 +754,8 @@ h1 {
   gap: 8px;
   min-height: 42px;
   align-items: center;
+  padding: 10px 12px;
+  border-radius: var(--radius-row);
 }
 
 .token-card {
@@ -787,6 +874,8 @@ h1 {
   font-family: var(--display);
   font-size: 3.2rem;
   line-height: 1;
+  padding: 16px 12px 14px;
+  border-radius: var(--radius-card);
 }
 
 .pad-total span {
@@ -829,10 +918,7 @@ h1 {
 .keypad button {
   min-height: 64px;
   border-radius: 18px;
-  background: color-mix(in srgb, var(--ivory) 10%, transparent);
   color: var(--ivory);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 
 .keypad-digit,
@@ -871,12 +957,27 @@ h1 {
   justify-content: space-between;
 }
 
+.wild-list li,
+.score-legend li,
+.hint.frost-tile {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: var(--radius-row);
+}
+
+.hint.frost-tile {
+  justify-content: center;
+}
+
 .champs {
   display: flex;
   justify-content: center;
   gap: 12px;
   font-family: var(--display);
   font-size: 1.6rem;
+  padding: 12px 16px;
+  border-radius: var(--radius-card);
 }
 
 .confetti {
@@ -953,7 +1054,20 @@ h1 {
   .btn.ghost,
   .install-chip,
   .screen-head,
-  .ios27-list-section-content {
+  .ios27-list-section-content,
+  .hero-block,
+  .play-head,
+  .hand-track,
+  .frost-panel,
+  .frost-tile,
+  .history-empty,
+  .pad-total,
+  .wild-list li,
+  .score-legend li,
+  .leaderboard-list li,
+  .ios27-searchbar-field,
+  .ios27-segmented,
+  .ios27-sheet {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: var(--glass-strong);
@@ -1004,6 +1118,8 @@ h1 {
 
 .history-empty {
   margin-top: 24px;
+  padding: 18px 16px;
+  border-radius: var(--radius-card);
 }
 
 .history-list {
@@ -1146,8 +1262,6 @@ h1 {
   align-items: center;
   padding: 10px 12px;
   border-radius: 14px;
-  background: color-mix(in srgb, var(--ivory) 6%, transparent);
-  border: 1px solid var(--line);
 }
 
 .leaderboard-name {

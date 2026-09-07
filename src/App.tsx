@@ -10,6 +10,7 @@ function AppShell({ children }: { children: ReactNode }) {
       <div className="orb orb-a" aria-hidden="true" />
       <div className="orb orb-b" aria-hidden="true" />
       <div className="orb orb-c" aria-hidden="true" />
+      <div className="orb orb-d" aria-hidden="true" />
       {children}
     </div>
   )
