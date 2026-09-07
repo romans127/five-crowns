@@ -105,9 +105,11 @@ body {
   position: relative;
   isolation: isolate;
   background:
+    radial-gradient(ellipse 120% 70% at 50% -8%, color-mix(in srgb, var(--felt) 55%, transparent), transparent 58%),
     radial-gradient(circle at 18% -8%, var(--glow), transparent 42%),
     radial-gradient(circle at 92% 12%, color-mix(in srgb, var(--gold) 22%, transparent), transparent 36%),
-    linear-gradient(180deg, color-mix(in srgb, var(--felt) 70%, transparent), transparent 40%),
+    radial-gradient(ellipse 80% 55% at 50% 100%, color-mix(in srgb, var(--ink) 80%, var(--felt)), transparent 62%),
+    linear-gradient(180deg, color-mix(in srgb, var(--felt) 78%, transparent), color-mix(in srgb, var(--ink) 92%, transparent) 48%, var(--ink)),
     var(--ink);
 }
 
@@ -116,20 +118,122 @@ body {
   min-height: 100svh;
 }
 
+.app-bg {
+  --bg-stroke: color-mix(in srgb, var(--gold) 22%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--gold-deep) 16%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--ivory) 7%, transparent);
+  position: fixed;
+  inset: 0;
+  left: 50%;
+  width: min(100%, 430px);
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.app-bg__depth {
+  position: absolute;
+  inset: -12%;
+  background:
+    radial-gradient(ellipse 95% 55% at 12% 8%, color-mix(in srgb, var(--gold) 14%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 18%, color-mix(in srgb, var(--crimson) 10%, transparent), transparent 52%),
+    radial-gradient(ellipse 85% 60% at 50% 108%, color-mix(in srgb, var(--gold-deep) 12%, transparent), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 8% 78%, color-mix(in srgb, var(--gold-deep) 8%, transparent), transparent 50%);
+}
+
+.app-bg__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  mask-image: radial-gradient(ellipse 92% 78% at 50% 42%, black 18%, transparent 78%);
+}
+
+.app-bg__mesh {
+  position: absolute;
+  inset: -18%;
+  opacity: 0.22;
+  background:
+    repeating-linear-gradient(
+      116deg,
+      transparent,
+      transparent 54px,
+      color-mix(in srgb, var(--gold) 10%, transparent) 54px,
+      color-mix(in srgb, var(--gold) 10%, transparent) 55px
+    ),
+    repeating-linear-gradient(
+      -24deg,
+      transparent,
+      transparent 78px,
+      color-mix(in srgb, var(--gold-deep) 7%, transparent) 78px,
+      color-mix(in srgb, var(--gold-deep) 7%, transparent) 79px
+    );
+  mask-image: radial-gradient(ellipse 88% 72% at 50% 38%, black 8%, transparent 72%);
+}
+
+.app-bg__dots {
+  position: absolute;
+  inset: 0;
+  opacity: 0.14;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--ivory) 16%, transparent) 0.55px, transparent 0.65px);
+  background-size: 18px 18px;
+  mask-image: radial-gradient(ellipse 96% 82% at 50% 44%, black 10%, transparent 76%);
+}
+
+.app-bg__vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 105% 88% at 50% 46%, transparent 34%, color-mix(in srgb, var(--ink) 42%, transparent) 100%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ink) 28%, transparent), transparent 22%, transparent 78%, color-mix(in srgb, var(--ink) 36%, transparent));
+  opacity: 0.92;
+}
+
+.app-bg__noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.028;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+[data-game-theme='five-crowns'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--gold) 24%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--gold-deep) 18%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--ivory) 8%, transparent);
+}
+
+[data-game-theme='five-crowns'] .app-bg__mesh {
+  opacity: 0.18;
+}
+
+[data-game-theme='phase-10'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--gold) 26%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--gold-deep) 20%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--ivory) 8%, transparent);
+}
+
+[data-game-theme='phase-10'] .app-bg__mesh {
+  opacity: 0.2;
+}
+
 .swipe-back-shell {
   min-height: 100svh;
   width: 100%;
 }
 
 .orb {
-  position: fixed;
-  z-index: 0;
+  position: absolute;
+  z-index: 1;
   width: 280px;
   height: 280px;
   border-radius: 50%;
-  filter: blur(48px);
+  filter: blur(52px);
   pointer-events: none;
-  opacity: 0.72;
+  opacity: 0.58;
 }
 
 .orb-a {
@@ -160,7 +264,7 @@ body {
   width: 200px;
   height: 200px;
   background: color-mix(in srgb, var(--gold) 28%, #4f9dff);
-  opacity: 0.45;
+  opacity: 0.32;
 }
 
 button,
@@ -1035,13 +1139,29 @@ h1 {
   .pulse,
   .speck,
   .score-sheet,
-  .orb {
+  .orb,
+  .app-bg__noise {
     animation: none;
     filter: none;
   }
 }
 
 @media (prefers-reduced-transparency: reduce) {
+  .app-bg__lines,
+  .app-bg__mesh,
+  .app-bg__dots,
+  .app-bg__noise {
+    opacity: 0.06;
+  }
+
+  .app-bg__vignette {
+    opacity: 0.65;
+  }
+
+  .orb {
+    opacity: 0.35;
+  }
+
   .glass,
   .player-field,
   .player-card,

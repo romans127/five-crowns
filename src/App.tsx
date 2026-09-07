@@ -2,16 +2,14 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { FiveCrownsApp } from './FiveCrownsApp.tsx'
 import { Phase10App } from './games/phase10/App.tsx'
 import { GamePicker } from './platform/GamePicker.tsx'
+import { AppBackground } from './platform/AppBackground.tsx'
 import { SwipeBack } from './platform/SwipeBack.tsx'
 import type { GameId } from './platform/types.ts'
 
 function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="app-shell">
-      <div className="orb orb-a" aria-hidden="true" />
-      <div className="orb orb-b" aria-hidden="true" />
-      <div className="orb orb-c" aria-hidden="true" />
-      <div className="orb orb-d" aria-hidden="true" />
+      <AppBackground />
       {children}
     </div>
   )
