@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { createGame, setHandScore } from './engine.ts'
 import {
+  canResumeFromHistory,
   deleteHistoryGame,
   gameHasProgress,
   getHistoryGame,
   HISTORY_KEY,
   listHistory,
+  recordToGame,
   searchHistory,
   upsertHistory,
 } from './history.ts'
@@ -72,5 +74,26 @@ describe('game history', () => {
     expect(searchHistory(records, 'dave')).toHaveLength(1)
     expect(searchHistory(records, 'zzz')).toHaveLength(0)
     expect(searchHistory(records, '')).toHaveLength(2)
+  })
+
+  it('detects resumable games and strips history metadata', () => {
+    const storage = memoryStorage()
+    let game = createGame(['Ryan', 'Ada'])
+    game = setHandScore(game, 0, game.players[0]!.id, 4)
+    const record = upsertHistory(game, { finishedAt: null }, storage)
+    expect(canResumeFromHistory(record)).toBe(true)
+    const restored = recordToGame(record)
+    expect(restored.status).toBe('playing')
+    expect(restored).not.toHaveProperty('archivedAt')
+    expect(restored).not.toHaveProperty('finishedAt')
+    expect(restored.currentHand).toBe(0)
+
+    let finished = createGame(['Morgan', 'Lee'])
+    for (let hand = 0; hand < 11; hand += 1) {
+      finished = setHandScore(finished, hand, finished.players[0]!.id, 0)
+      finished = setHandScore(finished, hand, finished.players[1]!.id, 1)
+    }
+    const done = upsertHistory({ ...finished, status: 'finished' }, undefined, storage)
+    expect(canResumeFromHistory(done)).toBe(false)
   })
 })

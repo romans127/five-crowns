@@ -1,9 +1,16 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, beforeEach } from 'vitest'
+import { createGame, setHandScore } from './game/engine.ts'
+import { HISTORY_KEY, upsertHistory } from './game/history.ts'
+import { STORAGE_KEY } from './game/storage.ts'
 import App from './App.tsx'
 
 describe('Five Crowns scorekeeper', () => {
+  beforeEach(() => {
+    localStorage.removeItem(HISTORY_KEY)
+    localStorage.removeItem(STORAGE_KEY)
+  })
   it('starts a game, records leftovers, and opens the rules', async () => {
     const user = userEvent.setup()
     render(<App />)
@@ -40,5 +47,21 @@ describe('Five Crowns scorekeeper', () => {
     await user.click(screen.getByRole('button', { name: /^past games/i }))
     expect(screen.getByRole('heading', { name: 'Past games' })).toBeInTheDocument()
     expect(screen.getByRole('searchbox', { name: /search past games/i })).toBeInTheDocument()
+  })
+
+  it('resumes an accidentally ended game from history', async () => {
+    let game = createGame(['Ryan', 'Ada'])
+    game = setHandScore(game, 0, game.players[0]!.id, 7)
+    upsertHistory(game, { finishedAt: null })
+
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: /^past games/i }))
+    await user.click(screen.getByRole('button', { name: /Ryan, Ada/i }))
+    await user.click(screen.getByRole('button', { name: /resume this table/i }))
+
+    expect(screen.getByRole('heading', { name: /3s are wild/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /ryan.*total 7/i })).toBeInTheDocument()
   })
 })

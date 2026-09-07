@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { advanceHand, createGame, goToHand, setHandScore } from '../game/engine.ts'
-import { gameHasProgress, listHistory, upsertHistory } from '../game/history.ts'
+import { gameHasProgress, listHistory, recordToGame, upsertHistory } from '../game/history.ts'
 import { loadGame, saveGame } from '../game/storage.ts'
-import type { Game } from '../game/types.ts'
+import type { Game, GameRecord } from '../game/types.ts'
 
-function archiveGame(game: Game, archived: Set<string>): void {
-  if (archived.has(game.id)) {
+function archiveGame(game: Game, archived: Set<string>, force = false): void {
+  if (!force && archived.has(game.id)) {
     return
   }
   if (game.status === 'finished' || gameHasProgress(game)) {
@@ -38,9 +38,20 @@ export function useGame() {
     if (!current) {
       return
     }
-    archiveGame(current, archivedRef.current)
+    archiveGame(current, archivedRef.current, true)
     setHistoryCount(listHistory().length)
   }, [])
+
+  const resumeFromHistory = useCallback(
+    (record: GameRecord) => {
+      setGame((current) => {
+        stashCurrentGame(current)
+        archivedRef.current.delete(record.id)
+        return recordToGame(record)
+      })
+    },
+    [stashCurrentGame],
+  )
 
   const startGame = useCallback(
     (names: string[]) => {
@@ -83,5 +94,6 @@ export function useGame() {
     nextHand,
     selectHand,
     clearGame,
+    resumeFromHistory,
   }
 }

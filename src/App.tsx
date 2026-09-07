@@ -6,10 +6,11 @@ import { Rules } from './components/Rules.tsx'
 import { Setup } from './components/Setup.tsx'
 import { Winner } from './components/Winner.tsx'
 import { useGame } from './hooks/useGame.ts'
+import { recordToGame } from './game/history.ts'
 import type { Screen } from './game/types.ts'
 
 export default function App() {
-  const { game, historyCount, refreshHistoryCount, startGame, recordScore, nextHand, selectHand, clearGame } =
+  const { game, historyCount, refreshHistoryCount, startGame, recordScore, nextHand, selectHand, clearGame, resumeFromHistory } =
     useGame()
   const [screen, setScreen] = useState<Screen>(() => {
     if (!game) {
@@ -32,6 +33,12 @@ export default function App() {
         onBack={() => {
           refreshHistoryCount()
           setScreen('home')
+        }}
+        onResume={(record) => {
+          const restored = recordToGame(record)
+          resumeFromHistory(record)
+          refreshHistoryCount()
+          setScreen(restored.status === 'finished' ? 'winner' : 'play')
         }}
       />
     )

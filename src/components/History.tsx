@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { playerColor, standings, winners } from '../game/engine.ts'
 import {
+  canResumeFromHistory,
   deleteHistoryGame,
   formatWhen,
   handsRecorded,
@@ -13,9 +14,10 @@ import { ScoreSheet } from './ScoreSheet.tsx'
 
 type HistoryProps = {
   onBack: () => void
+  onResume: (record: GameRecord) => void
 }
 
-export function History({ onBack }: HistoryProps) {
+export function History({ onBack, onResume }: HistoryProps) {
   const [records, setRecords] = useState(() => listHistory())
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -64,6 +66,16 @@ export function History({ onBack }: HistoryProps) {
         </article>
 
         <ScoreSheet game={selected} />
+
+        {canResumeFromHistory(selected) ? (
+          <button
+            type="button"
+            className="btn primary"
+            onClick={() => onResume(selected)}
+          >
+            Resume this table
+          </button>
+        ) : null}
 
         <button
           type="button"

@@ -1,4 +1,4 @@
-import { handComplete } from './engine.ts'
+import { gameComplete, handComplete } from './engine.ts'
 import type { Game, GameRecord } from './types.ts'
 
 export const HISTORY_KEY = 'five-crowns:history:v1'
@@ -106,4 +106,16 @@ export function searchHistory(records: GameRecord[], query: string): GameRecord[
     ]
     return haystack.some((part) => part.includes(needle))
   })
+}
+
+export function canResumeFromHistory(record: GameRecord): boolean {
+  return record.status === 'playing' || !gameComplete(record)
+}
+
+export function recordToGame(record: GameRecord): Game {
+  const { finishedAt: _finishedAt, archivedAt: _archivedAt, ...game } = record
+  return {
+    ...game,
+    status: gameComplete(game) ? 'finished' : 'playing',
+  }
 }
