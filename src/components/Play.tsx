@@ -4,12 +4,14 @@ import { cardsDealt, handTitle, wildLabel, wildRank } from '../game/rules.ts'
 import { suitForHand } from '../game/suits.ts'
 import { HAND_SIZES, type Game } from '../game/types.ts'
 import { PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
+import { SceneShell } from '../platform/SceneNav.tsx'
 import { PlayingCard } from './PlayingCard.tsx'
 import { ScorePad } from './ScorePad.tsx'
 import { SuitRow } from './Suits.tsx'
 
 type PlayProps = {
   game: Game
+  onBack: () => void
   onScore: (handIndex: number, playerId: string, score: number | null) => void
   onNextHand: () => void
   onSelectHand: (handIndex: number) => void
@@ -17,7 +19,7 @@ type PlayProps = {
   onQuit: () => void
 }
 
-export function Play({ game, onScore, onNextHand, onSelectHand, onRules, onQuit }: PlayProps) {
+export function Play({ game, onBack, onScore, onNextHand, onSelectHand, onRules, onQuit }: PlayProps) {
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null)
   const current = game.currentHand
   const ready = handComplete(game, current)
@@ -37,16 +39,18 @@ export function Play({ game, onScore, onNextHand, onSelectHand, onRules, onQuit 
   }, [current])
 
   return (
-    <section className="screen play-screen">
-      <header className="play-head">
-        <div>
-          <p className="eyebrow">{handTitle(current)}</p>
-          <h1>
-            <span className="wild-burst">{wildLabel(current)}</span> are wild
-          </h1>
-        </div>
-        <TextButton onClick={onRules}>Rules</TextButton>
-      </header>
+    <SceneShell
+      className="play-screen"
+      nav={{
+        back: { label: 'Five Crowns', onClick: onBack },
+        title: handTitle(current),
+        subtitle: `${wildLabel(current)} are wild`,
+        actions: [{ label: 'Rules', onClick: onRules }],
+      }}
+    >
+      <h1 className="play-title">
+        <span className="wild-burst">{wildLabel(current)}</span> are wild
+      </h1>
 
       <div className="hand-track" ref={handTrackRef} role="tablist" aria-label="Hands">
         {HAND_SIZES.map((size, index) => {
@@ -127,6 +131,6 @@ export function Play({ game, onScore, onNextHand, onSelectHand, onRules, onQuit 
           }}
         />
       ) : null}
-    </section>
+    </SceneShell>
   )
 }

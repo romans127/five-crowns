@@ -8,7 +8,7 @@ import {
   sortByWins,
   type LeaderboardEntry,
 } from '../game/leaderboard.ts'
-import { TextButton } from '../platform/IosChrome.tsx'
+import { SceneShell } from '../platform/SceneNav.tsx'
 
 type LeaderboardProps = {
   onBack: () => void
@@ -23,13 +23,14 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
   const finishedGames = useMemo(() => records.filter(isLeaderboardGame).length, [records])
 
   return (
-    <section className="screen leaderboard-screen">
-      <header className="screen-head">
-        <TextButton onClick={onBack}>Back home</TextButton>
-        <h1>Hall of crowns</h1>
-        <p>All-time wins and last-place finishes from completed games on this phone.</p>
-      </header>
-
+    <SceneShell
+      className="leaderboard-screen"
+      nav={{
+        back: { label: 'Five Crowns', onClick: onBack },
+        title: 'Hall of crowns',
+        subtitle: 'All-time stats on this phone',
+      }}
+    >
       {!hasStats ? (
         <p className="hint center history-empty">No completed games yet. Finish a full match and stats will show up here.</p>
       ) : (
@@ -50,7 +51,7 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
           />
         </>
       )}
-    </section>
+    </SceneShell>
   )
 }
 

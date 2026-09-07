@@ -1,20 +1,23 @@
 import { HAND_SIZES } from '../game/types.ts'
 import { JOKER_POINTS, WILD_POINTS, wildLabel } from '../game/rules.ts'
-import { TextButton } from '../platform/IosChrome.tsx'
+import { SceneShell } from '../platform/SceneNav.tsx'
 
 type RulesProps = {
   onBack: () => void
+  backLabel?: string
 }
 
-export function Rules({ onBack }: RulesProps) {
+export function Rules({ onBack, backLabel = 'Table' }: RulesProps) {
   return (
-    <section className="screen rules-screen">
-      <header className="screen-head">
-        <TextButton onClick={onBack}>Back to the table</TextButton>
-        <h1>How Five Crowns works</h1>
-        <p>Rummy with a fifth suit and a wild that climbs every hand.</p>
-      </header>
-
+    <SceneShell
+      className="rules-screen"
+      nav={{
+        back: { label: backLabel, onClick: onBack },
+        title: 'Rules',
+        subtitle: 'Five Crowns scoring',
+      }}
+    >
+      <h2 className="scene-section-title">How Five Crowns works</h2>
       <article className="rule-card">
         <h2>The deck</h2>
         <p>
@@ -90,6 +93,6 @@ export function Rules({ onBack }: RulesProps) {
         </ul>
         <p>The player who goes out scores zero for that hand. Nobody can hold more cards than were dealt that round — hand 3 means up to 3 leftovers. After the Kings-wild hand, lowest total wins.</p>
       </article>
-    </section>
+    </SceneShell>
   )
 }

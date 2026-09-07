@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { SwipeBack } from '../../platform/SwipeBack.tsx'
+import { SceneStage } from '../../platform/SceneNav.tsx'
+import { useDirectedScreen } from '../../hooks/useDirectedScreen.ts'
 import {
   Phase10History,
   Phase10Home,
@@ -16,21 +18,29 @@ type Phase10AppProps = {
   onLeaveGames: () => void
 }
 
+function initialScreen(game: ReturnType<typeof usePhase10Game>['game']): Phase10Screen {
+  if (!game) {
+    return 'home'
+  }
+  return game.status === 'finished' ? 'winner' : 'play'
+}
+
 export function Phase10App({ onLeaveGames }: Phase10AppProps) {
   const { game, historyCount, refreshHistoryCount, startGame, recordScore, nextRound, clearGame, resumeFromHistory } =
     usePhase10Game()
-  const [screen, setScreen] = useState<Phase10Screen>(() => {
-    if (!game) {
-      return 'home'
-    }
-    return game.status === 'finished' ? 'winner' : 'play'
-  })
+  const { screen, transition, navigate, back } = useDirectedScreen<Phase10Screen>(initialScreen(game))
 
-  const goHome = () => setScreen('home')
-  const goRulesBack = () => setScreen(game ? (game.status === 'finished' ? 'winner' : 'play') : 'home')
+  const goHome = () => back('home')
+  const goRulesBack = () => {
+    if (game) {
+      back(game.status === 'finished' ? 'winner' : 'play')
+      return
+    }
+    back('home')
+  }
   const goWinnerHome = () => {
     clearGame()
-    setScreen('home')
+    back('home')
   }
 
   useEffect(() => {
@@ -39,97 +49,97 @@ export function Phase10App({ onLeaveGames }: Phase10AppProps) {
     }
   }, [screen, refreshHistoryCount])
 
+  let content
+
   if (screen === 'history') {
-    return (
+    content = (
       <Phase10History
-        onBack={() => setScreen('home')}
-        onLeaderboard={() => setScreen('leaderboard')}
+        onBack={() => back('home')}
+        onLeaderboard={() => navigate('leaderboard')}
         onResume={(record) => {
           resumeFromHistory(record)
-          setScreen(record.status === 'finished' ? 'winner' : 'play')
+          navigate(record.status === 'finished' ? 'winner' : 'play')
         }}
       />
     )
-  }
-
-  if (screen === 'leaderboard') {
-    return (
+  } else if (screen === 'leaderboard') {
+    content = (
       <SwipeBack onBack={goHome}>
         <Phase10Leaderboard onBack={goHome} />
       </SwipeBack>
     )
-  }
-
-  if (screen === 'rules') {
-    return (
+  } else if (screen === 'rules') {
+    content = (
       <SwipeBack onBack={goRulesBack}>
-        <Phase10Rules onBack={goRulesBack} />
+        <Phase10Rules onBack={goRulesBack} backLabel={game ? 'Table' : 'Phase 10'} />
       </SwipeBack>
     )
-  }
-
-  if (screen === 'setup') {
-    return (
+  } else if (screen === 'setup') {
+    content = (
       <SwipeBack onBack={goHome}>
         <Phase10Setup
           onBack={goHome}
           onStart={(names) => {
             startGame(names)
-            setScreen('play')
+            navigate('play')
           }}
         />
       </SwipeBack>
     )
-  }
-
-  if ((screen === 'winner' || (screen === 'play' && game?.status === 'finished')) && game) {
-    return (
+  } else if ((screen === 'winner' || (screen === 'play' && game?.status === 'finished')) && game) {
+    content = (
       <SwipeBack onBack={goWinnerHome}>
         <Phase10Winner
           game={game}
+          onBack={goWinnerHome}
           onHome={goWinnerHome}
           onPlayAgain={(names) => {
             startGame(names)
-            setScreen('play')
+            navigate('play')
           }}
-          onRules={() => setScreen('rules')}
-          onHistory={() => setScreen('history')}
+          onRules={() => navigate('rules')}
+          onHistory={() => navigate('history')}
         />
       </SwipeBack>
     )
-  }
-
-  if (screen === 'play' && game) {
-    return (
+  } else if (screen === 'play' && game) {
+    content = (
       <SwipeBack onBack={goHome}>
         <Phase10Play
           game={game}
+          onBack={goHome}
           onScore={recordScore}
           onNextRound={() => {
             nextRound()
           }}
-          onRules={() => setScreen('rules')}
+          onRules={() => navigate('rules')}
           onQuit={() => {
             clearGame()
-            setScreen('home')
+            back('home')
           }}
+        />
+      </SwipeBack>
+    )
+  } else {
+    content = (
+      <SwipeBack onBack={onLeaveGames}>
+        <Phase10Home
+          canResume={Boolean(game)}
+          historyCount={historyCount}
+          onLeaveGames={onLeaveGames}
+          onNewGame={() => navigate('setup')}
+          onResume={() => navigate(game?.status === 'finished' ? 'winner' : 'play')}
+          onHistory={() => navigate('history')}
+          onLeaderboard={() => navigate('leaderboard')}
+          onRules={() => navigate('rules')}
         />
       </SwipeBack>
     )
   }
 
   return (
-    <SwipeBack onBack={onLeaveGames}>
-      <Phase10Home
-        canResume={Boolean(game)}
-        historyCount={historyCount}
-        onLeaveGames={onLeaveGames}
-        onNewGame={() => setScreen('setup')}
-        onResume={() => setScreen(game?.status === 'finished' ? 'winner' : 'play')}
-        onHistory={() => setScreen('history')}
-        onLeaderboard={() => setScreen('leaderboard')}
-        onRules={() => setScreen('rules')}
-      />
-    </SwipeBack>
+    <SceneStage sceneKey={screen} transition={transition}>
+      {content}
+    </SceneStage>
   )
 }

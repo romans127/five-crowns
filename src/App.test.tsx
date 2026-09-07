@@ -33,7 +33,7 @@ describe('Game Night', () => {
     expect(screen.getByRole('button', { name: /kings go wild/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /complete every phase/i })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /complete every phase/i }))
-    expect(screen.getByRole('heading', { name: 'Phase 10' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Phase 10' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /all games/i }))
     expect(screen.getByRole('heading', { name: 'Game Night' })).toBeInTheDocument()
   })
@@ -68,7 +68,7 @@ describe('Five Crowns scorekeeper', () => {
     render(<App />)
     await openFiveCrowns(user)
 
-    expect(screen.getByRole('heading', { name: 'Five Crowns' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Five Crowns' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /deal a new game/i }))
     await user.type(screen.getByLabelText('Player 1 name'), 'Ryan')
     await user.type(screen.getByLabelText('Player 2 name'), 'Ada')
@@ -99,7 +99,7 @@ describe('Five Crowns scorekeeper', () => {
 
     expect(screen.getByRole('button', { name: /^past games/i })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /^past games/i }))
-    expect(screen.getByRole('heading', { name: 'Past games' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Past games' })).toBeInTheDocument()
     expect(screen.getByRole('searchbox', { name: /search past games/i })).toBeInTheDocument()
   })
 
@@ -126,7 +126,7 @@ describe('Five Crowns scorekeeper', () => {
     await openFiveCrowns(user)
 
     await user.click(screen.getByRole('button', { name: /hall of crowns/i }))
-    expect(screen.getByRole('heading', { name: 'Hall of crowns' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Hall of crowns' })).toBeInTheDocument()
     expect(screen.getByText(/no completed games yet/i)).toBeInTheDocument()
   })
 
@@ -136,10 +136,10 @@ describe('Five Crowns scorekeeper', () => {
     await openFiveCrowns(user)
 
     await user.click(screen.getByRole('button', { name: /deal a new game/i }))
-    expect(screen.getByRole('heading', { name: /who.*at the table/i })).toBeInTheDocument()
+    expect(screen.getByText(/who.*at the table/i)).toBeInTheDocument()
 
     swipeLeft(swipeBackShell())
-    expect(screen.getByRole('heading', { name: 'Five Crowns' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Five Crowns' })).toBeInTheDocument()
   })
 
   it('swipes back from game home to the picker', async () => {
@@ -162,9 +162,9 @@ describe('Five Crowns scorekeeper', () => {
 
     await user.click(screen.getByRole('button', { name: /^past games/i }))
     await user.click(screen.getByRole('button', { name: /Ryan, Ada/i }))
-    expect(screen.getByRole('heading', { name: 'Game detail' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Game detail' })).toBeInTheDocument()
 
     swipeLeft(swipeBackShell())
-    expect(screen.getByRole('heading', { name: 'Past games' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Past games' })).toBeInTheDocument()
   })
 })

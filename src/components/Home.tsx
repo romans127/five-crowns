@@ -1,5 +1,6 @@
 import { useInstallPrompt } from '../hooks/useInstallPrompt.ts'
-import { ActionList, PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
+import { ActionList, PrimaryButton } from '../platform/IosChrome.tsx'
+import { SceneShell, type SceneNavAction } from '../platform/SceneNav.tsx'
 import { CrownMark, SuitRow } from './Suits.tsx'
 
 type HomeProps = {
@@ -25,16 +26,36 @@ export function Home({
 }: HomeProps) {
   const { canInstall, install, installed } = useInstallPrompt()
 
+  const flowLinks: SceneNavAction[] = [
+    {
+      label: historyCount > 0 ? `Past games (${historyCount})` : 'Past games',
+      onClick: onHistory,
+    },
+    {
+      label: 'Hall of crowns',
+      onClick: onLeaderboard,
+    },
+    {
+      label: 'Rules',
+      onClick: onRules,
+    },
+  ]
+
   return (
-    <section className="screen home-screen">
-      <header className="nav-bar">
-        <TextButton onClick={onLeaveGames}>All games</TextButton>
-      </header>
+    <SceneShell
+      className="home-screen"
+      nav={{
+        back: { label: 'All games', onClick: onLeaveGames },
+        title: 'Five Crowns',
+        subtitle: 'Table-side scorekeeper',
+      }}
+      flowLinks={flowLinks}
+    >
       <div className="hero-block">
         <SuitRow size="lg" />
         <CrownMark />
         <p className="eyebrow">Table-side scorekeeper</p>
-        <h1>Five Crowns</h1>
+        <h2 className="hero-display">Five Crowns</h2>
         <p className="tagline">The game isn’t over ’til the Kings go wild.</p>
       </div>
       <div className="home-actions">
@@ -42,18 +63,13 @@ export function Home({
           Deal a new game
         </PrimaryButton>
         <ActionList
-          items={[
-            ...(canResume ? [{ label: 'Resume the table', onClick: onResume }] : []),
-            { label: historyCount > 0 ? `Past games (${historyCount})` : 'Past games', onClick: onHistory },
-            { label: 'Hall of crowns', onClick: onLeaderboard },
-            { label: 'Look up the rules', onClick: onRules },
-          ]}
+          items={[...(canResume ? [{ label: 'Resume the table', onClick: onResume }] : [])]}
         />
       </div>
       {canInstall ? (
         <PrimaryButton onClick={() => void install()}>Add to Home Screen</PrimaryButton>
       ) : null}
       {installed ? <p className="install-note">Installed — play it like an app, even offline.</p> : null}
-    </section>
+    </SceneShell>
   )
 }

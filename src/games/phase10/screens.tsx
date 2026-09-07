@@ -1,6 +1,7 @@
 import { SearchBar, Sheet, Toggle } from '@ios27_design_system/react'
 import { useMemo, useState } from 'react'
 import { ActionList, GlassButton, PrimaryButton, TextButton, TintedButton } from '../../platform/IosChrome.tsx'
+import { SceneShell, SceneStage } from '../../platform/SceneNav.tsx'
 import { SwipeBack } from '../../platform/SwipeBack.tsx'
 import {
   playerColor,
@@ -41,30 +42,37 @@ export function Phase10Home({
   onLeaderboard: () => void
   onRules: () => void
 }) {
+  const flowLinks = [
+    {
+      label: historyCount > 0 ? `Past games (${historyCount})` : 'Past games',
+      onClick: onHistory,
+    },
+    { label: 'Phase board', onClick: onLeaderboard },
+    { label: 'Rules', onClick: onRules },
+  ]
+
   return (
-    <section className="screen home-screen">
-      <header className="nav-bar">
-        <TextButton onClick={onLeaveGames}>All games</TextButton>
-      </header>
+    <SceneShell
+      className="home-screen"
+      nav={{
+        back: { label: 'All games', onClick: onLeaveGames },
+        title: 'Phase 10',
+        subtitle: 'Phase by phase',
+      }}
+      flowLinks={flowLinks}
+    >
       <div className="hero-block">
         <p className="eyebrow">Phase by phase</p>
-        <h1>Phase 10</h1>
+        <h2 className="hero-display">Phase 10</h2>
         <p className="tagline">Complete every phase. Leftovers still count against you.</p>
       </div>
       <div className="home-actions">
         <PrimaryButton className="pulse" onClick={onNewGame}>
           Deal a new game
         </PrimaryButton>
-        <ActionList
-          items={[
-            ...(resume ? [{ label: 'Resume the table', onClick: onResume }] : []),
-            { label: historyCount > 0 ? `Past games (${historyCount})` : 'Past games', onClick: onHistory },
-            { label: 'Phase board', onClick: onLeaderboard },
-            { label: 'Look up the rules', onClick: onRules },
-          ]}
-        />
+        <ActionList items={[...(resume ? [{ label: 'Resume the table', onClick: onResume }] : [])]} />
       </div>
-    </section>
+    </SceneShell>
   )
 }
 
@@ -73,12 +81,15 @@ export function Phase10Setup({ onBack, onStart }: { onBack: () => void; onStart:
   const readyNames = names.map((name) => name.trim()).filter(Boolean)
 
   return (
-    <section className="screen setup-screen">
-      <header className="screen-head">
-        <TextButton onClick={onBack}>Back</TextButton>
-        <h1>Who’s at the table?</h1>
-        <p>Two to eight players. First to finish Phase 10 with the lowest leftover total wins.</p>
-      </header>
+    <SceneShell
+      className="setup-screen"
+      nav={{
+        back: { label: 'Phase 10', onClick: onBack },
+        title: 'New table',
+        subtitle: 'Who’s playing?',
+      }}
+    >
+      <p className="hint">Two to eight players. First to finish Phase 10 with the lowest leftover total wins.</p>
       <ol className="player-fields">
         {names.map((name, index) => {
           const color = PLAYER_COLORS[index % PLAYER_COLORS.length]
@@ -109,18 +120,20 @@ export function Phase10Setup({ onBack, onStart }: { onBack: () => void; onStart:
       <PrimaryButton disabled={readyNames.length < MIN_PLAYERS} onClick={() => onStart(readyNames)}>
         Shuffle up and deal
       </PrimaryButton>
-    </section>
+    </SceneShell>
   )
 }
 
 export function Phase10Play({
   game,
+  onBack,
   onScore,
   onNextRound,
   onRules,
   onQuit,
 }: {
   game: Phase10Game
+  onBack: () => void
   onScore: (playerId: string, leftover: number | null, completed: boolean) => void
   onNextRound: () => void
   onRules: () => void
@@ -133,14 +146,16 @@ export function Phase10Play({
   const current = game.rounds[game.currentRound] ?? {}
 
   return (
-    <section className="screen play-screen">
-      <header className="play-head">
-        <div>
-          <p className="eyebrow">Hand {game.currentRound + 1} · 10 cards</p>
-          <h1>Make your phase</h1>
-        </div>
-        <TextButton onClick={onRules}>Rules</TextButton>
-      </header>
+    <SceneShell
+      className="play-screen"
+      nav={{
+        back: { label: 'Phase 10', onClick: onBack },
+        title: `Hand ${game.currentRound + 1}`,
+        subtitle: '10 cards · Make your phase',
+        actions: [{ label: 'Rules', onClick: onRules }],
+      }}
+    >
+      <h1 className="play-title">Make your phase</h1>
       {leader ? (
         <p className="hint center frost-tile">
           Lowest so far: <strong style={{ color: playerColor(leader.player).hex }}>{leader.player.name}</strong> · {leader.total}
@@ -195,7 +210,7 @@ export function Phase10Play({
           }}
         />
       ) : null}
-    </section>
+    </SceneShell>
   )
 }
 
@@ -257,14 +272,17 @@ function Phase10Pad({
   )
 }
 
-export function Phase10Rules({ onBack }: { onBack: () => void }) {
+export function Phase10Rules({ onBack, backLabel = 'Table' }: { onBack: () => void; backLabel?: string }) {
   return (
-    <section className="screen rules-screen">
-      <header className="screen-head">
-        <TextButton onClick={onBack}>Back to the table</TextButton>
-        <h1>How Phase 10 works</h1>
-        <p>Complete ten phases in order. Leftover cards still add to your score.</p>
-      </header>
+    <SceneShell
+      className="rules-screen"
+      nav={{
+        back: { label: backLabel, onClick: onBack },
+        title: 'Rules',
+        subtitle: 'How Phase 10 works',
+      }}
+    >
+      <h2 className="scene-section-title">Phase 10 phases</h2>
       <article className="rule-card">
         <h2>The ten phases</h2>
         <ol className="wild-list">
@@ -288,18 +306,20 @@ export function Phase10Rules({ onBack }: { onBack: () => void }) {
         <p>{leftoverHint()}.</p>
         <p>The first player to complete Phase 10 ends the game. If more than one finishes in the same hand, lowest leftover total wins.</p>
       </article>
-    </section>
+    </SceneShell>
   )
 }
 
 export function Phase10Winner({
   game,
+  onBack,
   onHome,
   onPlayAgain,
   onRules,
   onHistory,
 }: {
   game: Phase10Game
+  onBack: () => void
   onHome: () => void
   onPlayAgain: (names: string[]) => void
   onRules: () => void
@@ -308,7 +328,22 @@ export function Phase10Winner({
   const champs = winners(game)
   const rows = standings(game)
   return (
-    <section className="screen winner-screen">
+    <SceneShell
+      className="winner-screen"
+      nav={{
+        back: { label: 'Phase 10', onClick: onBack },
+        title: 'Match complete',
+        subtitle: 'Phase 10 finished',
+        actions: [
+          { label: 'Rules', onClick: onRules },
+          { label: 'History', onClick: onHistory },
+        ],
+      }}
+      flowLinks={[
+        { label: 'Past games', onClick: onHistory },
+        { label: 'Rules', onClick: onRules },
+      ]}
+    >
       <div className="hero-block">
         <p className="eyebrow">Phase 10 complete</p>
         <h1>{champs.length > 1 ? 'Shared finish!' : 'Phase master'}</h1>
@@ -335,7 +370,7 @@ export function Phase10Winner({
       <GlassButton onClick={onHome}>Back home</GlassButton>
       <GlassButton onClick={onHistory}>Past games</GlassButton>
       <TextButton onClick={onRules}>Review the rules</TextButton>
-    </section>
+    </SceneShell>
   )
 }
 
@@ -351,83 +386,101 @@ export function Phase10History({
   const [records, setRecords] = useState(() => listHistory())
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [detailTransition, setDetailTransition] = useState<'forward' | 'back' | 'none'>('none')
   const filtered = useMemo(() => searchHistory(records, query), [records, query])
   const selected = records.find((record) => record.id === selectedId) ?? null
+
+  const openDetail = (id: string) => {
+    setDetailTransition('forward')
+    setSelectedId(id)
+  }
+
+  const closeDetail = () => {
+    setDetailTransition('back')
+    setSelectedId(null)
+  }
 
   if (selected) {
     const champs = winners(selected)
     return (
-      <SwipeBack onBack={() => setSelectedId(null)}>
-        <section className="screen history-screen">
-        <header className="screen-head">
-          <TextButton onClick={() => setSelectedId(null)}>Back to history</TextButton>
-          <h1>Game detail</h1>
-          <p>{formatWhen(selected.archivedAt)}</p>
-        </header>
-        <article className="history-detail-card">
-          <p className="eyebrow">{selected.status === 'finished' ? 'Completed match' : 'Stopped early'}</p>
-          <h2>{historyHeadline(selected)}</h2>
-          {champs.length > 0 ? (
-            <p className="champs compact">
-              {champs.map((player) => (
-                <span key={player.id} style={{ color: playerColor(player).hex }}>
-                  {player.name}
-                </span>
-              ))}
-            </p>
-          ) : null}
-        </article>
-        {canResume(selected) ? (
-          <PrimaryButton onClick={() => onResume(selected)}>Resume this table</PrimaryButton>
-        ) : null}
-        <TextButton
-          className="quiet"
-          onClick={() => {
-            deleteHistoryGame(selected.id)
-            setRecords(listHistory())
-            setSelectedId(null)
-          }}
-        >
-          Delete this game
-        </TextButton>
-        </section>
+      <SwipeBack onBack={closeDetail}>
+        <SceneStage sceneKey={selected.id} transition={detailTransition}>
+          <SceneShell
+            className="history-screen"
+            nav={{
+              back: { label: 'Past games', onClick: closeDetail },
+              title: 'Game detail',
+              subtitle: formatWhen(selected.archivedAt),
+            }}
+          >
+            <article className="history-detail-card">
+              <p className="eyebrow">{selected.status === 'finished' ? 'Completed match' : 'Stopped early'}</p>
+              <h2>{historyHeadline(selected)}</h2>
+              {champs.length > 0 ? (
+                <p className="champs compact">
+                  {champs.map((player) => (
+                    <span key={player.id} style={{ color: playerColor(player).hex }}>
+                      {player.name}
+                    </span>
+                  ))}
+                </p>
+              ) : null}
+            </article>
+            {canResume(selected) ? (
+              <PrimaryButton onClick={() => onResume(selected)}>Resume this table</PrimaryButton>
+            ) : null}
+            <TextButton
+              className="quiet"
+              onClick={() => {
+                deleteHistoryGame(selected.id)
+                setRecords(listHistory())
+                closeDetail()
+              }}
+            >
+              Delete this game
+            </TextButton>
+          </SceneShell>
+        </SceneStage>
       </SwipeBack>
     )
   }
 
   return (
     <SwipeBack onBack={onBack}>
-      <section className="screen history-screen">
-      <header className="screen-head">
-        <TextButton onClick={onBack}>Back home</TextButton>
-        <h1>Past games</h1>
-        <p>Search Phase 10 tables saved on this phone.</p>
-        <TextButton onClick={onLeaderboard}>Phase board</TextButton>
-      </header>
-      <SearchBar
-        value={query}
-        onChange={setQuery}
-        placeholder="Search players…"
-        aria-label="Search past games"
-      />
-      {filtered.length === 0 ? (
-        <p className="hint center history-empty">No saved Phase 10 games yet.</p>
-      ) : (
-        <ol className="history-list">
-          {filtered.map((record) => (
-            <li key={record.id}>
-              <button type="button" className="history-row" onClick={() => setSelectedId(record.id)}>
-                <span className="history-when">{formatWhen(record.archivedAt)}</span>
-                <strong>{historyHeadline(record)}</strong>
-                <span className="history-meta">
-                  {record.status === 'finished' ? 'Completed' : `Stopped after hand ${handsRecorded(record)}`}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ol>
-      )}
-      </section>
+      <SceneShell
+        className="history-screen"
+        nav={{
+          back: { label: 'Phase 10', onClick: onBack },
+          title: 'Past games',
+          subtitle: 'Saved on this phone',
+          actions: [{ label: 'Phase board', onClick: onLeaderboard }],
+        }}
+        flowLinks={[{ label: 'Phase board', onClick: onLeaderboard }]}
+      >
+        <SearchBar
+          value={query}
+          onChange={setQuery}
+          placeholder="Search players…"
+          aria-label="Search past games"
+        />
+        {filtered.length === 0 ? (
+          <p className="hint center history-empty">No saved Phase 10 games yet.</p>
+        ) : (
+          <ol className="history-list">
+            {filtered.map((record) => (
+              <li key={record.id}>
+                <button type="button" className="history-row" onClick={() => openDetail(record.id)}>
+                  <span className="history-when">{formatWhen(record.archivedAt)}</span>
+                  <strong>{historyHeadline(record)}</strong>
+                  <span className="history-meta">
+                    {record.status === 'finished' ? 'Completed' : `Stopped after hand ${handsRecorded(record)}`}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        )}
+      </SceneShell>
     </SwipeBack>
   )
 }
@@ -438,12 +491,14 @@ export function Phase10Leaderboard({ onBack }: { onBack: () => void }) {
   const lanterns = sortByLastPlace(entries).filter((entry) => entry.lastPlace > 0)
 
   return (
-    <section className="screen leaderboard-screen">
-      <header className="screen-head">
-        <TextButton onClick={onBack}>Back home</TextButton>
-        <h1>Phase board</h1>
-        <p>Wins and last-place finishes from completed Phase 10 games.</p>
-      </header>
+    <SceneShell
+      className="leaderboard-screen"
+      nav={{
+        back: { label: 'Phase 10', onClick: onBack },
+        title: 'Phase board',
+        subtitle: 'Wins and last-place finishes',
+      }}
+    >
       {entries.length === 0 ? (
         <p className="hint center history-empty">Finish a Phase 10 match and stats will show up here.</p>
       ) : (
@@ -484,6 +539,6 @@ export function Phase10Leaderboard({ onBack }: { onBack: () => void }) {
           </article>
         </>
       )}
-    </section>
+    </SceneShell>
   )
 }

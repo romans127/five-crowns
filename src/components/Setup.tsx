@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MAX_PLAYERS, MIN_PLAYERS, PLAYER_COLORS } from '../game/types.ts'
-import { GlassButton, PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
+import { GlassButton, PrimaryButton } from '../platform/IosChrome.tsx'
+import { SceneShell } from '../platform/SceneNav.tsx'
 
 type SetupProps = {
   onBack: () => void
@@ -17,12 +18,15 @@ export function Setup({ onBack, onStart }: SetupProps) {
   const canStart = readyNames.length >= MIN_PLAYERS
 
   return (
-    <section className="screen setup-screen">
-      <header className="screen-head">
-        <TextButton onClick={onBack}>Back</TextButton>
-        <h1>Who’s at the table?</h1>
-        <p>Two to eight players. Lowest leftover points after 11 hands wins.</p>
-      </header>
+    <SceneShell
+      className="setup-screen"
+      nav={{
+        back: { label: 'Five Crowns', onClick: onBack },
+        title: 'New table',
+        subtitle: 'Who’s at the table?',
+      }}
+    >
+      <p className="hint">Two to eight players. Lowest leftover points after 11 hands wins.</p>
       <ol className="player-fields">
         {names.map((name, index) => {
           const color = PLAYER_COLORS[index % PLAYER_COLORS.length]
@@ -74,6 +78,6 @@ export function Setup({ onBack, onStart }: SetupProps) {
       >
         Shuffle up and deal
       </PrimaryButton>
-    </section>
+    </SceneShell>
   )
 }
