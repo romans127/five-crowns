@@ -1,8 +1,8 @@
-import { ListRow, ListSection } from '@ios27_design_system/react'
+import { SearchBar } from '@ios27_design_system/react'
 import { useMemo, useState } from 'react'
 import { useInstallPrompt } from '../hooks/useInstallPrompt.ts'
 import { GlassButton, PrimaryButton } from './IosChrome.tsx'
-import { GAMES } from './catalog.ts'
+import { searchGames } from './catalog.ts'
 import { alreadyImported, hasLocalFiveCrowns, importLocalFiveCrowns, peekLocalFiveCrowns } from './importFiveCrowns.ts'
 import { cloudAvailable } from './sync.ts'
 import type { GameId } from './types.ts'
@@ -15,10 +15,12 @@ export function GamePicker({ onChoose }: GamePickerProps) {
   const { canInstall, install, installed } = useInstallPrompt()
   const localPeek = useMemo(() => peekLocalFiveCrowns(), [])
   const showImport = hasLocalFiveCrowns()
+  const [query, setQuery] = useState('')
   const [importing, setImporting] = useState(false)
   const [importNote, setImportNote] = useState<string | null>(() =>
     alreadyImported() ? 'Five Crowns games were already imported to Game Night.' : null,
   )
+  const matches = useMemo(() => searchGames(query), [query])
 
   return (
     <section className="screen picker-screen">
@@ -28,23 +30,35 @@ export function GamePicker({ onChoose }: GamePickerProps) {
         <p className="tagline">Scorekeepers that feel like the apps on your phone — glass, history, and a theme for every game.</p>
       </header>
 
-      <ListSection header="Tonight's table">
-        {GAMES.map((game, index) => (
-          <ListRow
-            key={game.id}
-            className={`theme-${game.id}`}
-            disclosure
-            separator={index < GAMES.length - 1}
-            onClick={() => onChoose(game.id)}
-          >
-            <span className="game-tile-copy">
-              <span className="eyebrow">{game.tagline}</span>
-              <strong>{game.name}</strong>
-              <span>{game.blurb}</span>
-            </span>
-          </ListRow>
-        ))}
-      </ListSection>
+      <SearchBar
+        value={query}
+        onChange={setQuery}
+        placeholder="Search games…"
+        aria-label="Search games"
+        autoComplete="off"
+        enterKeyHint="search"
+      />
+
+      {matches.length === 0 ? (
+        <p className="hint center history-empty">No games match “{query.trim()}”.</p>
+      ) : (
+        <ol className="game-grid">
+          {matches.map((game) => (
+            <li key={game.id}>
+              <button type="button" className={`game-tile theme-${game.id}`} onClick={() => onChoose(game.id)}>
+                <span className="game-tile-copy">
+                  <span className="eyebrow">{game.tagline}</span>
+                  <strong>{game.name}</strong>
+                  <span>{game.blurb}</span>
+                </span>
+                <span className="chevron" aria-hidden="true">
+                  ›
+                </span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      )}
 
       {showImport ? (
         <div className="import-panel glass">

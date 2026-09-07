@@ -1294,10 +1294,14 @@ h1 {
   font-size: clamp(2.6rem, 11vw, 3.6rem);
 }
 
+.picker-screen .ios27-searchbar {
+  margin-top: 2px;
+}
+
 .game-grid {
   list-style: none;
   padding: 0;
-  margin: 8px 0 0;
+  margin: 4px 0 0;
   display: grid;
   gap: 14px;
 }
@@ -1315,20 +1319,24 @@ h1 {
   color: inherit;
 }
 
+.game-tile:active {
+  transform: scale(0.985);
+}
+
 .game-tile-copy {
   display: grid;
   gap: 6px;
   min-width: 0;
 }
 
-.ios27-list-row.theme-five-crowns,
 .game-tile.theme-five-crowns {
-  background: linear-gradient(135deg, rgba(244, 201, 93, 0.18), transparent 46%);
+  background-color: var(--frost-fill);
+  background-image: linear-gradient(135deg, rgba(244, 201, 93, 0.22), transparent 52%);
 }
 
-.ios27-list-row.theme-phase-10,
 .game-tile.theme-phase-10 {
-  background: linear-gradient(135deg, rgba(255, 90, 168, 0.2), transparent 46%);
+  background-color: var(--frost-fill);
+  background-image: linear-gradient(135deg, rgba(255, 90, 168, 0.22), transparent 52%);
 }
 
 .game-tile strong {

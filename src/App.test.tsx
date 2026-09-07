@@ -24,6 +24,19 @@ describe('Game Night', () => {
     await user.click(screen.getByRole('button', { name: /all games/i }))
     expect(screen.getByRole('heading', { name: 'Game Night' })).toBeInTheDocument()
   })
+
+  it('filters game cards by search', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.type(screen.getByRole('searchbox', { name: /search games/i }), 'phase')
+    expect(screen.getByRole('button', { name: /complete every phase/i })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /kings go wild/i })).not.toBeInTheDocument()
+
+    await user.clear(screen.getByRole('searchbox', { name: /search games/i }))
+    await user.type(screen.getByRole('searchbox', { name: /search games/i }), 'cribbage')
+    expect(screen.getByText(/no games match “cribbage”/i)).toBeInTheDocument()
+  })
 })
 
 describe('Five Crowns scorekeeper', () => {
