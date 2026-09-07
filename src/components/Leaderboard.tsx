@@ -8,6 +8,7 @@ import {
   sortByWins,
   type LeaderboardEntry,
 } from '../game/leaderboard.ts'
+import { TextButton } from '../platform/IosChrome.tsx'
 
 type LeaderboardProps = {
   onBack: () => void
@@ -24,9 +25,7 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
   return (
     <section className="screen leaderboard-screen">
       <header className="screen-head">
-        <button type="button" className="btn text" onClick={onBack}>
-          Back home
-        </button>
+        <TextButton onClick={onBack}>Back home</TextButton>
         <h1>Hall of crowns</h1>
         <p>All-time wins and last-place finishes from completed games on this phone.</p>
       </header>

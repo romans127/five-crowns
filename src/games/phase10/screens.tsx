@@ -1,4 +1,6 @@
+import { SearchBar, Sheet, Toggle } from '@ios27_design_system/react'
 import { useMemo, useState } from 'react'
+import { ActionList, GlassButton, PrimaryButton, TextButton, TintedButton } from '../../platform/IosChrome.tsx'
 import {
   playerColor,
   playerTotal,
@@ -41,9 +43,7 @@ export function Phase10Home({
   return (
     <section className="screen home-screen">
       <header className="nav-bar">
-        <button type="button" className="btn text" onClick={onLeaveGames}>
-          All games
-        </button>
+        <TextButton onClick={onLeaveGames}>All games</TextButton>
       </header>
       <div className="hero-block">
         <p className="eyebrow">Phase by phase</p>
@@ -51,29 +51,17 @@ export function Phase10Home({
         <p className="tagline">Complete every phase. Leftovers still count against you.</p>
       </div>
       <div className="home-actions">
-        <button type="button" className="btn primary pulse" onClick={onNewGame}>
+        <PrimaryButton className="pulse" onClick={onNewGame}>
           Deal a new game
-        </button>
-        <div className="grouped-list">
-          {resume ? (
-            <button type="button" className="grouped-row" onClick={onResume}>
-              <span>Resume the table</span>
-              <span className="chevron">›</span>
-            </button>
-          ) : null}
-          <button type="button" className="grouped-row" onClick={onHistory}>
-            <span>Past games{historyCount > 0 ? ` (${historyCount})` : ''}</span>
-            <span className="chevron">›</span>
-          </button>
-          <button type="button" className="grouped-row" onClick={onLeaderboard}>
-            <span>Phase board</span>
-            <span className="chevron">›</span>
-          </button>
-          <button type="button" className="grouped-row" onClick={onRules}>
-            <span>Look up the rules</span>
-            <span className="chevron">›</span>
-          </button>
-        </div>
+        </PrimaryButton>
+        <ActionList
+          items={[
+            ...(resume ? [{ label: 'Resume the table', onClick: onResume }] : []),
+            { label: historyCount > 0 ? `Past games (${historyCount})` : 'Past games', onClick: onHistory },
+            { label: 'Phase board', onClick: onLeaderboard },
+            { label: 'Look up the rules', onClick: onRules },
+          ]}
+        />
       </div>
     </section>
   )
@@ -86,9 +74,7 @@ export function Phase10Setup({ onBack, onStart }: { onBack: () => void; onStart:
   return (
     <section className="screen setup-screen">
       <header className="screen-head">
-        <button type="button" className="btn text" onClick={onBack}>
-          Back
-        </button>
+        <TextButton onClick={onBack}>Back</TextButton>
         <h1>Who’s at the table?</h1>
         <p>Two to eight players. First to finish Phase 10 with the lowest leftover total wins.</p>
       </header>
@@ -117,18 +103,11 @@ export function Phase10Setup({ onBack, onStart }: { onBack: () => void; onStart:
         })}
       </ol>
       {names.length < MAX_PLAYERS ? (
-        <button type="button" className="btn ghost" onClick={() => setNames([...names, ''])}>
-          Add a player
-        </button>
+        <GlassButton onClick={() => setNames([...names, ''])}>Add a player</GlassButton>
       ) : null}
-      <button
-        type="button"
-        className="btn primary"
-        disabled={readyNames.length < MIN_PLAYERS}
-        onClick={() => onStart(readyNames)}
-      >
+      <PrimaryButton disabled={readyNames.length < MIN_PLAYERS} onClick={() => onStart(readyNames)}>
         Shuffle up and deal
-      </button>
+      </PrimaryButton>
     </section>
   )
 }
@@ -159,9 +138,7 @@ export function Phase10Play({
           <p className="eyebrow">Hand {game.currentRound + 1} · 10 cards</p>
           <h1>Make your phase</h1>
         </div>
-        <button type="button" className="btn text" onClick={onRules}>
-          Rules
-        </button>
+        <TextButton onClick={onRules}>Rules</TextButton>
       </header>
       {leader ? (
         <p className="hint center">
@@ -194,15 +171,15 @@ export function Phase10Play({
         })}
       </ul>
       {ready ? (
-        <button type="button" className="btn primary pulse" onClick={onNextRound}>
+        <PrimaryButton className="pulse" onClick={onNextRound}>
           Next hand
-        </button>
+        </PrimaryButton>
       ) : (
         <p className="hint center">Tap a player for leftovers and whether they completed this phase.</p>
       )}
-      <button type="button" className="btn text quiet" onClick={onQuit}>
+      <TextButton className="quiet" onClick={onQuit}>
         Leave table
-      </button>
+      </TextButton>
       {editing ? (
         <Phase10Pad
           playerName={editing.name}
@@ -243,57 +220,39 @@ function Phase10Pad({
   const total = digits === '' ? 0 : Number(digits)
 
   return (
-    <div className="sheet-backdrop" role="presentation" onClick={onClose}>
-      <div
-        className="score-sheet"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="phase10-pad-title"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <header>
-          <p style={{ color: playerColor }}>{playerName}</p>
-          <h2 id="phase10-pad-title">Leftovers this hand</h2>
-          <p className="pad-limit">{phaseLabelText}</p>
-          <p className="pad-limit">{leftoverHint()}</p>
-        </header>
-        <p className="pad-total" aria-live="polite">
-          {digits === '' ? '0' : digits}
-          <span>leftover points</span>
-        </p>
-        <div className="keypad" aria-label="Score keypad">
-          {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((key) => (
-            <button
-              key={key}
-              type="button"
-              className="keypad-digit"
-              onClick={() => setDigits((current) => (current + key).replace(/^0+(?=\d)/, '').slice(0, 3))}
-            >
-              {key}
-            </button>
-          ))}
-          <span className="keypad-spacer" aria-hidden="true" />
-          <button type="button" className="keypad-digit" onClick={() => setDigits((current) => (current + '0').replace(/^0+(?=\d)/, '').slice(0, 3))}>
-            0
+    <Sheet open onChange={(next) => { if (!next) onClose() }} detent="large" title="Leftovers this hand">
+      <p style={{ color: playerColor }}>{playerName}</p>
+      <p className="pad-limit">{phaseLabelText}</p>
+      <p className="pad-limit">{leftoverHint()}</p>
+      <p className="pad-total" aria-live="polite">
+        {digits === '' ? '0' : digits}
+        <span>leftover points</span>
+      </p>
+      <div className="keypad" aria-label="Score keypad">
+        {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((key) => (
+          <button
+            key={key}
+            type="button"
+            className="keypad-digit"
+            onClick={() => setDigits((current) => (current + key).replace(/^0+(?=\d)/, '').slice(0, 3))}
+          >
+            {key}
           </button>
-          <button type="button" className="keypad-action" aria-label="Delete last digit" onClick={() => setDigits((current) => current.slice(0, -1))}>
-            ⌫
-          </button>
-        </div>
-        <label className="phase-complete">
-          <input type="checkbox" checked={completed} onChange={(event) => setCompleted(event.target.checked)} />
-          Completed this phase
-        </label>
-        <div className="sheet-actions">
-          <button type="button" className="btn gold" onClick={() => onSave(0, completed)}>
-            Hit out · 0
-          </button>
-          <button type="button" className="btn primary" onClick={() => onSave(total, completed)}>
-            Lock in {total}
-          </button>
-        </div>
+        ))}
+        <span className="keypad-spacer" aria-hidden="true" />
+        <button type="button" className="keypad-digit" onClick={() => setDigits((current) => (current + '0').replace(/^0+(?=\d)/, '').slice(0, 3))}>
+          0
+        </button>
+        <button type="button" className="keypad-action" aria-label="Delete last digit" onClick={() => setDigits((current) => current.slice(0, -1))}>
+          ⌫
+        </button>
       </div>
-    </div>
+      <Toggle checked={completed} onChange={setCompleted} label="Completed this phase" />
+      <div className="sheet-actions">
+        <TintedButton onClick={() => onSave(0, completed)}>Hit out · 0</TintedButton>
+        <PrimaryButton onClick={() => onSave(total, completed)}>Lock in {total}</PrimaryButton>
+      </div>
+    </Sheet>
   )
 }
 
@@ -301,9 +260,7 @@ export function Phase10Rules({ onBack }: { onBack: () => void }) {
   return (
     <section className="screen rules-screen">
       <header className="screen-head">
-        <button type="button" className="btn text" onClick={onBack}>
-          Back to the table
-        </button>
+        <TextButton onClick={onBack}>Back to the table</TextButton>
         <h1>How Phase 10 works</h1>
         <p>Complete ten phases in order. Leftover cards still add to your score.</p>
       </header>
@@ -369,18 +326,12 @@ export function Phase10Winner({
           </li>
         ))}
       </ol>
-      <button type="button" className="btn primary" onClick={() => onPlayAgain(game.players.map((player) => player.name))}>
+      <PrimaryButton onClick={() => onPlayAgain(game.players.map((player) => player.name))}>
         Same table, new deal
-      </button>
-      <button type="button" className="btn ghost" onClick={onHome}>
-        Back home
-      </button>
-      <button type="button" className="btn ghost" onClick={onHistory}>
-        Past games
-      </button>
-      <button type="button" className="btn text" onClick={onRules}>
-        Review the rules
-      </button>
+      </PrimaryButton>
+      <GlassButton onClick={onHome}>Back home</GlassButton>
+      <GlassButton onClick={onHistory}>Past games</GlassButton>
+      <TextButton onClick={onRules}>Review the rules</TextButton>
     </section>
   )
 }
@@ -405,9 +356,7 @@ export function Phase10History({
     return (
       <section className="screen history-screen">
         <header className="screen-head">
-          <button type="button" className="btn text" onClick={() => setSelectedId(null)}>
-            Back to history
-          </button>
+          <TextButton onClick={() => setSelectedId(null)}>Back to history</TextButton>
           <h1>Game detail</h1>
           <p>{formatWhen(selected.archivedAt)}</p>
         </header>
@@ -425,13 +374,10 @@ export function Phase10History({
           ) : null}
         </article>
         {canResume(selected) ? (
-          <button type="button" className="btn primary" onClick={() => onResume(selected)}>
-            Resume this table
-          </button>
+          <PrimaryButton onClick={() => onResume(selected)}>Resume this table</PrimaryButton>
         ) : null}
-        <button
-          type="button"
-          className="btn text quiet"
+        <TextButton
+          className="quiet"
           onClick={() => {
             deleteHistoryGame(selected.id)
             setRecords(listHistory())
@@ -439,7 +385,7 @@ export function Phase10History({
           }}
         >
           Delete this game
-        </button>
+        </TextButton>
       </section>
     )
   }
@@ -447,19 +393,17 @@ export function Phase10History({
   return (
     <section className="screen history-screen">
       <header className="screen-head">
-        <button type="button" className="btn text" onClick={onBack}>
-          Back home
-        </button>
+        <TextButton onClick={onBack}>Back home</TextButton>
         <h1>Past games</h1>
         <p>Search Phase 10 tables saved on this phone.</p>
-        <button type="button" className="btn text" onClick={onLeaderboard}>
-          Phase board
-        </button>
+        <TextButton onClick={onLeaderboard}>Phase board</TextButton>
       </header>
-      <label className="history-search">
-        <span className="sr-only">Search past games</span>
-        <input type="search" value={query} placeholder="Search players…" onChange={(event) => setQuery(event.target.value)} />
-      </label>
+      <SearchBar
+        value={query}
+        onChange={setQuery}
+        placeholder="Search players…"
+        aria-label="Search past games"
+      />
       {filtered.length === 0 ? (
         <p className="hint center history-empty">No saved Phase 10 games yet.</p>
       ) : (
@@ -489,9 +433,7 @@ export function Phase10Leaderboard({ onBack }: { onBack: () => void }) {
   return (
     <section className="screen leaderboard-screen">
       <header className="screen-head">
-        <button type="button" className="btn text" onClick={onBack}>
-          Back home
-        </button>
+        <TextButton onClick={onBack}>Back home</TextButton>
         <h1>Phase board</h1>
         <p>Wins and last-place finishes from completed Phase 10 games.</p>
       </header>

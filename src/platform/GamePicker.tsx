@@ -1,5 +1,7 @@
+import { ListRow, ListSection } from '@ios27_design_system/react'
 import { useMemo, useState } from 'react'
 import { useInstallPrompt } from '../hooks/useInstallPrompt.ts'
+import { GlassButton, PrimaryButton } from './IosChrome.tsx'
 import { GAMES } from './catalog.ts'
 import { alreadyImported, hasLocalFiveCrowns, importLocalFiveCrowns, peekLocalFiveCrowns } from './importFiveCrowns.ts'
 import { cloudAvailable } from './sync.ts'
@@ -26,22 +28,23 @@ export function GamePicker({ onChoose }: GamePickerProps) {
         <p className="tagline">Scorekeepers that feel like the apps on your phone — glass, history, and a theme for every game.</p>
       </header>
 
-      <ol className="game-grid">
-        {GAMES.map((game) => (
-          <li key={game.id}>
-            <button type="button" className={`game-tile theme-${game.id}`} onClick={() => onChoose(game.id)}>
-              <span className="game-tile-copy">
-                <span className="eyebrow">{game.tagline}</span>
-                <strong>{game.name}</strong>
-                <span>{game.blurb}</span>
-              </span>
-              <span className="chevron" aria-hidden="true">
-                ›
-              </span>
-            </button>
-          </li>
+      <ListSection header="Tonight's table">
+        {GAMES.map((game, index) => (
+          <ListRow
+            key={game.id}
+            className={`theme-${game.id}`}
+            disclosure
+            separator={index < GAMES.length - 1}
+            onClick={() => onChoose(game.id)}
+          >
+            <span className="game-tile-copy">
+              <span className="eyebrow">{game.tagline}</span>
+              <strong>{game.name}</strong>
+              <span>{game.blurb}</span>
+            </span>
+          </ListRow>
         ))}
-      </ol>
+      </ListSection>
 
       {showImport ? (
         <div className="import-panel glass">
@@ -49,9 +52,7 @@ export function GamePicker({ onChoose }: GamePickerProps) {
             Found {localPeek.historyCount} saved Five Crowns {localPeek.historyCount === 1 ? 'game' : 'games'}
             {localPeek.active ? ' plus a table in progress' : ''} on this phone.
           </p>
-          <button
-            type="button"
-            className="btn ghost"
+          <GlassButton
             disabled={importing || !cloudAvailable()}
             onClick={() => {
               setImporting(true)
@@ -72,7 +73,7 @@ export function GamePicker({ onChoose }: GamePickerProps) {
             }}
           >
             {importing ? 'Importing…' : 'Import Five Crowns games'}
-          </button>
+          </GlassButton>
           {!cloudAvailable() ? <p className="hint">Cloud sync is not configured on this build.</p> : null}
           {importNote ? <p className="hint">{importNote}</p> : null}
         </div>
@@ -80,9 +81,7 @@ export function GamePicker({ onChoose }: GamePickerProps) {
 
       <div className="thumb-dock">
         {canInstall ? (
-          <button type="button" className="install-chip" onClick={() => void install()}>
-            Add to Home Screen
-          </button>
+          <PrimaryButton onClick={() => void install()}>Add to Home Screen</PrimaryButton>
         ) : null}
         {installed ? <p className="install-note">On your Home Screen — works offline at the table.</p> : null}
       </div>

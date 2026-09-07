@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { MAX_PLAYERS, MIN_PLAYERS, PLAYER_COLORS } from '../game/types.ts'
+import { GlassButton, PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
 
 type SetupProps = {
   onBack: () => void
@@ -18,9 +19,7 @@ export function Setup({ onBack, onStart }: SetupProps) {
   return (
     <section className="screen setup-screen">
       <header className="screen-head">
-        <button type="button" className="btn text" onClick={onBack}>
-          Back
-        </button>
+        <TextButton onClick={onBack}>Back</TextButton>
         <h1>Who’s at the table?</h1>
         <p>Two to eight players. Lowest leftover points after 11 hands wins.</p>
       </header>
@@ -60,14 +59,10 @@ export function Setup({ onBack, onStart }: SetupProps) {
         })}
       </ol>
       {names.length < MAX_PLAYERS ? (
-        <button type="button" className="btn ghost" onClick={() => setNames([...names, ''])}>
-          Add a player
-        </button>
+        <GlassButton onClick={() => setNames([...names, ''])}>Add a player</GlassButton>
       ) : null}
       {error ? <p className="error-text">{error}</p> : null}
-      <button
-        type="button"
-        className="btn primary"
+      <PrimaryButton
         disabled={!canStart}
         onClick={() => {
           if (!canStart) {
@@ -78,7 +73,7 @@ export function Setup({ onBack, onStart }: SetupProps) {
         }}
       >
         Shuffle up and deal
-      </button>
+      </PrimaryButton>
     </section>
   )
 }

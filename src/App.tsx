@@ -19,7 +19,8 @@ export default function App() {
   const [selected, setSelected] = useState<GameId | null>(null)
 
   useEffect(() => {
-    document.documentElement.dataset.theme = selected ?? 'game-night'
+    document.documentElement.dataset.theme = 'dark'
+    document.documentElement.dataset.gameTheme = selected ?? 'game-night'
     document.documentElement.style.colorScheme = 'dark'
   }, [selected])
 

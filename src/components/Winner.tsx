@@ -1,5 +1,6 @@
 import { playerColor, standings, winners } from '../game/engine.ts'
 import type { Game } from '../game/types.ts'
+import { GlassButton, PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
 import { CrownMark, SuitRow } from './Suits.tsx'
 
 type WinnerProps = {
@@ -42,22 +43,12 @@ export function Winner({ game, onPlayAgain, onHome, onRules, onHistory }: Winner
           </li>
         ))}
       </ol>
-      <button
-        type="button"
-        className="btn primary"
-        onClick={() => onPlayAgain(game.players.map((player) => player.name))}
-      >
+      <PrimaryButton onClick={() => onPlayAgain(game.players.map((player) => player.name))}>
         Same table, new deal
-      </button>
-      <button type="button" className="btn ghost" onClick={onHome}>
-        Back home
-      </button>
-      <button type="button" className="btn ghost" onClick={onHistory}>
-        Past games
-      </button>
-      <button type="button" className="btn text" onClick={onRules}>
-        Review the rules
-      </button>
+      </PrimaryButton>
+      <GlassButton onClick={onHome}>Back home</GlassButton>
+      <GlassButton onClick={onHistory}>Past games</GlassButton>
+      <TextButton onClick={onRules}>Review the rules</TextButton>
     </section>
   )
 }

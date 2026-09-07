@@ -3,6 +3,7 @@ import { handComplete, playerColor, playerTotal, standings } from '../game/engin
 import { cardsDealt, handTitle, wildLabel, wildRank } from '../game/rules.ts'
 import { suitForHand } from '../game/suits.ts'
 import { HAND_SIZES, type Game } from '../game/types.ts'
+import { PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
 import { PlayingCard } from './PlayingCard.tsx'
 import { ScorePad } from './ScorePad.tsx'
 import { SuitRow } from './Suits.tsx'
@@ -44,9 +45,7 @@ export function Play({ game, onScore, onNextHand, onSelectHand, onRules, onQuit 
             <span className="wild-burst">{wildLabel(current)}</span> are wild
           </h1>
         </div>
-        <button type="button" className="btn text" onClick={onRules}>
-          Rules
-        </button>
+        <TextButton onClick={onRules}>Rules</TextButton>
       </header>
 
       <div className="hand-track" ref={handTrackRef} role="tablist" aria-label="Hands">
@@ -104,16 +103,16 @@ export function Play({ game, onScore, onNextHand, onSelectHand, onRules, onQuit 
       </ul>
 
       {ready ? (
-        <button type="button" className="btn primary pulse" onClick={onNextHand}>
+        <PrimaryButton className="pulse" onClick={onNextHand}>
           {lastHand ? 'Crown a winner' : 'Next hand — deal one more'}
-        </button>
+        </PrimaryButton>
       ) : (
         <p className="hint center">Tap a player as they count leftovers (up to {cardsDealt(current)} cards).</p>
       )}
 
-      <button type="button" className="btn text quiet" onClick={onQuit}>
+      <TextButton className="quiet" onClick={onQuit}>
         Leave table
-      </button>
+      </TextButton>
 
       {editingPlayer ? (
         <ScorePad

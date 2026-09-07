@@ -1,5 +1,6 @@
 import { HAND_SIZES } from '../game/types.ts'
 import { JOKER_POINTS, WILD_POINTS, wildLabel } from '../game/rules.ts'
+import { TextButton } from '../platform/IosChrome.tsx'
 
 type RulesProps = {
   onBack: () => void
@@ -9,9 +10,7 @@ export function Rules({ onBack }: RulesProps) {
   return (
     <section className="screen rules-screen">
       <header className="screen-head">
-        <button type="button" className="btn text" onClick={onBack}>
-          Back to the table
-        </button>
+        <TextButton onClick={onBack}>Back to the table</TextButton>
         <h1>How Five Crowns works</h1>
         <p>Rummy with a fifth suit and a wild that climbs every hand.</p>
       </header>

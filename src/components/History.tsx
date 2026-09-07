@@ -1,3 +1,4 @@
+import { SearchBar } from '@ios27_design_system/react'
 import { useMemo, useState } from 'react'
 import { playerColor, standings, winners } from '../game/engine.ts'
 import {
@@ -10,6 +11,7 @@ import {
   searchHistory,
 } from '../game/history.ts'
 import type { GameRecord } from '../game/types.ts'
+import { PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
 import { ScoreSheet } from './ScoreSheet.tsx'
 
 type HistoryProps = {
@@ -36,9 +38,7 @@ export function History({ onBack, onLeaderboard, onResume }: HistoryProps) {
     return (
       <section className="screen history-screen">
         <header className="screen-head">
-          <button type="button" className="btn text" onClick={() => setSelectedId(null)}>
-            Back to history
-          </button>
+          <TextButton onClick={() => setSelectedId(null)}>Back to history</TextButton>
           <h1>Game detail</h1>
           <p>{formatWhen(selected.archivedAt)}</p>
         </header>
@@ -69,18 +69,11 @@ export function History({ onBack, onLeaderboard, onResume }: HistoryProps) {
         <ScoreSheet game={selected} />
 
         {canResumeFromHistory(selected) ? (
-          <button
-            type="button"
-            className="btn primary"
-            onClick={() => onResume(selected)}
-          >
-            Resume this table
-          </button>
+          <PrimaryButton onClick={() => onResume(selected)}>Resume this table</PrimaryButton>
         ) : null}
 
-        <button
-          type="button"
-          className="btn text quiet"
+        <TextButton
+          className="quiet"
           onClick={() => {
             deleteHistoryGame(selected.id)
             setRecords(listHistory())
@@ -88,7 +81,7 @@ export function History({ onBack, onLeaderboard, onResume }: HistoryProps) {
           }}
         >
           Delete this game
-        </button>
+        </TextButton>
       </section>
     )
   }
@@ -96,27 +89,20 @@ export function History({ onBack, onLeaderboard, onResume }: HistoryProps) {
   return (
     <section className="screen history-screen">
       <header className="screen-head">
-        <button type="button" className="btn text" onClick={onBack}>
-          Back home
-        </button>
+        <TextButton onClick={onBack}>Back home</TextButton>
         <h1>Past games</h1>
         <p>Search by player name or browse every saved table on this phone.</p>
-        <button type="button" className="btn text" onClick={onLeaderboard}>
-          Hall of crowns
-        </button>
+        <TextButton onClick={onLeaderboard}>Hall of crowns</TextButton>
       </header>
 
-      <label className="history-search">
-        <span className="sr-only">Search past games</span>
-        <input
-          type="search"
-          value={query}
-          placeholder="Search players…"
-          autoComplete="off"
-          enterKeyHint="search"
-          onChange={(event) => setQuery(event.target.value)}
-        />
-      </label>
+      <SearchBar
+        value={query}
+        onChange={setQuery}
+        placeholder="Search players…"
+        aria-label="Search past games"
+        autoComplete="off"
+        enterKeyHint="search"
+      />
 
       {records.length === 0 ? (
         <p className="hint center history-empty">No saved games yet. Finish a match and it will show up here.</p>

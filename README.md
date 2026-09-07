@@ -33,6 +33,10 @@ VITE_SUPABASE_PUBLISHABLE_KEY=
 
 A temporary **Import Five Crowns games** button on the landing page copies any older localStorage Five Crowns tables into Game Night.
 
+## iOS 27 theme
+
+Chrome (lists, sheets, buttons, search, segmented controls) uses [`@ios27_design_system/react`](https://www.npmjs.com/package/@ios27_design_system/react) plus [`@ios27_design_system/tokens`](https://www.npmjs.com/package/@ios27_design_system/tokens) — Liquid Glass materials, darkened edges, and specular rims from the iOS 27 kit. Game-specific gold / pink accents sit on `data-game-theme` so they do not collide with the library’s `data-theme="dark"`. Playing cards and score pads stay custom.
+
 ## PWA
 
 The production build registers a service worker, ships a web app manifest, and precaches the app shell so Game Night still works after you install it or lose signal.
