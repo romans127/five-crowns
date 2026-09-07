@@ -6,15 +6,41 @@ import { HISTORY_KEY, upsertHistory } from './game/history.ts'
 import { STORAGE_KEY } from './game/storage.ts'
 import App from './App.tsx'
 
+describe('Game Night', () => {
+  beforeEach(() => {
+    cleanup()
+    localStorage.removeItem(HISTORY_KEY)
+    localStorage.removeItem(STORAGE_KEY)
+  })
+
+  it('starts on a game picker', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    expect(screen.getByRole('heading', { name: 'Game Night' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /kings go wild/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /complete every phase/i })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /complete every phase/i }))
+    expect(screen.getByRole('heading', { name: 'Phase 10' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /all games/i }))
+    expect(screen.getByRole('heading', { name: 'Game Night' })).toBeInTheDocument()
+  })
+})
+
 describe('Five Crowns scorekeeper', () => {
   beforeEach(() => {
     cleanup()
     localStorage.removeItem(HISTORY_KEY)
     localStorage.removeItem(STORAGE_KEY)
   })
+
+  async function openFiveCrowns(user: ReturnType<typeof userEvent.setup>) {
+    await user.click(screen.getByRole('button', { name: /kings go wild/i }))
+  }
+
   it('starts a game, records leftovers, and opens the rules', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await openFiveCrowns(user)
 
     expect(screen.getByRole('heading', { name: 'Five Crowns' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /deal a new game/i }))
@@ -43,6 +69,7 @@ describe('Five Crowns scorekeeper', () => {
   it('always offers past games from the home screen', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await openFiveCrowns(user)
 
     expect(screen.getByRole('button', { name: /^past games/i })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /^past games/i }))
@@ -57,6 +84,7 @@ describe('Five Crowns scorekeeper', () => {
 
     const user = userEvent.setup()
     render(<App />)
+    await openFiveCrowns(user)
 
     await user.click(screen.getByRole('button', { name: /^past games/i }))
     await user.click(screen.getByRole('button', { name: /Ryan, Ada/i }))
@@ -69,6 +97,7 @@ describe('Five Crowns scorekeeper', () => {
   it('opens the all-game leaderboard from home', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await openFiveCrowns(user)
 
     await user.click(screen.getByRole('button', { name: /hall of crowns/i }))
     expect(screen.getByRole('heading', { name: 'Hall of crowns' })).toBeInTheDocument()

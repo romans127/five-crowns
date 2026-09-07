@@ -1,4 +1,28 @@
 :root {
+  --felt: #102034;
+  --ink: #081018;
+  --panel: #121a28;
+  --panel-2: #182234;
+  --line: rgba(186, 214, 255, 0.16);
+  --ivory: #eef4ff;
+  --muted: #b7c6dc;
+  --gold: #8ec5ff;
+  --gold-deep: #4f8fd6;
+  --crimson: #ff4d6d;
+  --glow: rgba(142, 197, 255, 0.18);
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --sans: 'Trebuchet MS', 'Avenir Next', 'Segoe UI', sans-serif;
+  --display: 'Palatino Linotype', Palatino, 'Iowan Old Style', Georgia, serif;
+  color: var(--ivory);
+  background: radial-gradient(circle at top, #163154 0%, var(--ink) 55%, #05070c 100%);
+  font: 17px/1.4 var(--sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-theme='five-crowns'] {
   --felt: #10261c;
   --ink: #0b1020;
   --panel: #171226;
@@ -9,16 +33,25 @@
   --gold: #f4c95d;
   --gold-deep: #d4a017;
   --crimson: #ff4d6d;
-  --safe-top: env(safe-area-inset-top);
-  --safe-bottom: env(safe-area-inset-bottom);
-  --sans: 'Trebuchet MS', 'Avenir Next', 'Segoe UI', sans-serif;
+  --glow: rgba(244, 201, 93, 0.16);
   --display: 'Palatino Linotype', Palatino, 'Iowan Old Style', Georgia, serif;
-  color: var(--ivory);
   background: radial-gradient(circle at top, #2a1b45 0%, var(--ink) 55%, #07060d 100%);
-  font: 17px/1.4 var(--sans);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+}
+
+[data-theme='phase-10'] {
+  --felt: #2a1230;
+  --ink: #14081a;
+  --panel: #2a1533;
+  --panel-2: #3a1c44;
+  --line: rgba(255, 186, 214, 0.18);
+  --ivory: #fff4fb;
+  --muted: #e0c3d6;
+  --gold: #ff8ac4;
+  --gold-deep: #ff5ea0;
+  --crimson: #ff4d6d;
+  --glow: rgba(255, 138, 196, 0.2);
+  --display: 'Trebuchet MS', 'Avenir Next', 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top, #6a1b5c 0%, #24103a 48%, #0d0714 100%);
 }
 
 * {
@@ -42,8 +75,8 @@ body {
   margin: 0 auto;
   min-height: 100svh;
   background:
-    radial-gradient(circle at 20% 0%, rgba(244, 201, 93, 0.16), transparent 36%),
-    linear-gradient(180deg, rgba(16, 38, 28, 0.35), transparent 28%),
+    radial-gradient(circle at 20% 0%, var(--glow), transparent 36%),
+    linear-gradient(180deg, rgba(16, 38, 28, 0.18), transparent 28%),
     var(--ink);
   border-inline: 1px solid var(--line);
   box-shadow: 0 0 80px rgba(0, 0, 0, 0.45);
@@ -857,4 +890,57 @@ h1 {
 
 .lantern-stat {
   color: #ff8a4c;
+}
+
+.picker-screen h1 {
+  font-size: clamp(2.4rem, 10vw, 3.4rem);
+}
+
+.game-grid {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: grid;
+  gap: 12px;
+}
+
+.game-tile {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  gap: 6px;
+  min-height: 112px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  color: inherit;
+}
+
+.game-tile.theme-five-crowns {
+  background: linear-gradient(180deg, #2a1b45, #171226);
+}
+
+.game-tile.theme-phase-10 {
+  background: linear-gradient(180deg, #6a1b5c, #2a1533);
+}
+
+.game-tile strong {
+  font-family: var(--display);
+  font-size: 1.6rem;
+}
+
+.import-panel {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px dashed var(--line);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.phase-complete {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
 }

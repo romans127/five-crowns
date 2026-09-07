@@ -9,12 +9,12 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Five Crowns Scorekeeper',
-        short_name: 'Five Crowns',
+        name: 'Game Night',
+        short_name: 'Game Night',
         description:
-          'A lively scorekeeper for Five Crowns. Tap leftover cards, track every hand, and look up the rules at the table.',
-        theme_color: '#1a1033',
-        background_color: '#0b1020',
+          'Table-side scorekeepers for Five Crowns, Phase 10, and more. History, leaderboards, and per-game theming.',
+        theme_color: '#081018',
+        background_color: '#081018',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',

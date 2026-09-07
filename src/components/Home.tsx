@@ -4,6 +4,7 @@ import { useInstallPrompt } from '../hooks/useInstallPrompt.ts'
 type HomeProps = {
   canResume: boolean
   historyCount: number
+  onLeaveGames: () => void
   onNewGame: () => void
   onResume: () => void
   onHistory: () => void
@@ -11,7 +12,16 @@ type HomeProps = {
   onRules: () => void
 }
 
-export function Home({ canResume, historyCount, onNewGame, onResume, onHistory, onLeaderboard, onRules }: HomeProps) {
+export function Home({
+  canResume,
+  historyCount,
+  onLeaveGames,
+  onNewGame,
+  onResume,
+  onHistory,
+  onLeaderboard,
+  onRules,
+}: HomeProps) {
   const { canInstall, install, installed } = useInstallPrompt()
 
   return (
@@ -22,6 +32,9 @@ export function Home({ canResume, historyCount, onNewGame, onResume, onHistory, 
       <h1>Five Crowns</h1>
       <p className="tagline">The game isn’t over ’til the Kings go wild.</p>
       <div className="home-actions">
+        <button type="button" className="btn text" onClick={onLeaveGames}>
+          All games
+        </button>
         <button type="button" className="btn primary pulse" onClick={onNewGame}>
           Deal a new game
         </button>

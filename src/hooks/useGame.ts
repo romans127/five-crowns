@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { advanceHand, createGame, goToHand, setHandScore } from '../game/engine.ts'
 import { gameHasProgress, listHistory, recordToGame, upsertHistory } from '../game/history.ts'
 import { loadGame, saveGame } from '../game/storage.ts'
+import { upsertCloudRecord } from '../platform/sync.ts'
 import type { Game, GameRecord } from '../game/types.ts'
 
 function archiveGame(game: Game, archived: Set<string>, force = false): void {
@@ -21,6 +22,14 @@ export function useGame() {
 
   useEffect(() => {
     saveGame(game)
+    if (game) {
+      void upsertCloudRecord({
+        id: game.id,
+        gameType: 'five-crowns',
+        kind: game.status === 'finished' ? 'history' : 'active',
+        payload: game,
+      })
+    }
   }, [game])
 
   useEffect(() => {

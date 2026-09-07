@@ -1,4 +1,5 @@
 import { gameComplete, handComplete } from './engine.ts'
+import { upsertCloudRecord } from '../platform/sync.ts'
 import type { Game, GameRecord } from './types.ts'
 
 export const HISTORY_KEY = 'five-crowns:history:v1'
@@ -61,6 +62,12 @@ export function upsertHistory(
   const without = store.records.filter((entry) => entry.id !== game.id)
   const records = [record, ...without].slice(0, MAX_HISTORY)
   writeStore({ version: 1, records }, storage)
+  void upsertCloudRecord({
+    id: game.id,
+    gameType: 'five-crowns',
+    kind: 'history',
+    payload: record,
+  })
   return record
 }
 
