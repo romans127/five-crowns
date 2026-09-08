@@ -1,4 +1,17 @@
-export type GameId = 'five-crowns' | 'phase-10'
+export type GameId =
+  | 'five-crowns'
+  | 'phase-10'
+  | 'yahtzee'
+  | 'uno'
+  | 'cribbage'
+  | 'hearts'
+  | 'gin-rummy'
+  | 'farkle'
+  | 'qwixx'
+  | 'monopoly-deal'
+  | 'sorry'
+  | 'ticket-to-ride'
+  | 'sequence'
 
 export type CloudKind = 'active' | 'history'
 

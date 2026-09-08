@@ -1,9 +1,10 @@
+import { ListSection } from '@ios27_design_system/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { handComplete, playerColor, playerTotal, standings } from '../game/engine.ts'
 import { cardsDealt, handTitle, wildLabel, wildRank } from '../game/rules.ts'
 import { suitForHand } from '../game/suits.ts'
 import { HAND_SIZES, type Game } from '../game/types.ts'
-import { PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
+import { PlayerScoreRow, PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
 import { SceneShell } from '../platform/SceneNav.tsx'
 import { PlayingCard } from './PlayingCard.tsx'
 import { ScorePad } from './ScorePad.tsx'
@@ -84,27 +85,29 @@ export function Play({ game, onBack, onScore, onNextHand, onSelectHand, onRules,
         ) : null}
       </div>
 
-      <ul className="player-scores">
-        {game.players.map((player) => {
+      <ListSection className="player-scores">
+        {game.players.map((player, index) => {
           const color = playerColor(player)
           const handScore = game.scores[current]?.[player.id]
           const entered = typeof handScore === 'number'
           return (
-            <li key={player.id}>
-              <button type="button" className="player-card" onClick={() => setEditingPlayerId(player.id)}>
+            <PlayerScoreRow
+              key={player.id}
+              name={player.name}
+              detail={`Total ${playerTotal(game, player.id)}`}
+              suit={
                 <span className="seat-suit" style={{ color: color.hex }}>
                   {color.suit}
                 </span>
-                <span className="player-meta">
-                  <strong>{player.name}</strong>
-                  <small>Total {playerTotal(game, player.id)}</small>
-                </span>
-                <span className={`hand-score ${entered ? 'in' : 'open'}`}>{entered ? handScore : 'Tap'}</span>
-              </button>
-            </li>
+              }
+              scoreLabel={entered ? handScore : 'Tap'}
+              entered={entered}
+              separator={index < game.players.length - 1}
+              onClick={() => setEditingPlayerId(player.id)}
+            />
           )
         })}
-      </ul>
+      </ListSection>
 
       {ready ? (
         <PrimaryButton className="pulse" onClick={onNextHand}>

@@ -1,19 +1,24 @@
-import { SearchBar } from '@ios27_design_system/react'
+import { ListRow, ListSection, SearchBar } from '@ios27_design_system/react'
 import { useMemo, useState } from 'react'
 import { useInstallPrompt } from '../hooks/useInstallPrompt.ts'
 import { GlassButton, PrimaryButton } from './IosChrome.tsx'
+import { GameArt } from './GameArt.tsx'
 import { searchGames } from './catalog.ts'
+import { displayTableLabel, getHouseholdId } from './household.ts'
 import { alreadyImported, hasLocalFiveCrowns, importLocalFiveCrowns, peekLocalFiveCrowns } from './importFiveCrowns.ts'
 import { cloudAvailable } from './sync.ts'
 import type { GameId } from './types.ts'
 
 type GamePickerProps = {
   onChoose: (id: GameId) => void
+  onFamilyTable: () => void
 }
 
-export function GamePicker({ onChoose }: GamePickerProps) {
+export function GamePicker({ onChoose, onFamilyTable }: GamePickerProps) {
   const { canInstall, install, installed } = useInstallPrompt()
   const localPeek = useMemo(() => peekLocalFiveCrowns(), [])
+  const tableId = useMemo(() => getHouseholdId(), [])
+  const tableLabel = displayTableLabel(tableId)
   const showImport = hasLocalFiveCrowns()
   const [query, setQuery] = useState('')
   const [importing, setImporting] = useState(false)
@@ -24,74 +29,95 @@ export function GamePicker({ onChoose }: GamePickerProps) {
 
   return (
     <section className="screen picker-screen">
-      <header className="hero-block">
-        <p className="eyebrow">Family table</p>
-        <h1>Game Night</h1>
-        <p className="tagline">Scorekeepers that feel like the apps on your phone — glass, history, and a theme for every game.</p>
-      </header>
+      <div className="picker-layout">
+        <header className="hero-block picker-hero">
+          <p className="eyebrow">Table {tableLabel}</p>
+          <h1>Game Night</h1>
+          <p className="tagline">Scorekeepers that feel like the apps on your phone — glass, history, and a theme for every game.</p>
+        </header>
 
-      <SearchBar
-        value={query}
-        onChange={setQuery}
-        placeholder="Search games…"
-        aria-label="Search games"
-        autoComplete="off"
-        enterKeyHint="search"
-      />
+        <div className="picker-body">
+          <ListSection>
+            <ListRow
+              className="family-table-row"
+              disclosure
+              separator={false}
+              trailing={<span className="family-table-row__id">{tableLabel}</span>}
+              onClick={onFamilyTable}
+            >
+              <span className="family-table-row__copy">
+                <strong>Family table</strong>
+                <small>Pin or join this household</small>
+              </span>
+            </ListRow>
+          </ListSection>
 
-      {matches.length === 0 ? (
-        <p className="hint center history-empty">No games match “{query.trim()}”.</p>
-      ) : (
-        <ol className="game-grid">
-          {matches.map((game) => (
-            <li key={game.id}>
-              <button type="button" className={`game-tile theme-${game.id}`} onClick={() => onChoose(game.id)}>
-                <span className="game-tile-copy">
-                  <span className="eyebrow">{game.tagline}</span>
-                  <strong>{game.name}</strong>
-                  <span>{game.blurb}</span>
-                </span>
-                <span className="chevron" aria-hidden="true">
-                  ›
-                </span>
-              </button>
-            </li>
-          ))}
-        </ol>
-      )}
+          <SearchBar
+            value={query}
+            onChange={setQuery}
+            placeholder="Search games…"
+            aria-label="Search games"
+            autoComplete="off"
+            enterKeyHint="search"
+          />
 
-      {showImport ? (
-        <div className="import-panel glass">
-          <p>
-            Found {localPeek.historyCount} saved Five Crowns {localPeek.historyCount === 1 ? 'game' : 'games'}
-            {localPeek.active ? ' plus a table in progress' : ''} on this phone.
-          </p>
-          <GlassButton
-            disabled={importing || !cloudAvailable()}
-            onClick={() => {
-              setImporting(true)
-              void importLocalFiveCrowns()
-                .then((result) => {
-                  setImportNote(
-                    result.imported === 0
-                      ? 'Nothing new to import.'
-                      : `Imported ${result.imported} Five Crowns ${result.imported === 1 ? 'game' : 'games'} to Game Night.`,
-                  )
-                })
-                .catch(() => {
-                  setImportNote('Import failed. Try again with a connection.')
-                })
-                .finally(() => {
-                  setImporting(false)
-                })
-            }}
-          >
-            {importing ? 'Importing…' : 'Import Five Crowns games'}
-          </GlassButton>
-          {!cloudAvailable() ? <p className="hint">Cloud sync is not configured on this build.</p> : null}
-          {importNote ? <p className="hint">{importNote}</p> : null}
+          {matches.length === 0 ? (
+            <p className="hint center history-empty">No games match “{query.trim()}”.</p>
+          ) : (
+            <div className="game-grid game-grid--cards">
+              {matches.map((game) => (
+                <ListRow
+                  key={game.id}
+                  className={`game-tile theme-${game.id}`}
+                  leading={<GameArt id={game.id} />}
+                  disclosure
+                  separator={false}
+                  onClick={() => onChoose(game.id)}
+                >
+                  <span className="game-tile-copy">
+                    <span className="eyebrow">{game.tagline}</span>
+                    <strong>{game.name}</strong>
+                    <span>{game.blurb}</span>
+                  </span>
+                </ListRow>
+              ))}
+            </div>
+          )}
+
+          {showImport ? (
+            <div className="import-panel glass">
+              <p>
+                Found {localPeek.historyCount} saved Five Crowns {localPeek.historyCount === 1 ? 'game' : 'games'}
+                {localPeek.active ? ' plus a table in progress' : ''} on this phone.
+              </p>
+              <GlassButton
+                disabled={importing || !cloudAvailable()}
+                onClick={() => {
+                  setImporting(true)
+                  void importLocalFiveCrowns()
+                    .then((result) => {
+                      setImportNote(
+                        result.imported === 0
+                          ? 'Nothing new to import.'
+                          : `Imported ${result.imported} Five Crowns ${result.imported === 1 ? 'game' : 'games'} to Game Night.`,
+                      )
+                    })
+                    .catch(() => {
+                      setImportNote('Import failed. Try again with a connection.')
+                    })
+                    .finally(() => {
+                      setImporting(false)
+                    })
+                }}
+              >
+                {importing ? 'Importing…' : 'Import Five Crowns games'}
+              </GlassButton>
+              {!cloudAvailable() ? <p className="hint">Cloud sync is not configured on this build.</p> : null}
+              {importNote ? <p className="hint">{importNote}</p> : null}
+            </div>
+          ) : null}
         </div>
-      ) : null}
+      </div>
 
       <div className="thumb-dock">
         {canInstall ? (

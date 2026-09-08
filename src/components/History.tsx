@@ -1,4 +1,4 @@
-import { SearchBar } from '@ios27_design_system/react'
+import { ListSection, SearchBar } from '@ios27_design_system/react'
 import { useMemo, useState } from 'react'
 import { playerColor, standings, winners } from '../game/engine.ts'
 import {
@@ -11,7 +11,7 @@ import {
   searchHistory,
 } from '../game/history.ts'
 import type { GameRecord } from '../game/types.ts'
-import { PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
+import { HistoryGameRow, PrimaryButton, TextButton } from '../platform/IosChrome.tsx'
 import { SceneShell, SceneStage } from '../platform/SceneNav.tsx'
 import { SwipeBack } from '../platform/SwipeBack.tsx'
 import { ScoreSheet } from './ScoreSheet.tsx'
@@ -129,32 +129,45 @@ export function History({ onBack, onLeaderboard, onResume }: HistoryProps) {
         ) : filtered.length === 0 ? (
           <p className="hint center history-empty">No games match “{query.trim()}”.</p>
         ) : (
-          <ol className="history-list">
-            {filtered.map((record) => (
-              <HistoryRow key={record.id} record={record} onOpen={() => openDetail(record.id)} />
+          <ListSection className="history-list">
+            {filtered.map((record, index) => (
+              <HistoryRow
+                key={record.id}
+                record={record}
+                separator={index < filtered.length - 1}
+                onOpen={() => openDetail(record.id)}
+              />
             ))}
-          </ol>
+          </ListSection>
         )}
       </SceneShell>
     </SwipeBack>
   )
 }
 
-function HistoryRow({ record, onOpen }: { record: GameRecord; onOpen: () => void }) {
+function HistoryRow({
+  record,
+  onOpen,
+  separator,
+}: {
+  record: GameRecord
+  onOpen: () => void
+  separator: boolean
+}) {
   const champs = winners(record)
   return (
-    <li>
-      <button type="button" className="history-row" onClick={onOpen}>
-        <span className="history-when">{formatWhen(record.archivedAt)}</span>
-        <strong>{historyHeadline(record)}</strong>
-        <span className="history-meta">
-          {record.status === 'finished'
-            ? champs.length > 0
-              ? `${champs.map((player) => player.name).join(' & ')} won`
-              : 'Completed'
-            : `Stopped after hand ${handsRecorded(record)}`}
-        </span>
-      </button>
-    </li>
+    <HistoryGameRow
+      when={formatWhen(record.archivedAt)}
+      headline={historyHeadline(record)}
+      meta={
+        record.status === 'finished'
+          ? champs.length > 0
+            ? `${champs.map((player) => player.name).join(' & ')} won`
+            : 'Completed'
+          : `Stopped after hand ${handsRecorded(record)}`
+      }
+      onOpen={onOpen}
+      separator={separator}
+    />
   )
 }

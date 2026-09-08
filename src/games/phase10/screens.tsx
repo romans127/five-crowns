@@ -1,8 +1,9 @@
-import { SearchBar, Sheet, Toggle } from '@ios27_design_system/react'
+import { Button, ListRow, ListSection, SearchBar, Sheet, Toggle } from '@ios27_design_system/react'
 import { useMemo, useState } from 'react'
-import { ActionList, GlassButton, PrimaryButton, TextButton, TintedButton } from '../../platform/IosChrome.tsx'
+import { ActionList, GlassButton, HistoryGameRow, PlayerNameField, PlayerScoreRow, PrimaryButton, TextButton, TintedButton } from '../../platform/IosChrome.tsx'
 import { SceneShell, SceneStage } from '../../platform/SceneNav.tsx'
 import { SwipeBack } from '../../platform/SwipeBack.tsx'
+import { PhaseCardColors, PhaseLadder, PhaseMark } from './Brand.tsx'
 import {
   playerColor,
   playerTotal,
@@ -62,6 +63,9 @@ export function Phase10Home({
       flowLinks={flowLinks}
     >
       <div className="hero-block">
+        <PhaseCardColors size="lg" />
+        <PhaseMark />
+        <PhaseLadder />
         <p className="eyebrow">Phase by phase</p>
         <h2 className="hero-display">Phase 10</h2>
         <p className="tagline">Complete every phase. Leftovers still count against you.</p>
@@ -90,30 +94,30 @@ export function Phase10Setup({ onBack, onStart }: { onBack: () => void; onStart:
       }}
     >
       <p className="hint">Two to eight players. First to finish Phase 10 with the lowest leftover total wins.</p>
-      <ol className="player-fields">
+      <ListSection header="Players" className="player-fields">
         {names.map((name, index) => {
           const color = PLAYER_COLORS[index % PLAYER_COLORS.length]
           return (
-            <li key={`${color.id}-${index}`} className="player-field">
-              <span className="seat-suit" style={{ color: color.hex }}>
-                {color.suit}
-              </span>
-              <input
-                value={name}
-                maxLength={18}
-                autoCapitalize="words"
-                placeholder={`Player ${index + 1}`}
-                aria-label={`Player ${index + 1} name`}
-                onChange={(event) => {
-                  const next = [...names]
-                  next[index] = event.target.value
-                  setNames(next)
-                }}
-              />
-            </li>
+            <PlayerNameField
+              key={`${color.id}-${index}`}
+              index={index}
+              name={name}
+              suit={
+                <span className="seat-suit" style={{ color: color.hex }}>
+                  {color.suit}
+                </span>
+              }
+              canRemove={false}
+              onChange={(value) => {
+                const next = [...names]
+                next[index] = value
+                setNames(next)
+              }}
+              onRemove={() => undefined}
+            />
           )
         })}
-      </ol>
+      </ListSection>
       {names.length < MAX_PLAYERS ? (
         <GlassButton onClick={() => setNames([...names, ''])}>Add a player</GlassButton>
       ) : null}
@@ -156,36 +160,35 @@ export function Phase10Play({
       }}
     >
       <h1 className="play-title">Make your phase</h1>
+      <PhaseCardColors size="sm" />
       {leader ? (
         <p className="hint center frost-tile">
           Lowest so far: <strong style={{ color: playerColor(leader.player).hex }}>{leader.player.name}</strong> · {leader.total}
         </p>
       ) : null}
-      <ul className="player-scores">
-        {game.players.map((player) => {
+      <ListSection className="player-scores">
+        {game.players.map((player, index) => {
           const color = playerColor(player)
           const score = current[player.id]
           const entered = typeof score?.leftover === 'number'
           return (
-            <li key={player.id}>
-              <button type="button" className="player-card" onClick={() => setEditingId(player.id)}>
+            <PlayerScoreRow
+              key={player.id}
+              name={player.name}
+              detail={`${phaseLabel(player.phase)} · Total ${playerTotal(game, player.id)}`}
+              suit={
                 <span className="seat-suit" style={{ color: color.hex }}>
                   {color.suit}
                 </span>
-                <span className="player-meta">
-                  <strong>{player.name}</strong>
-                  <small>
-                    {phaseLabel(player.phase)} · Total {playerTotal(game, player.id)}
-                  </small>
-                </span>
-                <span className={`hand-score ${entered ? 'in' : 'open'}`}>
-                  {entered ? score?.leftover : 'Tap'}
-                </span>
-              </button>
-            </li>
+              }
+              scoreLabel={entered ? score?.leftover ?? 'Tap' : 'Tap'}
+              entered={entered}
+              separator={index < game.players.length - 1}
+              onClick={() => setEditingId(player.id)}
+            />
           )
         })}
-      </ul>
+      </ListSection>
       {ready ? (
         <PrimaryButton className="pulse" onClick={onNextRound}>
           Next hand
@@ -236,34 +239,59 @@ function Phase10Pad({
   const total = digits === '' ? 0 : Number(digits)
 
   return (
-    <Sheet open onChange={(next) => { if (!next) onClose() }} detent="large" title="Leftovers this hand">
-      <p style={{ color: playerColor }}>{playerName}</p>
-      <p className="pad-limit">{phaseLabelText}</p>
-      <p className="pad-limit">{leftoverHint()}</p>
-      <p className="pad-total" aria-live="polite">
-        {digits === '' ? '0' : digits}
-        <span>leftover points</span>
-      </p>
-      <div className="keypad" aria-label="Score keypad">
-        {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((key) => (
-          <button
-            key={key}
-            type="button"
+    <Sheet
+      open
+      className="score-pad-sheet"
+      onChange={(next) => { if (!next) onClose() }}
+      detent="large"
+      title="Leftovers this hand"
+    >
+      <div className="score-pad-body">
+        <p className="score-pad-player" style={{ color: playerColor }}>
+          {playerName}
+        </p>
+        <p className="pad-limit">
+          {phaseLabelText} · {leftoverHint()}
+        </p>
+        <p className="pad-total" aria-live="polite">
+          {digits === '' ? '0' : digits}
+          <span>leftover points</span>
+        </p>
+        <div className="keypad" aria-label="Score keypad">
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((key) => (
+            <Button
+              key={key}
+              variant="gray"
+              size="large"
+              className="keypad-digit"
+              onClick={() => setDigits((current) => (current + key).replace(/^0+(?=\d)/, '').slice(0, 3))}
+            >
+              {key}
+            </Button>
+          ))}
+          <span className="keypad-spacer" aria-hidden="true" />
+          <Button
+            variant="gray"
+            size="large"
             className="keypad-digit"
-            onClick={() => setDigits((current) => (current + key).replace(/^0+(?=\d)/, '').slice(0, 3))}
+            onClick={() => setDigits((current) => (current + '0').replace(/^0+(?=\d)/, '').slice(0, 3))}
           >
-            {key}
-          </button>
-        ))}
-        <span className="keypad-spacer" aria-hidden="true" />
-        <button type="button" className="keypad-digit" onClick={() => setDigits((current) => (current + '0').replace(/^0+(?=\d)/, '').slice(0, 3))}>
-          0
-        </button>
-        <button type="button" className="keypad-action" aria-label="Delete last digit" onClick={() => setDigits((current) => current.slice(0, -1))}>
-          ⌫
-        </button>
+            0
+          </Button>
+          <Button
+            variant="gray"
+            size="large"
+            className="keypad-action"
+            aria-label="Delete last digit"
+            onClick={() => setDigits((current) => current.slice(0, -1))}
+          >
+            ⌫
+          </Button>
+        </div>
+        <div className="score-pad-toggle-row">
+          <Toggle checked={completed} onChange={setCompleted} label="Completed this phase" />
+        </div>
       </div>
-      <Toggle checked={completed} onChange={setCompleted} label="Completed this phase" />
       <div className="sheet-actions">
         <TintedButton onClick={() => onSave(0, completed)}>Hit out · 0</TintedButton>
         <PrimaryButton onClick={() => onSave(total, completed)}>Lock in {total}</PrimaryButton>
@@ -345,6 +373,8 @@ export function Phase10Winner({
       ]}
     >
       <div className="hero-block">
+        <PhaseCardColors size="md" />
+        <PhaseMark />
         <p className="eyebrow">Phase 10 complete</p>
         <h1>{champs.length > 1 ? 'Shared finish!' : 'Phase master'}</h1>
       </div>
@@ -466,19 +496,18 @@ export function Phase10History({
         {filtered.length === 0 ? (
           <p className="hint center history-empty">No saved Phase 10 games yet.</p>
         ) : (
-          <ol className="history-list">
-            {filtered.map((record) => (
-              <li key={record.id}>
-                <button type="button" className="history-row" onClick={() => openDetail(record.id)}>
-                  <span className="history-when">{formatWhen(record.archivedAt)}</span>
-                  <strong>{historyHeadline(record)}</strong>
-                  <span className="history-meta">
-                    {record.status === 'finished' ? 'Completed' : `Stopped after hand ${handsRecorded(record)}`}
-                  </span>
-                </button>
-              </li>
+          <ListSection className="history-list">
+            {filtered.map((record, index) => (
+              <HistoryGameRow
+                key={record.id}
+                when={formatWhen(record.archivedAt)}
+                headline={historyHeadline(record)}
+                meta={record.status === 'finished' ? 'Completed' : `Stopped after hand ${handsRecorded(record)}`}
+                onOpen={() => openDetail(record.id)}
+                separator={index < filtered.length - 1}
+              />
             ))}
-          </ol>
+          </ListSection>
         )}
       </SceneShell>
     </SwipeBack>
@@ -507,35 +536,41 @@ export function Phase10Leaderboard({ onBack }: { onBack: () => void }) {
             <header>
               <h2>Most wins</h2>
             </header>
-            <ol className="leaderboard-list">
+            <ListSection className="leaderboard-list">
               {crowns.map((entry, index) => (
-                <li key={entry.name}>
-                  <span className="place">{index + 1}</span>
+                <ListRow
+                  key={entry.name}
+                  leading={<span className="place">{index + 1}</span>}
+                  trailing={<span className="leaderboard-stat gold-stat">{entry.wins}</span>}
+                  separator={index < crowns.length - 1}
+                >
                   <div className="leaderboard-name">
                     <strong>{entry.name}</strong>
                     <small>{entry.gamesPlayed} games</small>
                   </div>
-                  <span className="leaderboard-stat gold-stat">{entry.wins}</span>
-                </li>
+                </ListRow>
               ))}
-            </ol>
+            </ListSection>
           </article>
           <article className="leaderboard-panel">
             <header>
               <h2>Most last place</h2>
             </header>
-            <ol className="leaderboard-list">
+            <ListSection className="leaderboard-list">
               {lanterns.map((entry, index) => (
-                <li key={entry.name}>
-                  <span className="place">{index + 1}</span>
+                <ListRow
+                  key={entry.name}
+                  leading={<span className="place">{index + 1}</span>}
+                  trailing={<span className="leaderboard-stat lantern-stat">{entry.lastPlace}</span>}
+                  separator={index < lanterns.length - 1}
+                >
                   <div className="leaderboard-name">
                     <strong>{entry.name}</strong>
                     <small>{entry.gamesPlayed} games</small>
                   </div>
-                  <span className="leaderboard-stat lantern-stat">{entry.lastPlace}</span>
-                </li>
+                </ListRow>
               ))}
-            </ol>
+            </ListSection>
           </article>
         </>
       )}

@@ -1,4 +1,4 @@
-import { SegmentedControl, Sheet } from '@ios27_design_system/react'
+import { Button, SegmentedControl, Sheet } from '@ios27_design_system/react'
 import { useMemo, useState } from 'react'
 import { loadPadMode, savePadMode, type PadMode } from '../game/preferences.ts'
 import { leftoverPoints, leftoverCardLimitReached, maxLeftoverCards, tallyLeftovers, wildRank } from '../game/rules.ts'
@@ -71,78 +71,88 @@ export function ScorePad({ playerName, playerColor, handIndex, currentScore, onS
   }
 
   return (
-    <Sheet open onChange={(next) => { if (!next) onClose() }} detent="large" title="Leftovers this hand">
-      <p style={{ color: playerColor }}>{playerName}</p>
-      <p className="pad-limit">Up to {maxCards} cards · you deal {maxCards} and discard every turn</p>
-      <SegmentedControl
-        segments={['Tap cards', 'Keypad']}
-        selected={mode === 'cards' ? 0 : 1}
-        onChange={(index) => selectMode(index === 0 ? 'cards' : 'keypad')}
-      />
+    <Sheet
+      open
+      className="score-pad-sheet"
+      onChange={(next) => { if (!next) onClose() }}
+      detent="large"
+      title="Leftovers this hand"
+    >
+      <div className="score-pad-body">
+        <p className="score-pad-player" style={{ color: playerColor }}>
+          {playerName}
+        </p>
+        <p className="pad-limit">Up to {maxCards} cards · you deal {maxCards} and discard every turn</p>
+        <SegmentedControl
+          segments={['Tap cards', 'Keypad']}
+          selected={mode === 'cards' ? 0 : 1}
+          onChange={(index) => selectMode(index === 0 ? 'cards' : 'keypad')}
+        />
 
-      {mode === 'cards' ? (
-        <>
-          <p className="pad-total" aria-live="polite">
-            {cardTotal}
-            <span>points</span>
-          </p>
-          <div className="token-row">
-            <span className="pad-card-count" aria-live="polite">
-              {tokens.length} / {maxCards} cards
-            </span>
-            {tokens.length === 0 ? <span className="hint">Tap every unused card</span> : null}
-            {tokens.map((token, index) => (
-              <PlayingCard
-                key={`${token.type}-${index}`}
-                face={token.type === 'joker' ? 'joker' : token.rank}
-                suitId={token.type === 'rank' ? suitForHand(token.rank - 3).id : 'star'}
-                size="xs"
-                wild={token.type === 'joker' || (token.type === 'rank' && token.rank === wild)}
-                pointsLabel={String(leftoverPoints(token, wild))}
-                onClick={() => setTokens(tokens.filter((_, i) => i !== index))}
-                className="token-card"
-              />
-            ))}
-          </div>
-          <div className={`card-picker ${atCardLimit ? 'card-picker-full' : ''}`}>
-            {FACE_RANKS.map((rank) => (
-              <PlayingCard
-                key={rank}
-                face={rank}
-                suitId={suitForHand(rank - 3).id}
-                size="sm"
-                wild={rank === wild}
-                pointsLabel={rank === wild ? '20 wild' : String(leftoverPoints({ type: 'rank', rank }, wild))}
-                onClick={atCardLimit ? undefined : () => addRank(rank)}
-              />
-            ))}
-            <PlayingCard face="joker" size="sm" wild pointsLabel="50" onClick={atCardLimit ? undefined : addJoker} />
-          </div>
-        </>
-      ) : (
-        <>
-          <p className="pad-total" aria-live="polite">
-            {digits === '' ? '0' : digits}
-            <span>typed score</span>
-          </p>
-          <div className="keypad" aria-label="Score keypad">
-            {KEYPAD_ROWS.flatMap((row) =>
-              row.map((key) => (
-                <button key={key} type="button" className="keypad-digit" onClick={() => appendDigit(key)}>
-                  {key}
-                </button>
-              )),
-            )}
-            <span className="keypad-spacer" aria-hidden="true" />
-            <button type="button" className="keypad-digit keypad-zero" onClick={() => appendDigit('0')}>
-              0
-            </button>
-            <button type="button" className="keypad-action" aria-label="Delete last digit" onClick={backspaceDigit}>
-              ⌫
-            </button>
-          </div>
-        </>
-      )}
+        {mode === 'cards' ? (
+          <>
+            <p className="pad-total" aria-live="polite">
+              {cardTotal}
+              <span>points</span>
+            </p>
+            <div className="token-row">
+              <span className="pad-card-count" aria-live="polite">
+                {tokens.length} / {maxCards} cards
+              </span>
+              {tokens.length === 0 ? <span className="hint">Tap every unused card</span> : null}
+              {tokens.map((token, index) => (
+                <PlayingCard
+                  key={`${token.type}-${index}`}
+                  face={token.type === 'joker' ? 'joker' : token.rank}
+                  suitId={token.type === 'rank' ? suitForHand(token.rank - 3).id : 'star'}
+                  size="xs"
+                  wild={token.type === 'joker' || (token.type === 'rank' && token.rank === wild)}
+                  pointsLabel={String(leftoverPoints(token, wild))}
+                  onClick={() => setTokens(tokens.filter((_, i) => i !== index))}
+                  className="token-card"
+                />
+              ))}
+            </div>
+            <div className={`card-picker ${atCardLimit ? 'card-picker-full' : ''}`}>
+              {FACE_RANKS.map((rank) => (
+                <PlayingCard
+                  key={rank}
+                  face={rank}
+                  suitId={suitForHand(rank - 3).id}
+                  size="sm"
+                  wild={rank === wild}
+                  pointsLabel={rank === wild ? '20 wild' : String(leftoverPoints({ type: 'rank', rank }, wild))}
+                  onClick={atCardLimit ? undefined : () => addRank(rank)}
+                />
+              ))}
+              <PlayingCard face="joker" size="sm" wild pointsLabel="50" onClick={atCardLimit ? undefined : addJoker} />
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="pad-total" aria-live="polite">
+              {digits === '' ? '0' : digits}
+              <span>typed score</span>
+            </p>
+            <div className="keypad" aria-label="Score keypad">
+              {KEYPAD_ROWS.flatMap((row) =>
+                row.map((key) => (
+                  <Button key={key} variant="gray" size="large" className="keypad-digit" onClick={() => appendDigit(key)}>
+                    {key}
+                  </Button>
+                )),
+              )}
+              <span className="keypad-spacer" aria-hidden="true" />
+              <Button variant="gray" size="large" className="keypad-digit keypad-zero" onClick={() => appendDigit('0')}>
+                0
+              </Button>
+              <Button variant="gray" size="large" className="keypad-action" aria-label="Delete last digit" onClick={backspaceDigit}>
+                ⌫
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
 
       <div className="sheet-actions">
         <TintedButton

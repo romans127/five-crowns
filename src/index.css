@@ -15,13 +15,16 @@
   --fill-text: #fff;
   --glass: rgba(255, 255, 255, 0.08);
   --glass-strong: rgba(16, 22, 36, 0.86);
-  --frost-fill: rgba(255, 255, 255, 0.1);
-  --frost-tile: rgba(255, 255, 255, 0.06);
-  --frost-border: rgba(255, 255, 255, 0.15);
-  --frost-highlight: rgba(255, 255, 255, 0.1);
-  --frost-blur: 24px;
-  --frost-blur-tile: 16px;
-  --frost-shadow: inset 0 1px 0 var(--frost-highlight), 0 18px 40px -22px rgba(0, 0, 0, 0.55);
+  --frost-fill: rgba(255, 255, 255, 0.13);
+  --frost-tile: rgba(255, 255, 255, 0.08);
+  --frost-border: rgba(255, 255, 255, 0.19);
+  --frost-highlight: rgba(255, 255, 255, 0.14);
+  --frost-blur: 28px;
+  --frost-blur-tile: 18px;
+  --frost-shadow:
+    inset 0 1px 0 var(--frost-highlight),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.06),
+    0 20px 44px -20px rgba(0, 0, 0, 0.58);
   --shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.55);
   --safe-top: env(safe-area-inset-top);
   --safe-bottom: env(safe-area-inset-bottom);
@@ -30,6 +33,8 @@
   --radius-sheet: 28px;
   --radius-card: 22px;
   --radius-row: 16px;
+  --app-max-width: 430px;
+  --app-gutter: 16px;
   color: var(--ivory);
   background: #050910;
   font: 17px/1.4 var(--sans);
@@ -50,8 +55,10 @@
   --fill-text: #2a1604;
   --glass: rgba(255, 244, 220, 0.08);
   --glass-strong: rgba(24, 14, 38, 0.86);
-  --frost-fill: rgba(255, 244, 220, 0.1);
-  --frost-tile: rgba(255, 244, 220, 0.06);
+  --frost-fill: rgba(255, 244, 220, 0.13);
+  --frost-tile: rgba(255, 244, 220, 0.08);
+  --frost-border: rgba(255, 244, 220, 0.19);
+  --frost-highlight: rgba(255, 244, 220, 0.14);
   --color-blue: #f4c95d;
   --ios27-color-accent-blue: #f4c95d;
 }
@@ -61,20 +68,277 @@
 }
 
 [data-game-theme='phase-10'] {
-  --felt: #2a0f2a;
-  --ink: #140814;
-  --panel: rgba(72, 20, 64, 0.5);
-  --gold: #ff8ac8;
-  --gold-deep: #ff5ea8;
-  --glow: rgba(255, 120, 196, 0.28);
-  --fill: #ff2d92;
+  --felt: #0a1848;
+  --ink: #050818;
+  --panel: rgba(18, 44, 108, 0.52);
+  --gold: #6ec0ff;
+  --gold-deep: #3d8ef0;
+  --glow: rgba(62, 130, 255, 0.3);
+  --fill: #2b7cff;
   --fill-text: #fff;
-  --glass: rgba(255, 220, 240, 0.08);
-  --glass-strong: rgba(36, 10, 34, 0.86);
-  --frost-fill: rgba(255, 220, 240, 0.1);
-  --frost-tile: rgba(255, 220, 240, 0.06);
-  --color-blue: #ff2d92;
-  --ios27-color-accent-blue: #ff2d92;
+  --crimson: #e84545;
+  --glass: rgba(220, 235, 255, 0.08);
+  --glass-strong: rgba(8, 16, 42, 0.88);
+  --frost-fill: rgba(220, 235, 255, 0.13);
+  --frost-tile: rgba(220, 235, 255, 0.08);
+  --frost-border: rgba(220, 235, 255, 0.19);
+  --frost-highlight: rgba(220, 235, 255, 0.14);
+  --color-blue: #2b7cff;
+  --ios27-color-accent-blue: #3d8ef0;
+  --p10-red: #e84545;
+  --p10-blue: #2b7cff;
+  --p10-green: #2db86a;
+  --p10-yellow: #f5c842;
+  --p10-wild: #8b5cf6;
+}
+
+[data-game-theme='yahtzee'] {
+  --felt: #1c070a;
+  --ink: #0a0406;
+  --panel: rgba(48, 12, 16, 0.54);
+  --gold: #ffd400;
+  --gold-deep: #e6b800;
+  --glow: rgba(196, 16, 46, 0.34);
+  --fill: #c8102e;
+  --fill-text: #fff;
+  --crimson: #c8102e;
+  --glass: rgba(255, 248, 236, 0.08);
+  --glass-strong: rgba(16, 6, 8, 0.88);
+  --frost-fill: rgba(255, 248, 236, 0.13);
+  --frost-tile: rgba(255, 248, 236, 0.08);
+  --frost-border: rgba(255, 248, 236, 0.19);
+  --frost-highlight: rgba(255, 248, 236, 0.14);
+  --color-blue: #c8102e;
+  --ios27-color-accent-blue: #e31c23;
+  --yz-red: #c8102e;
+  --yz-red-deep: #8b0e18;
+  --yz-yellow: #ffd400;
+  --yz-dice: #f7f4ee;
+  --yz-pip: #141414;
+}
+
+[data-game-theme='uno'] {
+  --felt: #4a1018;
+  --ink: #120508;
+  --panel: rgba(88, 18, 28, 0.52);
+  --gold: #ffd100;
+  --gold-deep: #e6b000;
+  --glow: rgba(227, 25, 55, 0.32);
+  --fill: #e31937;
+  --fill-text: #fff;
+  --crimson: #e31937;
+  --glass: rgba(255, 230, 230, 0.08);
+  --glass-strong: rgba(28, 8, 12, 0.88);
+  --frost-fill: rgba(255, 230, 230, 0.13);
+  --frost-tile: rgba(255, 230, 230, 0.08);
+  --frost-border: rgba(255, 220, 220, 0.19);
+  --frost-highlight: rgba(255, 236, 236, 0.14);
+  --color-blue: #e31937;
+  --ios27-color-accent-blue: #e31937;
+  --uno-red: #e31937;
+  --uno-yellow: #ffd100;
+  --uno-blue: #0093d0;
+  --uno-green: #00a651;
+  --uno-black: #111111;
+}
+
+[data-game-theme='cribbage'] {
+  --felt: #1a2e22;
+  --ink: #0a120c;
+  --panel: rgba(28, 48, 36, 0.54);
+  --gold: #d4a017;
+  --gold-deep: #b8862c;
+  --glow: rgba(46, 122, 86, 0.3);
+  --fill: #2e7a56;
+  --fill-text: #f4ead4;
+  --crimson: #c46a3a;
+  --glass: rgba(244, 234, 212, 0.08);
+  --glass-strong: rgba(12, 20, 14, 0.88);
+  --frost-fill: rgba(244, 234, 212, 0.13);
+  --frost-tile: rgba(244, 234, 212, 0.08);
+  --frost-border: rgba(244, 234, 212, 0.2);
+  --frost-highlight: rgba(244, 234, 212, 0.14);
+  --color-blue: #2e7a56;
+  --ios27-color-accent-blue: #3d8f62;
+  --crib-wood: #3d2414;
+  --crib-brass: #d4a017;
+  --crib-cream: #f4ead4;
+}
+
+[data-game-theme='hearts'] {
+  --felt: #123224;
+  --ink: #07140e;
+  --panel: rgba(20, 52, 36, 0.54);
+  --gold: #e0b44c;
+  --gold-deep: #c4922a;
+  --glow: rgba(214, 31, 38, 0.3);
+  --fill: #d61f26;
+  --fill-text: #fff;
+  --crimson: #d61f26;
+  --glass: rgba(232, 238, 242, 0.08);
+  --glass-strong: rgba(8, 18, 12, 0.88);
+  --frost-fill: rgba(232, 238, 242, 0.12);
+  --frost-tile: rgba(232, 238, 242, 0.08);
+  --frost-border: rgba(232, 238, 242, 0.18);
+  --frost-highlight: rgba(232, 238, 242, 0.14);
+  --color-blue: #d61f26;
+  --ios27-color-accent-blue: #d61f26;
+}
+
+[data-game-theme='gin-rummy'] {
+  --felt: #2a1218;
+  --ink: #12080c;
+  --panel: rgba(64, 24, 32, 0.54);
+  --gold: #e8d7c3;
+  --gold-deep: #c4a574;
+  --glow: rgba(155, 44, 67, 0.3);
+  --fill: #9b2c43;
+  --fill-text: #f7efe4;
+  --crimson: #9b2c43;
+  --glass: rgba(247, 239, 228, 0.08);
+  --glass-strong: rgba(20, 10, 12, 0.88);
+  --frost-fill: rgba(247, 239, 228, 0.13);
+  --frost-tile: rgba(247, 239, 228, 0.08);
+  --frost-border: rgba(247, 239, 228, 0.2);
+  --frost-highlight: rgba(247, 239, 228, 0.14);
+  --color-blue: #9b2c43;
+  --ios27-color-accent-blue: #9b2c43;
+}
+
+[data-game-theme='farkle'] {
+  --felt: #23160e;
+  --ink: #0e0806;
+  --panel: rgba(52, 32, 16, 0.54);
+  --gold: #f5b942;
+  --gold-deep: #e39b18;
+  --glow: rgba(245, 185, 66, 0.28);
+  --fill: #e39b18;
+  --fill-text: #1a1208;
+  --crimson: #c46a3a;
+  --glass: rgba(243, 239, 230, 0.08);
+  --glass-strong: rgba(16, 10, 6, 0.88);
+  --frost-fill: rgba(243, 239, 230, 0.13);
+  --frost-tile: rgba(243, 239, 230, 0.08);
+  --frost-border: rgba(243, 239, 230, 0.2);
+  --frost-highlight: rgba(243, 239, 230, 0.14);
+  --color-blue: #e39b18;
+  --ios27-color-accent-blue: #f5b942;
+}
+
+[data-game-theme='qwixx'] {
+  --felt: #161820;
+  --ink: #08090c;
+  --panel: rgba(28, 32, 44, 0.54);
+  --gold: #f5c400;
+  --gold-deep: #2b6cff;
+  --glow: rgba(227, 28, 35, 0.26);
+  --fill: #2b6cff;
+  --fill-text: #fff;
+  --crimson: #e31c23;
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-strong: rgba(12, 14, 20, 0.88);
+  --frost-fill: rgba(255, 255, 255, 0.12);
+  --frost-tile: rgba(255, 255, 255, 0.08);
+  --frost-border: rgba(255, 255, 255, 0.18);
+  --frost-highlight: rgba(255, 255, 255, 0.14);
+  --color-blue: #2b6cff;
+  --ios27-color-accent-blue: #2b6cff;
+  --qx-red: #e31c23;
+  --qx-yellow: #f5c400;
+  --qx-green: #1f9d55;
+  --qx-blue: #2b6cff;
+}
+
+[data-game-theme='monopoly-deal'] {
+  --felt: #2a100e;
+  --ink: #120808;
+  --panel: rgba(64, 20, 18, 0.54);
+  --gold: #d4a017;
+  --gold-deep: #c4922a;
+  --glow: rgba(227, 6, 19, 0.28);
+  --fill: #e30613;
+  --fill-text: #fff;
+  --crimson: #e30613;
+  --glass: rgba(244, 234, 212, 0.08);
+  --glass-strong: rgba(20, 8, 8, 0.88);
+  --frost-fill: rgba(244, 234, 212, 0.12);
+  --frost-tile: rgba(244, 234, 212, 0.08);
+  --frost-border: rgba(244, 234, 212, 0.2);
+  --frost-highlight: rgba(244, 234, 212, 0.14);
+  --color-blue: #e30613;
+  --ios27-color-accent-blue: #e30613;
+  --deal-red: #e30613;
+  --deal-gold: #d4a017;
+  --deal-cream: #f4ead4;
+}
+
+[data-game-theme='sorry'] {
+  --felt: #3a1a18;
+  --ink: #140808;
+  --panel: rgba(72, 24, 22, 0.54);
+  --gold: #f5d000;
+  --gold-deep: #1e5aa8;
+  --glow: rgba(227, 28, 35, 0.28);
+  --fill: #e31c23;
+  --fill-text: #fff;
+  --crimson: #e31c23;
+  --glass: rgba(244, 234, 212, 0.08);
+  --glass-strong: rgba(22, 10, 10, 0.88);
+  --frost-fill: rgba(244, 234, 212, 0.12);
+  --frost-tile: rgba(244, 234, 212, 0.08);
+  --frost-border: rgba(244, 234, 212, 0.2);
+  --frost-highlight: rgba(244, 234, 212, 0.14);
+  --color-blue: #e31c23;
+  --ios27-color-accent-blue: #1e5aa8;
+  --sorry-red: #e31c23;
+  --sorry-blue: #1e5aa8;
+  --sorry-yellow: #f5d000;
+  --sorry-green: #2e9d4a;
+}
+
+[data-game-theme='ticket-to-ride'] {
+  --felt: #2c2218;
+  --ink: #120e0a;
+  --panel: rgba(52, 36, 24, 0.54);
+  --gold: #f2d15c;
+  --gold-deep: #c41e3a;
+  --glow: rgba(196, 30, 58, 0.26);
+  --fill: #c41e3a;
+  --fill-text: #fff;
+  --crimson: #c41e3a;
+  --glass: rgba(255, 236, 196, 0.08);
+  --glass-strong: rgba(18, 12, 8, 0.88);
+  --frost-fill: rgba(255, 236, 196, 0.12);
+  --frost-tile: rgba(255, 236, 196, 0.08);
+  --frost-border: rgba(255, 236, 196, 0.2);
+  --frost-highlight: rgba(255, 236, 196, 0.14);
+  --color-blue: #c41e3a;
+  --ios27-color-accent-blue: #c41e3a;
+  --ttr-red: #c41e3a;
+  --ttr-yellow: #f2d15c;
+}
+
+[data-game-theme='sequence'] {
+  --felt: #163528;
+  --ink: #08140e;
+  --panel: rgba(24, 52, 40, 0.54);
+  --gold: #f2d15c;
+  --gold-deep: #2b6cff;
+  --glow: rgba(43, 108, 255, 0.24);
+  --fill: #2b6cff;
+  --fill-text: #fff;
+  --crimson: #e31c23;
+  --glass: rgba(232, 244, 236, 0.08);
+  --glass-strong: rgba(8, 18, 14, 0.88);
+  --frost-fill: rgba(232, 244, 236, 0.12);
+  --frost-tile: rgba(232, 244, 236, 0.08);
+  --frost-border: rgba(232, 244, 236, 0.18);
+  --frost-highlight: rgba(232, 244, 236, 0.14);
+  --color-blue: #2b6cff;
+  --ios27-color-accent-blue: #2b6cff;
+  --seq-blue: #2b6cff;
+  --seq-green: #1f9d55;
+  --seq-red: #e31c23;
 }
 
 [data-game-theme='game-night'] {
@@ -99,7 +363,7 @@ body {
 }
 
 #root {
-  max-width: 430px;
+  max-width: var(--app-max-width);
   margin: 0 auto;
   min-height: 100svh;
   position: relative;
@@ -125,7 +389,7 @@ body {
   position: fixed;
   inset: 0;
   left: 50%;
-  width: min(100%, 430px);
+  width: min(100%, var(--app-max-width));
   transform: translateX(-50%);
   z-index: 0;
   pointer-events: none;
@@ -211,13 +475,469 @@ body {
 }
 
 [data-game-theme='phase-10'] .app-bg {
-  --bg-stroke: color-mix(in srgb, var(--gold) 26%, transparent);
-  --bg-stroke-alt: color-mix(in srgb, var(--gold-deep) 20%, transparent);
+  --bg-stroke: color-mix(in srgb, var(--p10-blue) 28%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--p10-yellow) 16%, transparent);
   --bg-stroke-faint: color-mix(in srgb, var(--ivory) 8%, transparent);
 }
 
+[data-game-theme='phase-10'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 95% 55% at 12% 8%, color-mix(in srgb, var(--p10-blue) 16%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 18%, color-mix(in srgb, var(--p10-red) 12%, transparent), transparent 52%),
+    radial-gradient(ellipse 85% 60% at 50% 108%, color-mix(in srgb, var(--p10-green) 10%, transparent), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 8% 78%, color-mix(in srgb, var(--p10-yellow) 8%, transparent), transparent 50%);
+}
+
 [data-game-theme='phase-10'] .app-bg__mesh {
-  opacity: 0.2;
+  opacity: 0.16;
+  background:
+    repeating-linear-gradient(
+      116deg,
+      transparent,
+      transparent 54px,
+      color-mix(in srgb, var(--p10-blue) 10%, transparent) 54px,
+      color-mix(in srgb, var(--p10-blue) 10%, transparent) 55px
+    ),
+    repeating-linear-gradient(
+      -24deg,
+      transparent,
+      transparent 78px,
+      color-mix(in srgb, var(--p10-green) 7%, transparent) 78px,
+      color-mix(in srgb, var(--p10-green) 7%, transparent) 79px
+    );
+}
+
+[data-game-theme='phase-10'] .orb-a {
+  background: color-mix(in srgb, var(--p10-blue) 58%, var(--p10-red));
+}
+
+[data-game-theme='phase-10'] .orb-b {
+  background: color-mix(in srgb, var(--p10-red) 46%, transparent);
+}
+
+[data-game-theme='phase-10'] .orb-c {
+  background: color-mix(in srgb, var(--p10-green) 42%, var(--p10-yellow));
+}
+
+[data-game-theme='phase-10'] .orb-d {
+  background: color-mix(in srgb, var(--p10-yellow) 30%, var(--p10-blue));
+  opacity: 0.36;
+}
+
+[data-game-theme='phase-10'] .hero-block {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--p10-blue) 24%, transparent), transparent 52%),
+    linear-gradient(315deg, color-mix(in srgb, var(--p10-red) 12%, transparent), transparent 48%),
+    var(--frost-fill);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--p10-blue) 26%, transparent);
+}
+
+[data-game-theme='phase-10'] .rule-card,
+[data-game-theme='phase-10'] .leaderboard-panel,
+[data-game-theme='phase-10'] .history-detail-card {
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--p10-blue) 10%, transparent), transparent 42%),
+    var(--frost-fill);
+}
+
+[data-game-theme='phase-10'] .wild-list li strong {
+  color: var(--gold);
+}
+
+[data-game-theme='yahtzee'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--yz-red) 28%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--yz-yellow) 18%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--yz-dice) 10%, transparent);
+}
+
+[data-game-theme='yahtzee'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 95% 55% at 12% 8%, color-mix(in srgb, var(--yz-red) 18%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 18%, color-mix(in srgb, var(--yz-yellow) 12%, transparent), transparent 52%),
+    radial-gradient(ellipse 85% 60% at 50% 108%, color-mix(in srgb, var(--yz-pip) 16%, transparent), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 8% 78%, color-mix(in srgb, var(--yz-dice) 8%, transparent), transparent 50%);
+}
+
+[data-game-theme='yahtzee'] .app-bg__mesh {
+  opacity: 0.18;
+  background:
+    repeating-linear-gradient(
+      116deg,
+      transparent,
+      transparent 54px,
+      color-mix(in srgb, var(--yz-red) 12%, transparent) 54px,
+      color-mix(in srgb, var(--yz-red) 12%, transparent) 55px
+    ),
+    repeating-linear-gradient(
+      -24deg,
+      transparent,
+      transparent 78px,
+      color-mix(in srgb, var(--yz-yellow) 8%, transparent) 78px,
+      color-mix(in srgb, var(--yz-yellow) 8%, transparent) 79px
+    );
+}
+
+[data-game-theme='yahtzee'] .orb-a {
+  background: color-mix(in srgb, var(--yz-red) 62%, var(--yz-yellow));
+}
+
+[data-game-theme='yahtzee'] .orb-b {
+  background: color-mix(in srgb, var(--yz-yellow) 40%, transparent);
+}
+
+[data-game-theme='yahtzee'] .orb-c {
+  background: color-mix(in srgb, var(--yz-pip) 36%, var(--yz-red));
+}
+
+[data-game-theme='yahtzee'] .orb-d {
+  background: color-mix(in srgb, var(--yz-dice) 28%, var(--yz-red));
+  opacity: 0.34;
+}
+
+[data-game-theme='yahtzee'] .hero-block {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--yz-red) 26%, transparent), transparent 52%),
+    linear-gradient(315deg, color-mix(in srgb, var(--yz-yellow) 14%, transparent), transparent 48%),
+    var(--frost-fill);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--yz-yellow) 22%, transparent);
+}
+
+[data-game-theme='yahtzee'] .rule-card,
+[data-game-theme='yahtzee'] .leaderboard-panel,
+[data-game-theme='yahtzee'] .history-detail-card {
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--yz-red) 10%, transparent), transparent 42%),
+    var(--frost-fill);
+}
+
+[data-game-theme='yahtzee'] .wild-list li strong {
+  color: var(--yz-yellow);
+}
+
+[data-game-theme='uno'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--uno-red) 30%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--uno-yellow) 18%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--ivory) 8%, transparent);
+}
+
+[data-game-theme='uno'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 95% 55% at 12% 8%, color-mix(in srgb, var(--uno-red) 18%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 18%, color-mix(in srgb, var(--uno-yellow) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 85% 60% at 50% 108%, color-mix(in srgb, var(--uno-blue) 12%, transparent), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 8% 78%, color-mix(in srgb, var(--uno-green) 10%, transparent), transparent 50%);
+}
+
+[data-game-theme='uno'] .app-bg__mesh {
+  opacity: 0.18;
+  background:
+    repeating-linear-gradient(
+      116deg,
+      transparent,
+      transparent 54px,
+      color-mix(in srgb, var(--uno-red) 12%, transparent) 54px,
+      color-mix(in srgb, var(--uno-red) 12%, transparent) 55px
+    ),
+    repeating-linear-gradient(
+      -24deg,
+      transparent,
+      transparent 78px,
+      color-mix(in srgb, var(--uno-yellow) 8%, transparent) 78px,
+      color-mix(in srgb, var(--uno-yellow) 8%, transparent) 79px
+    );
+}
+
+[data-game-theme='uno'] .orb-a {
+  background: color-mix(in srgb, var(--uno-red) 62%, var(--uno-yellow));
+}
+
+[data-game-theme='uno'] .orb-b {
+  background: color-mix(in srgb, var(--uno-yellow) 48%, transparent);
+}
+
+[data-game-theme='uno'] .orb-c {
+  background: color-mix(in srgb, var(--uno-blue) 46%, var(--uno-green));
+}
+
+[data-game-theme='uno'] .orb-d {
+  background: color-mix(in srgb, var(--uno-green) 32%, var(--uno-red));
+  opacity: 0.36;
+}
+
+[data-game-theme='uno'] .hero-block {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--uno-red) 28%, transparent), transparent 52%),
+    linear-gradient(315deg, color-mix(in srgb, var(--uno-yellow) 16%, transparent), transparent 48%),
+    var(--frost-fill);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--uno-yellow) 22%, transparent);
+}
+
+[data-game-theme='uno'] .rule-card,
+[data-game-theme='uno'] .leaderboard-panel,
+[data-game-theme='uno'] .history-detail-card {
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--uno-red) 12%, transparent), transparent 42%),
+    var(--frost-fill);
+}
+
+[data-game-theme='uno'] .wild-list li strong,
+[data-game-theme='uno'] .score-legend li strong {
+  color: var(--gold);
+}
+
+[data-game-theme='cribbage'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--crib-brass) 26%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--fill) 18%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--crib-cream) 10%, transparent);
+}
+
+[data-game-theme='cribbage'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 95% 55% at 12% 8%, color-mix(in srgb, var(--fill) 16%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 18%, color-mix(in srgb, var(--crib-brass) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 85% 60% at 50% 108%, color-mix(in srgb, var(--crib-wood) 22%, transparent), transparent 55%);
+}
+
+[data-game-theme='cribbage'] .orb-a { background: color-mix(in srgb, var(--fill) 58%, var(--crib-brass)); }
+[data-game-theme='cribbage'] .orb-b { background: color-mix(in srgb, var(--crib-brass) 40%, transparent); }
+[data-game-theme='cribbage'] .orb-c { background: color-mix(in srgb, var(--crib-wood) 46%, var(--fill)); }
+[data-game-theme='cribbage'] .orb-d { background: color-mix(in srgb, var(--crib-cream) 28%, var(--fill)); opacity: 0.34; }
+
+[data-game-theme='cribbage'] .hero-block,
+[data-game-theme='cribbage'] .rule-card,
+[data-game-theme='cribbage'] .leaderboard-panel,
+[data-game-theme='cribbage'] .history-detail-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--fill) 18%, transparent), transparent 52%),
+    var(--frost-fill);
+}
+
+[data-game-theme='hearts'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--crimson) 28%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--fill) 16%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--gold) 10%, transparent);
+}
+
+[data-game-theme='hearts'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 95% 55% at 12% 8%, color-mix(in srgb, var(--crimson) 18%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 18%, color-mix(in srgb, var(--gold) 12%, transparent), transparent 52%),
+    radial-gradient(ellipse 85% 60% at 50% 108%, color-mix(in srgb, var(--felt) 22%, transparent), transparent 55%);
+}
+
+[data-game-theme='hearts'] .orb-a { background: color-mix(in srgb, var(--crimson) 62%, var(--gold)); }
+[data-game-theme='hearts'] .orb-b { background: color-mix(in srgb, var(--gold) 36%, transparent); }
+[data-game-theme='hearts'] .orb-c { background: color-mix(in srgb, var(--felt) 48%, #000); }
+[data-game-theme='hearts'] .orb-d { background: color-mix(in srgb, var(--crimson) 28%, transparent); opacity: 0.36; }
+
+[data-game-theme='hearts'] .hero-block,
+[data-game-theme='hearts'] .rule-card,
+[data-game-theme='hearts'] .leaderboard-panel,
+[data-game-theme='hearts'] .history-detail-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--crimson) 22%, transparent), transparent 52%),
+    var(--frost-fill);
+}
+
+[data-game-theme='gin-rummy'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--fill) 26%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--gold) 16%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--ivory) 8%, transparent);
+}
+
+[data-game-theme='gin-rummy'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 95% 55% at 12% 8%, color-mix(in srgb, var(--fill) 18%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 18%, color-mix(in srgb, var(--gold) 12%, transparent), transparent 52%);
+}
+
+[data-game-theme='gin-rummy'] .orb-a { background: color-mix(in srgb, var(--fill) 58%, var(--gold)); }
+[data-game-theme='gin-rummy'] .orb-b { background: color-mix(in srgb, var(--gold) 36%, transparent); }
+[data-game-theme='gin-rummy'] .orb-c { background: color-mix(in srgb, var(--felt) 48%, var(--fill)); }
+[data-game-theme='gin-rummy'] .orb-d { background: color-mix(in srgb, var(--gold) 24%, var(--fill)); opacity: 0.34; }
+
+[data-game-theme='gin-rummy'] .hero-block,
+[data-game-theme='gin-rummy'] .rule-card,
+[data-game-theme='gin-rummy'] .leaderboard-panel,
+[data-game-theme='gin-rummy'] .history-detail-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--fill) 22%, transparent), transparent 52%),
+    var(--frost-fill);
+}
+
+[data-game-theme='farkle'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--gold) 26%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--fill) 16%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--ivory) 8%, transparent);
+}
+
+[data-game-theme='farkle'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 95% 55% at 12% 8%, color-mix(in srgb, var(--gold) 16%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 18%, color-mix(in srgb, var(--fill) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 85% 60% at 50% 108%, color-mix(in srgb, #2a1a10 28%, transparent), transparent 55%);
+}
+
+[data-game-theme='farkle'] .orb-a { background: color-mix(in srgb, var(--gold) 62%, var(--fill)); }
+[data-game-theme='farkle'] .orb-b { background: color-mix(in srgb, var(--gold) 40%, transparent); }
+[data-game-theme='farkle'] .orb-c { background: color-mix(in srgb, #2a1a10 50%, var(--fill)); }
+[data-game-theme='farkle'] .orb-d { background: color-mix(in srgb, var(--ivory) 24%, var(--gold)); opacity: 0.34; }
+
+[data-game-theme='farkle'] .hero-block,
+[data-game-theme='farkle'] .rule-card,
+[data-game-theme='farkle'] .leaderboard-panel,
+[data-game-theme='farkle'] .history-detail-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--gold) 20%, transparent), transparent 52%),
+    var(--frost-fill);
+}
+
+[data-game-theme='qwixx'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--qx-blue) 24%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--qx-red) 16%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--qx-yellow) 10%, transparent);
+}
+
+[data-game-theme='qwixx'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 90% 50% at 10% 8%, color-mix(in srgb, var(--qx-red) 16%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 16%, color-mix(in srgb, var(--qx-yellow) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 70% 45% at 80% 88%, color-mix(in srgb, var(--qx-blue) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 60% 40% at 12% 86%, color-mix(in srgb, var(--qx-green) 12%, transparent), transparent 50%);
+}
+
+[data-game-theme='qwixx'] .orb-a { background: color-mix(in srgb, var(--qx-red) 58%, var(--qx-yellow)); }
+[data-game-theme='qwixx'] .orb-b { background: color-mix(in srgb, var(--qx-yellow) 42%, transparent); }
+[data-game-theme='qwixx'] .orb-c { background: color-mix(in srgb, var(--qx-green) 46%, var(--qx-blue)); }
+[data-game-theme='qwixx'] .orb-d { background: color-mix(in srgb, var(--qx-blue) 32%, var(--qx-red)); opacity: 0.36; }
+
+[data-game-theme='qwixx'] .hero-block,
+[data-game-theme='qwixx'] .rule-card,
+[data-game-theme='qwixx'] .leaderboard-panel,
+[data-game-theme='qwixx'] .history-detail-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--qx-blue) 16%, transparent), transparent 48%),
+    linear-gradient(315deg, color-mix(in srgb, var(--qx-red) 12%, transparent), transparent 52%),
+    var(--frost-fill);
+}
+
+[data-game-theme='monopoly-deal'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--deal-red) 26%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--deal-gold) 18%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--deal-cream) 10%, transparent);
+}
+
+[data-game-theme='monopoly-deal'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 95% 55% at 12% 8%, color-mix(in srgb, var(--deal-red) 16%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 18%, color-mix(in srgb, var(--deal-gold) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 85% 60% at 50% 108%, color-mix(in srgb, #111 28%, transparent), transparent 55%);
+}
+
+[data-game-theme='monopoly-deal'] .orb-a { background: color-mix(in srgb, var(--deal-red) 58%, var(--deal-gold)); }
+[data-game-theme='monopoly-deal'] .orb-b { background: color-mix(in srgb, var(--deal-gold) 40%, transparent); }
+[data-game-theme='monopoly-deal'] .orb-c { background: color-mix(in srgb, #111 46%, var(--deal-red)); }
+[data-game-theme='monopoly-deal'] .orb-d { background: color-mix(in srgb, var(--deal-cream) 28%, var(--deal-gold)); opacity: 0.34; }
+
+[data-game-theme='monopoly-deal'] .hero-block,
+[data-game-theme='monopoly-deal'] .rule-card,
+[data-game-theme='monopoly-deal'] .leaderboard-panel,
+[data-game-theme='monopoly-deal'] .history-detail-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--deal-red) 20%, transparent), transparent 52%),
+    linear-gradient(315deg, color-mix(in srgb, var(--deal-gold) 14%, transparent), transparent 48%),
+    var(--frost-fill);
+}
+
+[data-game-theme='sorry'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--sorry-red) 24%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--sorry-blue) 16%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--sorry-yellow) 10%, transparent);
+}
+
+[data-game-theme='sorry'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 90% 50% at 10% 8%, color-mix(in srgb, var(--sorry-red) 16%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 16%, color-mix(in srgb, var(--sorry-blue) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 70% 45% at 80% 88%, color-mix(in srgb, var(--sorry-green) 12%, transparent), transparent 52%),
+    radial-gradient(ellipse 60% 40% at 12% 86%, color-mix(in srgb, var(--sorry-yellow) 12%, transparent), transparent 50%);
+}
+
+[data-game-theme='sorry'] .orb-a { background: color-mix(in srgb, var(--sorry-red) 58%, var(--sorry-yellow)); }
+[data-game-theme='sorry'] .orb-b { background: color-mix(in srgb, var(--sorry-blue) 42%, transparent); }
+[data-game-theme='sorry'] .orb-c { background: color-mix(in srgb, var(--sorry-green) 46%, var(--sorry-yellow)); }
+[data-game-theme='sorry'] .orb-d { background: color-mix(in srgb, var(--sorry-yellow) 32%, var(--sorry-red)); opacity: 0.36; }
+
+[data-game-theme='sorry'] .hero-block,
+[data-game-theme='sorry'] .rule-card,
+[data-game-theme='sorry'] .leaderboard-panel,
+[data-game-theme='sorry'] .history-detail-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--sorry-red) 16%, transparent), transparent 48%),
+    linear-gradient(315deg, color-mix(in srgb, var(--sorry-blue) 12%, transparent), transparent 52%),
+    var(--frost-fill);
+}
+
+[data-game-theme='ticket-to-ride'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--ttr-red) 24%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--ttr-yellow) 18%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, #8d6e4c 12%, transparent);
+}
+
+[data-game-theme='ticket-to-ride'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 95% 55% at 12% 8%, color-mix(in srgb, var(--ttr-yellow) 16%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 18%, color-mix(in srgb, var(--ttr-red) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 85% 60% at 50% 108%, color-mix(in srgb, #2c2218 28%, transparent), transparent 55%);
+}
+
+[data-game-theme='ticket-to-ride'] .orb-a { background: color-mix(in srgb, var(--ttr-red) 58%, var(--ttr-yellow)); }
+[data-game-theme='ticket-to-ride'] .orb-b { background: color-mix(in srgb, var(--ttr-yellow) 42%, transparent); }
+[data-game-theme='ticket-to-ride'] .orb-c { background: color-mix(in srgb, #2c2218 50%, var(--ttr-red)); }
+[data-game-theme='ticket-to-ride'] .orb-d { background: color-mix(in srgb, var(--ttr-yellow) 28%, #fff); opacity: 0.34; }
+
+[data-game-theme='ticket-to-ride'] .hero-block,
+[data-game-theme='ticket-to-ride'] .rule-card,
+[data-game-theme='ticket-to-ride'] .leaderboard-panel,
+[data-game-theme='ticket-to-ride'] .history-detail-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--ttr-yellow) 18%, transparent), transparent 52%),
+    linear-gradient(315deg, color-mix(in srgb, var(--ttr-red) 14%, transparent), transparent 48%),
+    var(--frost-fill);
+}
+
+[data-game-theme='sequence'] .app-bg {
+  --bg-stroke: color-mix(in srgb, var(--seq-blue) 22%, transparent);
+  --bg-stroke-alt: color-mix(in srgb, var(--seq-green) 16%, transparent);
+  --bg-stroke-faint: color-mix(in srgb, var(--seq-red) 10%, transparent);
+}
+
+[data-game-theme='sequence'] .app-bg__depth {
+  background:
+    radial-gradient(ellipse 90% 50% at 10% 8%, color-mix(in srgb, var(--seq-blue) 16%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 88% 16%, color-mix(in srgb, var(--seq-green) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 70% 45% at 80% 88%, color-mix(in srgb, var(--seq-red) 12%, transparent), transparent 52%);
+}
+
+[data-game-theme='sequence'] .orb-a { background: color-mix(in srgb, var(--seq-blue) 58%, var(--seq-green)); }
+[data-game-theme='sequence'] .orb-b { background: color-mix(in srgb, var(--seq-green) 42%, transparent); }
+[data-game-theme='sequence'] .orb-c { background: color-mix(in srgb, var(--seq-red) 46%, var(--seq-blue)); }
+[data-game-theme='sequence'] .orb-d { background: color-mix(in srgb, #f4ead4 28%, var(--seq-green)); opacity: 0.34; }
+
+[data-game-theme='sequence'] .hero-block,
+[data-game-theme='sequence'] .rule-card,
+[data-game-theme='sequence'] .leaderboard-panel,
+[data-game-theme='sequence'] .history-detail-card {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--seq-blue) 16%, transparent), transparent 48%),
+    linear-gradient(315deg, color-mix(in srgb, var(--seq-green) 12%, transparent), transparent 52%),
+    var(--frost-fill);
 }
 
 .swipe-back-shell {
@@ -318,7 +1038,6 @@ h1 {
   text-align: center;
 }
 
-.frost-panel,
 .frost-tile,
 .glass,
 .hero-block,
@@ -336,7 +1055,6 @@ h1 {
 .leaderboard-panel,
 .leaderboard-list li,
 .import-panel,
-.game-tile,
 .grouped-list,
 .leader-strip,
 .score-sheet-grid-wrap,
@@ -348,8 +1066,8 @@ h1 {
 .ios27-segmented,
 .install-chip {
   background: var(--frost-fill);
-  backdrop-filter: blur(var(--frost-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(180%);
+  backdrop-filter: blur(var(--frost-blur)) saturate(190%);
+  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(190%);
   border: 1px solid var(--frost-border);
   box-shadow: var(--frost-shadow);
 }
@@ -365,10 +1083,10 @@ h1 {
 .token-row,
 .keypad button {
   background: var(--frost-tile);
-  backdrop-filter: blur(var(--frost-blur-tile)) saturate(170%);
-  -webkit-backdrop-filter: blur(var(--frost-blur-tile)) saturate(170%);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(var(--frost-blur-tile)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--frost-blur-tile)) saturate(180%);
+  border-color: color-mix(in srgb, var(--frost-border) 68%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--frost-highlight) 72%, transparent);
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -381,7 +1099,6 @@ h1 {
   .history-detail-card,
   .leaderboard-panel,
   .import-panel,
-  .game-tile,
   .grouped-list,
   .leader-strip,
   .score-sheet-grid-wrap,
@@ -471,152 +1188,54 @@ h1 {
   margin: 0 -4px;
 }
 
-.scene-nav {
+.scene-nav-wrap {
   position: sticky;
   top: 0;
   z-index: 6;
   margin: calc(-12px - var(--safe-top)) -16px 0;
-  padding: calc(8px + var(--safe-top)) 10px 10px;
+}
+
+.scene-nav {
   border-radius: 0;
   border-left: 0;
   border-right: 0;
   border-top: 0;
+  padding-top: calc(8px + var(--safe-top));
 }
 
-.scene-nav__bar {
-  display: grid;
-  grid-template-columns: minmax(88px, 1fr) minmax(0, 1.4fr) minmax(88px, 1fr);
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-}
-
-.scene-nav__leading,
-.scene-nav__trailing {
+.scene-nav__actions {
   display: flex;
   align-items: center;
-  min-width: 0;
-}
-
-.scene-nav__trailing {
   justify-content: flex-end;
-  gap: 6px;
-}
-
-.scene-nav__center {
-  text-align: center;
-  min-width: 0;
-}
-
-.scene-nav__title {
-  margin: 0;
-  font-family: var(--sans);
-  font-size: 0.95rem;
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.scene-section-title {
-  margin: 0;
-  font-size: 1.35rem;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 
 .scene-nav__subtitle {
-  margin: 2px 0 0;
+  margin: 0;
+  padding: 0 16px 8px;
   color: var(--muted);
   font-size: 0.72rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.scene-nav__back {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  min-height: 44px;
-  padding: 0 8px 0 4px;
-  border: 0;
-  background: transparent;
-  color: var(--fill);
-  font-size: 0.92rem;
-  font-weight: 560;
-  max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.scene-nav__back:active {
-  opacity: 0.72;
-}
-
-.scene-nav__chevron {
-  font-size: 1.35rem;
-  line-height: 1;
-  margin-top: -1px;
-  opacity: 0.92;
-}
-
-.scene-nav__action {
-  min-height: 34px;
-  padding: 0 12px;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--frost-border) 85%, transparent);
-  background: color-mix(in srgb, var(--frost-tile) 88%, transparent);
-  color: var(--ivory);
-  font-size: 0.82rem;
-  font-weight: 600;
-}
-
-.scene-nav__action.is-active {
-  background: color-mix(in srgb, var(--fill) 24%, transparent);
-  border-color: color-mix(in srgb, var(--fill) 42%, transparent);
-  color: var(--fill);
-}
-
-.scene-nav__spacer {
-  display: block;
-  width: 44px;
-  height: 44px;
+  text-align: center;
 }
 
 .scene-flow {
   display: flex;
   gap: 8px;
-  overflow-x: auto;
-  padding: 10px 12px;
   margin: 0 0 2px;
-  border-radius: var(--radius-card);
+}
+
+.scene-flow--scroll {
+  overflow-x: auto;
+  padding-bottom: 2px;
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
 }
 
-.scene-flow__pill {
+.scene-flow--scroll .ios27-btn {
   flex: 0 0 auto;
   scroll-snap-align: start;
-  min-height: 36px;
-  padding: 0 14px;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--frost-border) 80%, transparent);
-  background: color-mix(in srgb, var(--frost-tile) 90%, transparent);
-  color: var(--muted);
-  font-size: 0.84rem;
-  font-weight: 600;
   white-space: nowrap;
-}
-
-.scene-flow__pill.is-active {
-  color: var(--fill-text);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--fill) 92%, #fff), var(--fill));
-  border-color: color-mix(in srgb, var(--fill) 55%, transparent);
-}
-
-.scene-flow__pill:active {
-  transform: scale(0.98);
 }
 
 .scene-body {
@@ -779,15 +1398,179 @@ h1 {
 }
 
 .ios27-sheet {
-  width: min(430px, 100%);
+  width: min(var(--app-max-width), 100%);
   background: var(--frost-fill) !important;
   background-image: none !important;
-  backdrop-filter: blur(var(--frost-blur)) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(180%) !important;
+  backdrop-filter: blur(var(--frost-blur)) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(190%) !important;
   border: 1px solid var(--frost-border);
   box-shadow:
     0 -12px 40px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 var(--frost-highlight);
+  color: var(--ivory);
+}
+
+.ios27-sheet-title {
+  color: var(--ivory);
+}
+
+.ios27-sheet-content {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.ios27-sheet.score-pad-sheet .ios27-sheet-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  padding: 12px 16px 0;
+}
+
+.score-pad-sheet .score-pad-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 8px;
+}
+
+.score-pad-player {
+  margin: 0;
+  text-align: center;
+  font-weight: 650;
+  font-size: 1.05rem;
+}
+
+.score-pad-sheet .pad-total {
+  font-size: 2.6rem;
+  padding: 10px 12px 8px;
+}
+
+.score-pad-sheet .pad-limit {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.score-pad-sheet .keypad {
+  gap: 8px;
+}
+
+.score-pad-sheet .keypad button,
+.score-pad-sheet .keypad-digit,
+.score-pad-sheet .keypad-action {
+  min-height: 52px;
+  font-size: 1.35rem;
+}
+
+.score-pad-toggle-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-row);
+  background: var(--frost-tile);
+  backdrop-filter: blur(var(--frost-blur-tile)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--frost-blur-tile)) saturate(180%);
+  border: 1px solid color-mix(in srgb, var(--frost-border) 68%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--frost-highlight) 72%, transparent);
+}
+
+.score-pad-sheet .ios27-toggle-wrapper {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.score-pad-sheet .ios27-toggle-label {
+  color: var(--ivory);
+  font-size: 0.95rem;
+  font-weight: 500;
+  flex: 1;
+  min-width: 0;
+}
+
+.score-pad-sheet .ios27-toggle {
+  background-color: color-mix(in srgb, var(--ivory) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--frost-border) 75%, transparent);
+}
+
+.score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--color-green);
+  border-color: transparent;
+}
+
+[data-game-theme='phase-10'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--p10-green);
+}
+
+[data-game-theme='uno'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--uno-green);
+}
+
+[data-game-theme='yahtzee'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--yz-red);
+}
+
+[data-game-theme='cribbage'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--fill);
+}
+
+[data-game-theme='hearts'] .score-pad-sheet .ios27-toggle.is-checked,
+[data-game-theme='gin-rummy'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--crimson);
+}
+
+[data-game-theme='farkle'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--gold);
+}
+
+[data-game-theme='qwixx'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--qx-blue);
+}
+
+[data-game-theme='monopoly-deal'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--deal-red);
+}
+
+[data-game-theme='sorry'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--sorry-red);
+}
+
+[data-game-theme='ticket-to-ride'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--ttr-red);
+}
+
+[data-game-theme='sequence'] .score-pad-sheet .ios27-toggle.is-checked {
+  background-color: var(--seq-blue);
+}
+
+.score-pad-sheet .ios27-toggle-thumb {
+  background-color: var(--ivory);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.ios27-sheet-content .sheet-actions {
+  margin-top: 4px;
+}
+
+.score-pad-sheet .sheet-actions {
+  flex-shrink: 0;
+  margin: 0 -16px;
+  padding: 12px 16px max(12px, var(--safe-bottom));
+  border-top: 1px solid var(--frost-border);
+  background: color-mix(in srgb, var(--glass-strong) 55%, var(--frost-fill));
+  backdrop-filter: blur(var(--frost-blur)) saturate(190%);
+  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(190%);
+  box-shadow: inset 0 1px 0 var(--frost-highlight);
 }
 
 .ios27-searchbar-field {
@@ -821,20 +1604,10 @@ h1 {
   width: 100%;
 }
 
-.picker-screen .ios27-list-row {
+.picker-screen .ios27-list-row:not(.game-tile) {
   min-height: 108px;
   align-items: flex-start;
   padding-block: 16px;
-}
-
-.ios27-sheet-content {
-  display: grid;
-  gap: 12px;
-  align-content: start;
-}
-
-.ios27-sheet-content .sheet-actions {
-  margin-top: 4px;
 }
 
 .home-actions,
@@ -874,8 +1647,8 @@ h1 {
   margin: calc(-12px - var(--safe-top)) -16px 0;
   padding: calc(10px + var(--safe-top)) 16px 12px;
   background: var(--frost-fill);
-  backdrop-filter: blur(var(--frost-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(180%);
+  backdrop-filter: blur(var(--frost-blur)) saturate(190%);
+  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(190%);
   border-bottom: 1px solid var(--frost-border);
   box-shadow: inset 0 1px 0 var(--frost-highlight);
 }
@@ -1101,6 +1874,30 @@ h1 {
 .player-meta {
   display: grid;
   flex: 1;
+  gap: 2px;
+  text-align: left;
+}
+
+.history-row-copy {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+}
+
+.player-fields .ios27-list-row {
+  align-items: center;
+  gap: 10px;
+}
+
+.player-fields .ios27-textfield {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-scores.ios27-list-section,
+.history-list.ios27-list-section,
+.leaderboard-list.ios27-list-section {
+  margin: 0;
 }
 
 .player-meta small {
@@ -1133,7 +1930,7 @@ h1 {
 }
 
 .score-sheet {
-  width: min(430px, 100%);
+  width: min(var(--app-max-width), 100%);
   background: var(--glass-strong);
   backdrop-filter: blur(40px) saturate(190%);
   -webkit-backdrop-filter: blur(40px) saturate(190%);
@@ -1343,6 +2140,127 @@ h1 {
   }
 }
 
+@media (min-width: 600px) {
+  :root {
+    --app-max-width: min(720px, 94vw);
+    --app-gutter: 24px;
+  }
+
+  .screen {
+    padding-inline: var(--app-gutter);
+  }
+
+  .scene-nav-wrap {
+    margin-inline: calc(-1 * var(--app-gutter));
+  }
+
+  .scene-nav__subtitle {
+    padding-inline: var(--app-gutter);
+  }
+
+  .screen-head {
+    margin-inline: calc(-1 * var(--app-gutter));
+    padding-inline: var(--app-gutter);
+  }
+
+  .picker-screen .game-grid--cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .picker-screen h1 {
+    font-size: clamp(2.8rem, 6vw, 3.8rem);
+  }
+}
+
+@media (min-width: 900px) {
+  :root {
+    --app-max-width: min(960px, 96vw);
+    --app-gutter: 28px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .picker-screen {
+    gap: 12px;
+    padding-block: calc(8px + var(--safe-top)) calc(12px + var(--safe-bottom));
+  }
+
+  .picker-layout {
+    grid-template-columns: minmax(220px, 34%) minmax(0, 1fr);
+    gap: 14px 20px;
+    flex: 1;
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  .picker-hero {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    padding: 16px;
+  }
+
+  .picker-hero h1 {
+    font-size: clamp(1.85rem, 4.5vw, 2.4rem);
+  }
+
+  .picker-hero .tagline {
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+
+  .picker-body {
+    gap: 10px;
+    align-content: start;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .picker-screen .game-grid--cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+  }
+
+  .picker-screen .game-grid--cards .game-tile.ios27-list-row {
+    min-height: 104px;
+    padding: 14px 16px;
+  }
+
+  .picker-screen .game-tile strong {
+    font-size: 1.35rem;
+  }
+
+  .picker-screen .thumb-dock {
+    margin-top: 0;
+    padding-top: 0;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 700px) and (min-height: 521px) {
+  .picker-layout {
+    grid-template-columns: minmax(280px, 38%) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+
+  .picker-hero {
+    text-align: left;
+  }
+
+  .picker-body {
+    gap: 16px;
+  }
+}
+
+@media (min-width: 600px) and (orientation: portrait) {
+  .home-screen .hero-block {
+    padding: 24px 22px 26px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pulse,
   .speck,
@@ -1356,6 +2274,10 @@ h1 {
   }
 
   .scene-flow__pill:active {
+    transform: none;
+  }
+
+  .scene-flow--scroll .ios27-btn:active {
     transform: none;
   }
 }
@@ -1385,7 +2307,6 @@ h1 {
   .history-detail-card,
   .leaderboard-panel,
   .import-panel,
-  .game-tile,
   .grouped-list,
   .leader-strip,
   .score-sheet,
@@ -1638,28 +2559,34 @@ h1 {
 }
 
 .game-grid {
-  list-style: none;
-  padding: 0;
   margin: 4px 0 0;
   display: grid;
   gap: 14px;
 }
 
-.game-tile {
+.game-grid--cards .game-tile.ios27-list-row {
   width: 100%;
   text-align: left;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
   min-height: 132px;
-  padding: 18px 18px 18px 20px;
+  padding: 16px 16px 16px 16px;
   border-radius: 26px;
+  border: 1px solid var(--frost-border);
+  box-shadow: var(--frost-shadow);
+  backdrop-filter: blur(var(--frost-blur)) saturate(190%);
+  -webkit-backdrop-filter: blur(var(--frost-blur)) saturate(190%);
   color: inherit;
 }
 
-.game-tile:active {
-  transform: scale(0.985);
+.game-grid--cards .game-tile.ios27-list-row.has-separator::after {
+  display: none;
+}
+
+.game-grid--cards .game-tile.ios27-list-row-content {
+  align-self: stretch;
+  display: flex;
+  align-items: flex-start;
 }
 
 .game-tile-copy {
@@ -1670,12 +2597,137 @@ h1 {
 
 .game-tile.theme-five-crowns {
   background-color: var(--frost-fill);
-  background-image: linear-gradient(135deg, rgba(244, 201, 93, 0.22), transparent 52%);
+  background-image: linear-gradient(135deg, rgba(244, 201, 93, 0.26), transparent 52%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(244, 201, 93, 0.16);
 }
 
 .game-tile.theme-phase-10 {
   background-color: var(--frost-fill);
-  background-image: linear-gradient(135deg, rgba(255, 90, 168, 0.22), transparent 52%);
+  background-image:
+    linear-gradient(135deg, rgba(43, 124, 255, 0.28), transparent 46%),
+    linear-gradient(225deg, rgba(232, 69, 69, 0.16), transparent 52%),
+    linear-gradient(315deg, rgba(45, 184, 106, 0.12), transparent 58%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(110, 192, 255, 0.18);
+}
+
+.game-tile.theme-yahtzee {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(200, 16, 46, 0.34), transparent 48%),
+    linear-gradient(225deg, rgba(255, 212, 0, 0.16), transparent 56%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(255, 212, 0, 0.2);
+}
+
+.game-tile.theme-uno {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(227, 25, 55, 0.32), transparent 46%),
+    linear-gradient(225deg, rgba(255, 209, 0, 0.18), transparent 54%),
+    linear-gradient(315deg, rgba(0, 147, 208, 0.14), transparent 60%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(255, 209, 0, 0.2);
+}
+
+.game-tile.theme-cribbage {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(46, 122, 86, 0.32), transparent 48%),
+    linear-gradient(225deg, rgba(212, 160, 23, 0.18), transparent 56%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(212, 160, 23, 0.2);
+}
+
+.game-tile.theme-hearts {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(214, 31, 38, 0.3), transparent 46%),
+    linear-gradient(225deg, rgba(26, 61, 44, 0.28), transparent 58%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(214, 31, 38, 0.2);
+}
+
+.game-tile.theme-gin-rummy {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(155, 44, 67, 0.32), transparent 48%),
+    linear-gradient(225deg, rgba(232, 215, 195, 0.16), transparent 58%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(232, 215, 195, 0.18);
+}
+
+.game-tile.theme-farkle {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(227, 155, 24, 0.3), transparent 46%),
+    linear-gradient(225deg, rgba(42, 26, 16, 0.28), transparent 58%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(245, 185, 66, 0.22);
+}
+
+.game-tile.theme-qwixx {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(227, 28, 35, 0.22), transparent 42%),
+    linear-gradient(180deg, rgba(245, 196, 0, 0.14), transparent 52%),
+    linear-gradient(225deg, rgba(31, 157, 85, 0.14), transparent 58%),
+    linear-gradient(315deg, rgba(43, 108, 255, 0.16), transparent 62%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(43, 108, 255, 0.2);
+}
+
+.game-tile.theme-monopoly-deal {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(227, 6, 19, 0.3), transparent 46%),
+    linear-gradient(225deg, rgba(212, 160, 23, 0.18), transparent 56%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(212, 160, 23, 0.22);
+}
+
+.game-tile.theme-sorry {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(227, 28, 35, 0.24), transparent 42%),
+    linear-gradient(180deg, rgba(30, 90, 168, 0.16), transparent 52%),
+    linear-gradient(225deg, rgba(245, 208, 0, 0.14), transparent 58%),
+    linear-gradient(315deg, rgba(46, 157, 74, 0.14), transparent 62%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(245, 208, 0, 0.2);
+}
+
+.game-tile.theme-ticket-to-ride {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(242, 209, 92, 0.28), transparent 46%),
+    linear-gradient(225deg, rgba(196, 30, 58, 0.2), transparent 58%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(242, 209, 92, 0.22);
+}
+
+.game-tile.theme-sequence {
+  background-color: var(--frost-fill);
+  background-image:
+    linear-gradient(135deg, rgba(43, 108, 255, 0.22), transparent 42%),
+    linear-gradient(225deg, rgba(31, 157, 85, 0.16), transparent 56%),
+    linear-gradient(315deg, rgba(227, 28, 35, 0.12), transparent 62%);
+  box-shadow:
+    var(--frost-shadow),
+    inset 0 1px 0 rgba(43, 108, 255, 0.2);
 }
 
 .game-tile strong {
@@ -1690,9 +2742,499 @@ h1 {
   border-radius: var(--radius-card);
 }
 
+.picker-layout {
+  display: grid;
+  gap: 18px;
+}
+
+.picker-body {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  text-align: left;
+}
+
+.p10-card-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.p10-card-row-sm {
+  gap: 7px;
+}
+
+.p10-card-row-lg {
+  gap: 12px;
+}
+
+.p10-card-dot {
+  display: block;
+  border-radius: 6px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 6px 14px rgba(0, 0, 0, 0.28);
+}
+
+.p10-card-row-sm .p10-card-dot {
+  width: 14px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.p10-card-row-md .p10-card-dot {
+  width: 18px;
+  height: 26px;
+}
+
+.p10-card-row-lg .p10-card-dot {
+  width: 22px;
+  height: 32px;
+  border-radius: 7px;
+}
+
+.p10-mark {
+  width: 96px;
+  height: 72px;
+  margin: 4px auto 0;
+  filter: drop-shadow(0 8px 18px rgba(43, 124, 255, 0.36));
+}
+
+[data-game-theme='phase-10'] .p10-mark {
+  filter: drop-shadow(0 8px 18px color-mix(in srgb, var(--p10-blue) 42%, transparent));
+}
+
+.p10-phase-ladder {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: 280px;
+  margin-inline: auto;
+}
+
+.p10-phase-ladder__step {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: color-mix(in srgb, var(--ivory) 42%, transparent);
+  background: var(--frost-tile);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.p10-phase-ladder__step.is-lit {
+  color: #fff;
+  border-color: color-mix(in srgb, var(--p10-blue) 40%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--p10-blue) 88%, #fff), var(--p10-blue));
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.28) inset,
+    0 4px 12px color-mix(in srgb, var(--p10-blue) 34%, transparent);
+}
+
+.p10-phase-ladder__step.is-lit:nth-child(4n + 1) {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--p10-red) 88%, #fff), var(--p10-red));
+  border-color: color-mix(in srgb, var(--p10-red) 40%, transparent);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.28) inset,
+    0 4px 12px color-mix(in srgb, var(--p10-red) 34%, transparent);
+}
+
+.p10-phase-ladder__step.is-lit:nth-child(4n + 2) {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--p10-blue) 88%, #fff), var(--p10-blue));
+}
+
+.p10-phase-ladder__step.is-lit:nth-child(4n + 3) {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--p10-green) 88%, #fff), var(--p10-green));
+  border-color: color-mix(in srgb, var(--p10-green) 40%, transparent);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.28) inset,
+    0 4px 12px color-mix(in srgb, var(--p10-green) 34%, transparent);
+}
+
+.p10-phase-ladder__step.is-lit:nth-child(4n) {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--p10-yellow) 88%, #fff), var(--p10-yellow));
+  border-color: color-mix(in srgb, var(--p10-yellow) 40%, transparent);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.28) inset,
+    0 4px 12px color-mix(in srgb, var(--p10-yellow) 34%, transparent);
+  color: #1a1208;
+}
+
+.play-screen .p10-card-row {
+  margin: -6px 0 2px;
+}
+
 .phase-complete {
   display: flex;
   align-items: center;
   gap: 10px;
   min-height: 48px;
+}
+
+.uno-card-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.uno-card-row-sm {
+  gap: 7px;
+}
+
+.uno-card-row-lg {
+  gap: 12px;
+}
+
+.uno-card-dot {
+  display: block;
+  border-radius: 6px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 6px 14px rgba(0, 0, 0, 0.28);
+}
+
+.uno-card-row-sm .uno-card-dot {
+  width: 14px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.uno-card-row-md .uno-card-dot {
+  width: 18px;
+  height: 26px;
+}
+
+.uno-card-row-lg .uno-card-dot {
+  width: 22px;
+  height: 32px;
+  border-radius: 7px;
+}
+
+.uno-mark {
+  width: 148px;
+  height: 92px;
+  margin: 4px auto 0;
+  filter: drop-shadow(0 10px 20px rgba(227, 25, 55, 0.4));
+}
+
+[data-game-theme='uno'] .uno-mark {
+  filter: drop-shadow(0 10px 20px color-mix(in srgb, var(--uno-red) 48%, transparent));
+}
+
+.uno-race {
+  display: grid;
+  gap: 6px;
+  margin: 2px 0 4px;
+}
+
+.uno-race__track {
+  height: 6px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--ivory) 10%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.uno-race__fill {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+}
+
+.play-screen .uno-card-row {
+  margin: -6px 0 2px;
+}
+
+.uno-pad-legend {
+  gap: 6px;
+}
+
+.score-pad-sheet .uno-pad-legend li {
+  min-height: 40px;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+}
+
+.yz-dice-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.yz-dice-row-sm {
+  gap: 6px;
+}
+
+.yz-dice-row-lg {
+  gap: 10px;
+}
+
+.yz-die {
+  display: block;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+}
+
+.yz-mark {
+  width: min(240px, 100%);
+  height: 52px;
+  margin: 2px auto 0;
+  filter: drop-shadow(0 8px 16px color-mix(in srgb, var(--yz-yellow, #ffd400) 28%, transparent));
+}
+
+[data-game-theme='yahtzee'] .yz-mark {
+  filter: drop-shadow(0 8px 18px color-mix(in srgb, var(--yz-yellow) 36%, transparent));
+}
+
+.yz-player-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.yz-score-chips {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.play-screen.yz-play .yz-dice-row {
+  margin: -6px 0 2px;
+}
+
+.yz-scorecard .player-meta small {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.picker-screen .family-table-row.ios27-list-row {
+  min-height: 58px;
+  align-items: center;
+  padding-block: 10px;
+}
+
+.family-table-row__copy {
+  display: grid;
+  gap: 2px;
+  text-align: left;
+}
+
+.family-table-row__copy small {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.family-table-row__id {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  font-weight: 650;
+  color: var(--gold);
+}
+
+.family-table-screen {
+  text-align: left;
+}
+
+.family-table-hero {
+  text-align: left;
+  gap: 8px;
+}
+
+.table-code-hero {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(2rem, 8vw, 2.6rem);
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+}
+
+.table-code-hero.is-legacy {
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  word-break: break-all;
+  font-variant-numeric: tabular-nums;
+}
+
+.family-table-actions {
+  display: grid;
+  gap: 12px;
+}
+
+.game-art {
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  width: 76px;
+  min-width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 8px 18px -12px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+.game-art .crown-mark {
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  filter: drop-shadow(0 4px 8px rgba(244, 201, 93, 0.35));
+}
+
+.game-art .suit-row {
+  gap: 3px;
+  font-size: 0.62rem;
+  line-height: 1;
+}
+
+.game-art .p10-mark,
+.game-art .uno-mark,
+.game-art .crib-mark,
+.game-art .hearts-mark,
+.game-art .gin-mark,
+.game-art .farkle-mark,
+.game-art .qwixx-mark,
+.game-art .deal-mark,
+.game-art .sorry-mark,
+.game-art .ttr-mark,
+.game-art .seq-mark {
+  width: 68px;
+  height: 50px;
+  margin: 0;
+  filter: none;
+}
+
+.game-art .uno-card-row {
+  gap: 3px;
+}
+
+.game-art .uno-card-row-sm .uno-card-dot {
+  width: 8px;
+  height: 12px;
+}
+
+.game-art .yz-dice-row {
+  gap: 3px;
+}
+
+.game-art .yz-die {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
+
+.game-tile-copy {
+  flex: 1;
+}
+
+.game-tile-copy > span:last-child {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.crib-mark,
+.hearts-mark,
+.gin-mark,
+.farkle-mark,
+.qwixx-mark,
+.deal-mark,
+.sorry-mark,
+.ttr-mark,
+.seq-mark {
+  width: 148px;
+  height: 110px;
+  margin: 4px auto 0;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.35));
+}
+
+.stepper-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stepper-row .ios27-btn {
+  flex: 1 1 0;
+  min-width: 56px;
+}
+
+.qx-row-preview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 4px 0 10px;
+}
+
+.qx-row-preview__bar {
+  display: grid;
+  place-items: center;
+  min-height: 28px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.qx-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--frost-tile);
+  border: 1px solid var(--frost-border);
+}
+
+.qx-stepper__copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.qx-stepper__copy small {
+  color: var(--muted);
+}
+
+.qx-stepper__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qx-stepper__value {
+  min-width: 1.6em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+}
+
+@media (max-width: 380px) {
+  .game-grid--cards .game-tile.ios27-list-row {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .game-art {
+    width: 100%;
+    min-width: 0;
+    height: 72px;
+  }
+
+  .game-tile-copy {
+    width: 100%;
+  }
 }

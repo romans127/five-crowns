@@ -1,3 +1,4 @@
+import { ListRow, ListSection } from '@ios27_design_system/react'
 import { useMemo } from 'react'
 import { listHistory } from '../game/history.ts'
 import {
@@ -77,20 +78,25 @@ function LeaderboardPanel({
       {rows.length === 0 ? (
         <p className="hint center">{empty}</p>
       ) : (
-        <ol className="leaderboard-list">
+        <ListSection className="leaderboard-list">
           {rows.map((entry, index) => (
-            <li key={entry.name}>
-              <span className="place">{index + 1}</span>
+            <ListRow
+              key={entry.name}
+              leading={<span className="place">{index + 1}</span>}
+              trailing={
+                <span className={`leaderboard-stat ${stat === 'wins' ? 'gold-stat' : 'lantern-stat'}`}>
+                  {stat === 'wins' ? entry.wins : entry.lastPlace}
+                </span>
+              }
+              separator={index < rows.length - 1}
+            >
               <div className="leaderboard-name">
                 <strong>{entry.name}</strong>
                 <small>{entry.gamesPlayed} games played</small>
               </div>
-              <span className={`leaderboard-stat ${stat === 'wins' ? 'gold-stat' : 'lantern-stat'}`}>
-                {stat === 'wins' ? entry.wins : entry.lastPlace}
-              </span>
-            </li>
+            </ListRow>
           ))}
-        </ol>
+        </ListSection>
       )}
     </article>
   )

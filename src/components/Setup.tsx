@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MAX_PLAYERS, MIN_PLAYERS, PLAYER_COLORS } from '../game/types.ts'
-import { GlassButton, PrimaryButton } from '../platform/IosChrome.tsx'
+import { GlassButton, PlayerNameField, PrimaryButton } from '../platform/IosChrome.tsx'
+import { ListSection } from '@ios27_design_system/react'
 import { SceneShell } from '../platform/SceneNav.tsx'
 
 type SetupProps = {
@@ -27,41 +28,31 @@ export function Setup({ onBack, onStart }: SetupProps) {
       }}
     >
       <p className="hint">Two to eight players. Lowest leftover points after 11 hands wins.</p>
-      <ol className="player-fields">
+      <ListSection header="Players" className="player-fields">
         {names.map((name, index) => {
           const color = PLAYER_COLORS[index % PLAYER_COLORS.length]
           return (
-            <li key={color.id + index} className="player-field">
-              <span className="seat-suit" style={{ color: color.hex }} aria-hidden="true">
-                {color.suit}
-              </span>
-              <input
-                value={name}
-                maxLength={18}
-                autoCapitalize="words"
-                placeholder={`Player ${index + 1}`}
-                aria-label={`Player ${index + 1} name`}
-                onChange={(event) => {
-                  const next = [...names]
-                  next[index] = event.target.value
-                  setNames(next)
-                  setError(null)
-                }}
-              />
-              {names.length > MIN_PLAYERS ? (
-                <button
-                  type="button"
-                  className="icon-btn"
-                  aria-label={`Remove player ${index + 1}`}
-                  onClick={() => setNames(names.filter((_, i) => i !== index))}
-                >
-                  ✕
-                </button>
-              ) : null}
-            </li>
+            <PlayerNameField
+              key={color.id + index}
+              index={index}
+              name={name}
+              suit={
+                <span className="seat-suit" style={{ color: color.hex }} aria-hidden="true">
+                  {color.suit}
+                </span>
+              }
+              canRemove={names.length > MIN_PLAYERS}
+              onChange={(value) => {
+                const next = [...names]
+                next[index] = value
+                setNames(next)
+                setError(null)
+              }}
+              onRemove={() => setNames(names.filter((_, i) => i !== index))}
+            />
           )
         })}
-      </ol>
+      </ListSection>
       {names.length < MAX_PLAYERS ? (
         <GlassButton onClick={() => setNames([...names, ''])}>Add a player</GlassButton>
       ) : null}

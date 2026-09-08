@@ -51,12 +51,12 @@ export const MAX_LEFTOVER = 250
 export const CARDS_DEALT = 10
 
 export const PLAYER_COLORS = [
-  { id: 'red', hex: '#ff4d6d', suit: '●' },
-  { id: 'yellow', hex: '#ffd166', suit: '●' },
-  { id: 'green', hex: '#2ee6c6', suit: '●' },
-  { id: 'blue', hex: '#5aa9ff', suit: '●' },
+  { id: 'red', hex: '#e84545', suit: '●' },
+  { id: 'yellow', hex: '#f5c842', suit: '●' },
+  { id: 'green', hex: '#2db86a', suit: '●' },
+  { id: 'blue', hex: '#2b7cff', suit: '●' },
   { id: 'orange', hex: '#ff8a4c', suit: '●' },
-  { id: 'violet', hex: '#c084fc', suit: '●' },
+  { id: 'violet', hex: '#8b5cf6', suit: '●' },
   { id: 'sky', hex: '#67e8f9', suit: '●' },
   { id: 'rose', hex: '#fb7185', suit: '●' },
 ] as const
